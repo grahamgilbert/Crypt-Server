@@ -24,12 +24,13 @@
         <tr>
           <th>Serial Number</th>
 		  <th>Recovery Key</th>
+          <th>User Name</th>
           <th>Date Stored</th>
         </tr>
     </thead>
     <tbody>
         {% for computer in computers.all %}
-        <tr><td>{{ computer.serial }}</td><td>{{ computer.recovery_key }}</td><td>{{ computer.last_checkin }}</td></tr>
+        <tr><td>{{ computer.serial }}</td><td>{{ computer.recovery_key }}</td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td></tr>
         {% endfor %}
     </tbody>
 </table>
