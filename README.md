@@ -1,4 +1,5 @@
 Crypt-Server
 ============
-
-A Django webapp to escrow filevault keys sent by the Crypt client app.
+This is the server component for [Crypt](https://github.com/grahamgilbert/Crypt).
+##Installation instructions
+Installation instructions are over on the [Wiki](https://github.com/grahamgilbert/Crypt-Server/wiki)
