@@ -2,5 +2,5 @@
 *.pot
 *.pyc
 local_settings.py
-fvserver.db
 fvserver/settings.py
+crypt.db
