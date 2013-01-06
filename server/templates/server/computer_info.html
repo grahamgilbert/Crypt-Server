@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block script %}
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('.groupList').dataTable({
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "iDisplayLength": 20,
+            "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
+            "sPaginationType": "bootstrap",
+            "bStateSave": true,
+            "aaSorting": [[1,'asc']]
+        });
+    } );
+</script>
+
+{% endblock %}
+
+{% block nav %}
+<li><a href="{% url home %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <h2>{{ computer.computername }}</h2>
+    <h4>{{ computer.serial }}</h4>
+</div>
+
+<div class="row">
+    <div class="span4">
+        <table class="table table-bordered table-striped table-condensed">
+            <tr><th>Username</th><td>{{ computer.username }}</td></tr>
+            <tr><th>Computer Name</th><td>{{ computer.computername }}</td></tr>
+            <tr><th>Serial Number</th><td>{{ computer.serial }}</td></tr>
+            <tr><th>Escrow Data</th><td>{{ computer.last_checkin }}</td></tr>
+        </table>
+    </div>
+    <div class="span4">
+        {% block button %}
+        {% endblock %}
+    </div>
+</div>
+
+{% if perms.server.can_approve %}
+<div class="row">
+    <h3>Requests</h3>
+    <table class="table groupList">
+        <thead>
+        <th>Requesting User</th>
+        <th>Reason for Request</th>
+        <th>Date Requested</th>
+        <th>Approved By</th>
+        <th>Approval Notes</th>
+        <th>Date Approved</th>
+        </thead>
+        <tbody>
+            {% for the_request in computer.request_set.all %}
+            <tr>
+                
+                <td>{{ the_request.requesting_user }}</td>
+                <td>{{ the_request.reason_for_request }}</td>
+                <td>{{ the_request.date_requested }}</td>
+                <td>{{ the_request.auth_user }}</td>
+                <td>{{ the_request.reason_for_approval }}</td>
+                <td>{{ the_request.date_approved }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+            
+</div>
+{% endif %}
+
+{% endblock %}

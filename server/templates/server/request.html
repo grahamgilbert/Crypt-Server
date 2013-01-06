@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap_toolkit %}
+{% block content %}
+<h1>Request Key</h1>
+<p>{{ computer.computername }} ({{ computer.serial }})</p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="{% url request computer.id %}" method="post">{% csrf_token %}
+
+	
+            {{ form|as_bootstrap }}
+        {% if not perms.server.can_approve %}
+        <p><button type="submit" class="btn primary">Submit Request</button></p>
+        {% else %}
+        <p><button type="submit" class="btn primary">Retrieve Key</button></p>
+        {% endif %}
+    </form>
+{% endblock %}

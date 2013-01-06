@@ -18,31 +18,23 @@
 {% endblock %}
 
 {% block nav %}
-{% if perms.server.can_approve %}
-    <li><a href="{% url managerequests %}">Approve requests</a></li>
-{% endif %}
+<li><a href="{% url home %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
 {% endblock %}
-{% block content %}
-{% if perms.server.can_approve %}
-    {% if outstanding.count > 0 %}
-    <div class="alert alert-info">
-        You have outstanding requests to approve.
-    </div>
-    {% endif %}
-{% endif %}   
+{% block content %} 
+<h3>Key Requests</h3>
 <table class="groupList table table-striped table-condensed">
     <thead>
         <tr>
           <th>Serial Number</th>
           <th>Computer Name</th>
-          <th>User Name</th>
-          <th>Date Stored</th>
+          <th>Requested By</th>
+          <th>Date Requested</th>
           <th></th>
         </tr>
     </thead>
     <tbody>
-        {% for computer in computers.all %}
-        <tr><td><a href="{% url computer_info computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url computer_info computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-mini" href="{% url computer_info computer.id %}">Info</a></td></tr>
+        {% for the_request in requests %}
+        <tr><td><a href="{% url approve the_request.id %}">{{ the_request.computer.serial }}</a></td><td><a href="{% url approve the_request.id %}">{{ the_request.computer.computername }}</a></td><td>{{ the_request.requesting_user }}</td><td>{{ the_request.date_requested }}</td><td><a class="btn btn-primary btn-mini" href="{% url approve the_request.id %}">Manage</a></td></tr>
         {% endfor %}
     </tbody>
 </table>

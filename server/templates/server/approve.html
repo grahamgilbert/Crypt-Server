@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap_toolkit %}
+{% block content %}
+<h1>Approve Request</h1>
+<p>{{ the_request.computer.computername }} ({{ the_request.computer.serial }})</p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="{% url approve the_request.id %}" method="post">{% csrf_token %}
+
+	
+            {{ form|as_bootstrap }}
+       
+        <p><button type="submit" class="btn primary">Save</button></p>
+
+    </form>
+{% endblock %}
