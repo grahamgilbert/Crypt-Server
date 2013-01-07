@@ -4,3 +4,4 @@
 local_settings.py
 fvserver/settings.py
 crypt.db
+fvserver.db
