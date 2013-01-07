@@ -15,7 +15,7 @@ from forms import *
 ##clean up old requests
 def cleanup():
     how_many_days = 7
-    the_requests = Request.objects.filter(date_approved__gte=datetime.now()-datetime.timedelta(days=how_many_days)).filter(current=True)
+    the_requests = Request.objects.filter(date_approved__gte=datetime.now()-timedelta(days=how_many_days)).filter(current=True)
     for the_req in the_requests:
         the_req.current = False
         the_req.save()
