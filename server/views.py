@@ -23,6 +23,7 @@ def cleanup():
 ##index view
 @login_required 
 def index(request):
+    cleanup()
     #show table with all the keys
     computers = Computer.objects.all()
     
@@ -33,6 +34,7 @@ def index(request):
     
 ##view to see computer info
 def computer_info(request, computer_id):
+    cleanup()
     computer = get_object_or_404(Computer, pk=computer_id)
     ##check if the user has outstanding request for this
     pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True)
@@ -84,6 +86,7 @@ def request(request, computer_id):
     
 ##retrieve key view
 def retrieve(request, request_id):
+    cleanup()
     the_request = get_object_or_404(Request, pk=request_id)
     if the_request.approved == True and the_request.current==True:
         c = {'user': request.user, 'the_request':the_request, }
