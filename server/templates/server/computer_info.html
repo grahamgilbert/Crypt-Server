@@ -22,8 +22,10 @@
 {% endblock %}
 {% block content %}
 <div class="row">
+    <div class="span12">
     <h2>{{ computer.computername }}</h2>
     <h4>{{ computer.serial }}</h4>
+    </div>
 </div>
 
 <div class="row">
@@ -43,6 +45,7 @@
 
 {% if perms.server.can_approve %}
 <div class="row">
+    <div class="span12">
     <h3>Requests</h3>
     <table class="table groupList">
         <thead>
@@ -67,6 +70,7 @@
             {% endfor %}
         </tbody>
         </table>
+        </div>
             
 </div>
 {% endif %}
