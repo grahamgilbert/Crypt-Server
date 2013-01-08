@@ -17,7 +17,6 @@ def cleanup():
     how_many_days = 7
     the_requests = Request.objects.filter(date_approved__lte=datetime.now()-timedelta(days=how_many_days)).filter(current=True)
     for the_req in the_requests:
-        logger.debug(the_req.current)
         the_req.current = False
         the_req.save()
 
