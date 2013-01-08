@@ -15,8 +15,9 @@ from forms import *
 ##clean up old requests
 def cleanup():
     how_many_days = 7
-    the_requests = Request.objects.filter(date_approved__gte=datetime.now()-timedelta(days=how_many_days)).filter(current=True)
+    the_requests = Request.objects.filter(date_approved__lte=datetime.now()-timedelta(days=how_many_days)).filter(current=True)
     for the_req in the_requests:
+        logger.debug(the_req.current)
         the_req.current = False
         the_req.save()
 
@@ -37,15 +38,15 @@ def computer_info(request, computer_id):
     cleanup()
     computer = get_object_or_404(Computer, pk=computer_id)
     ##check if the user has outstanding request for this
-    pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True)
+    pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True).filter(computer=computer)
     if pending.count() == 0:
         can_request = True
     else:
         can_request = False
     ##if it's been approved, we'll show a link to retrieve the key
-    approved = Request.objects.filter(requesting_user=request.user).filter(approved=True).filter(current=True)
+    approved = Request.objects.filter(requesting_user=request.user).filter(approved=True).filter(current=True).filter(computer=computer)
     c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, }
-    if approved:
+    if approved.count() != 0:
         return render_to_response('server/computer_approved_button.html', c, context_instance=RequestContext(request))
     else:
         return render_to_response('server/computer_request_button.html', c, context_instance=RequestContext(request))
