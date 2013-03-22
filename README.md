@@ -2,8 +2,6 @@ Crypt-Server
 ============
 This is the server component for [Crypt](https://github.com/grahamgilbert/Crypt).
 
-__It is not considered production quality code yet as it has not undergone extensive testing. Please use with caution. It has however, been used at pebble.it internally with no issues.__
-
 ##Installation instructions
 Installation instructions are over on the in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_12.md)
 
