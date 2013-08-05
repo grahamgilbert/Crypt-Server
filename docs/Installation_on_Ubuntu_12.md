@@ -74,7 +74,7 @@ Still inside the crypt_env virtualenv, use git to clone the current version of C
 
 Now we need to get the other components for Crypt
 
-	pip install -r setup/requirements.txt
+	pip install -r crypt/setup/requirements.txt
 	
 Next we need to make a copy of the example_settings.py file and put in your info:
 
