@@ -1,6 +1,6 @@
 {% extends "server/computer_info.html" %}
 {% block button %}
         {% for the_request in approved %}
-            <a href="{% url retrieve the_request.id %}" class="btn btn-large btn-success">Retrieve Key</a>
+            <a href="{% url 'retrieve' the_request.id %}" class="btn btn-large btn-success">Retrieve Key</a>
         {% endfor %}
 {% endblock %}

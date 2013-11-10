@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block nav %}
-<li><a href="{% url home %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
+<li><a href="{% url 'home' %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
 {% endblock %}
 {% block content %} 
 <h3>Key Requests</h3>
@@ -35,7 +35,7 @@
     </thead>
     <tbody>
         {% for the_request in requests %}
-        <tr><td><a href="{% url approve the_request.id %}">{{ the_request.computer.serial }}</a></td><td><a href="{% url approve the_request.id %}">{{ the_request.computer.computername }}</a></td><td>{{ the_request.requesting_user }}</td><td>{{ the_request.reason_for_request }}</td><td>{{ the_request.date_requested }}</td><td><a class="btn btn-primary btn-mini" href="{% url approve the_request.id %}">Manage</a></td></tr>
+        <tr><td><a href="{% url 'approve' the_request.id %}">{{ the_request.computer.serial }}</a></td><td><a href="{% url 'approve' the_request.id %}">{{ the_request.computer.computername }}</a></td><td>{{ the_request.requesting_user }}</td><td>{{ the_request.reason_for_request }}</td><td>{{ the_request.date_requested }}</td><td><a class="btn btn-primary btn-mini" href="{% url 'approve' the_request.id %}">Manage</a></td></tr>
         {% endfor %}
     </tbody>
 </table>

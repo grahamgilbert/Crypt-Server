@@ -5,7 +5,7 @@
 <h1>Request Key</h1>
 <p>{{ computer.computername }} ({{ computer.serial }})</p>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    <form action="{% url request computer.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'request' computer.id %}" method="post">{% csrf_token %}
 
 	
             {{ form|as_bootstrap }}

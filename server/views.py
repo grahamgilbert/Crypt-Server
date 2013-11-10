@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from datetime import datetime, timedelta
+from django.db.models import Q
 from forms import *
 # Create your views here.
 
@@ -71,6 +72,14 @@ def request(request, computer_id):
                 new_request.auth_user = request.user
                 new_request.approved = True
                 new_request.date_approved = datetime.now()
+            else:
+                # User isn't an approver, send an email to all of the approvers
+                perm = Permission.objects.get(codename='can_approve')  
+                users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
+                print users
+                for user in users:
+                    if user.email:
+                        print user.email
             new_request.save()
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
