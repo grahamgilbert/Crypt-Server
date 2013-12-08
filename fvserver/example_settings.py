@@ -83,6 +83,8 @@ STATICFILES_DIRS = (
 LOGIN_URL='/login/'
 LOGIN_REDIRECT_URL='/'
 
+ALLOWED_HOSTS = ['*']
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
