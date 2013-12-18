@@ -85,7 +85,7 @@ Edit settings.py:
 
 * Set ADMINS to an administrative name and email
 * Set TIME_ZONE to the appropriate timezone
-* Change ALLOWED_HOSTS to be a list of hosts that the server will be accessible from (e.g. ``ALLOWED_HOSTS=['crypt.grahamgilbert.dev']
+* Change ALLOWED_HOSTS to be a list of hosts that the server will be accessible from (e.g. ``ALLOWED_HOSTS=['crypt.grahamgilbert.dev']``
 
 ###More Setup
 We need to use Django's manage.py to initialise the app's database and create an admin user. Running the syncdb command will ask you to create an admin user - make sure you do this!
