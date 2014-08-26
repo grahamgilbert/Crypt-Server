@@ -151,9 +151,13 @@ def checkin(request):
         user_name = request.POST['username']
     except:
         raise Http500
-    computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
+    try:
+        computer = get_object_or_404(Computer, serial=serial_num)
+        computer.recovery_key = recovery_pass
+    except:
+        computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
     computer.save()
     
-    c ={'revovery_password':computer.recovery_key, 'serial':computer.serial, 'username':computer.username, }
+    c ={'recovery_password':computer.recovery_key, 'serial':computer.serial, 'username':computer.username, }
     return HttpResponse(simplejson.dumps(c), mimetype="application/json")
         
