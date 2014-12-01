@@ -154,6 +154,6 @@ def checkin(request):
     computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
     computer.save()
     
-    c ={'revovery_password':computer.recovery_key, 'serial':computer.serial, 'username':computer.username, }
+    c ={'recovery_password':computer.recovery_key, 'serial':computer.serial, 'username':computer.username, }
     return HttpResponse(simplejson.dumps(c), mimetype="application/json")
         
