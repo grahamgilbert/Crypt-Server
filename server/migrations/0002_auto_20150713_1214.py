@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='request',
             name='secret',
-            field=models.ForeignKey(related_name='secrets', to='server.Secret'),
+            field=models.ForeignKey(default=1, related_name='secrets', to='server.Secret'),
             preserve_default=False,
         ),
     ]
