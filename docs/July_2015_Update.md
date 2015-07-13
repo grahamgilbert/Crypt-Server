@@ -5,6 +5,8 @@ If you have a new installation of Crypt, or you started with Crypt after the Jul
 
 The July 2015 update contains a significant upgrade to Django (the core framework that runs Crypt) - this contains lots of bug fixes and security patches (a 'good thing'). But you do need to perform one extra step after performing your normal update procedure (either following [this guide](https://github.com/grahamgilert/crypt-server/blob/master/docs/Upgrading_on_Ubuntu_12.md) if you are running using the older method of deploying Crypt, or after ``docker pull macadmins/crypt-server`` if you are using Docker).
 
+As ever, **back up your data**. The easiest method is to use [Django's built in method](https://coderwall.com/p/mvsoyg/django-dumpdata-and-loaddata).
+
 It is recommended that you start with a fresh ``fvserver/settings.py`` (copied from ``fvserver/example_settings.py``), as there have been quite a few changes. Plug in your database information as needed - if you're using Docker and not using your own ``settings.py``, you don't need to do anything.
 
 You only need to perform the following once.
