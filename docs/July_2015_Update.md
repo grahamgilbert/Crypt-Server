@@ -24,7 +24,8 @@ We're now going to run a temporary container to update the database - if you hav
 $ docker run -t -i --rm --link postgres-crypt:db -e DB_NAME=crypt -e DB_USER=admin -e DB_PASS=password macadmins/crypt-server /bin/bash
 # We're in the container now
 $ cd /home/app/crypt
-$ python manage.py migrate --fake-initial
+$ python manage.py migrate --fake server 0001
+$ python manage.py migrate
 $ exit
 ```
 
