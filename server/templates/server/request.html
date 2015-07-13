@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap_toolkit %}
+{% load bootstrap3 %}
 {% block content %}
-<h1>Request Key</h1>
-<p>{{ computer.computername }} ({{ computer.serial }})</p>
+<h1>Request Secret</h1>
+<p>{{ secret.computer.computername }} ({{ secret.computer.serial }})</p>
+<p>{{ secret.get_secret_type_display }} - {{ secret.escrow_date }}</p>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    <form action="{% url 'request' computer.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'request' secret.id %}" method="post">{% csrf_token %}
 
-	
-            {{ form|as_bootstrap }}
+
+            {% bootstrap_form form %}
         {% if not perms.server.can_approve %}
-        <p><button type="submit" class="btn primary">Submit Request</button></p>
+        <p><button type="submit" class="btn primary btn-default">Submit Request</button></p>
         {% else %}
-        <p><button type="submit" class="btn primary">Retrieve Key</button></p>
+        <p><button type="submit" class="btn primary btn-default">Retrieve Key</button></p>
         {% endif %}
     </form>
 {% endblock %}

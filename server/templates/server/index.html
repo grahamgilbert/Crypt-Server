@@ -5,12 +5,12 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('.groupList').dataTable({
-            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-            "iDisplayLength": 20,
+            //"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            // "iDisplayLength": 20,
             "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
-            "sPaginationType": "bootstrap",
-            "bStateSave": true,
-            "aaSorting": [[1,'asc']]
+            // "sPaginationType": "bootstrap",
+            // "bStateSave": true,
+            // "aaSorting": [[1,'asc']]
         });
     } );
 </script>
@@ -24,13 +24,17 @@
 {% endblock %}
 {% block content %}
 {% if perms.server.can_approve %}
-    {% if outstanding.count > 0 %}
+    {% if outstanding.count < 0 %}
     <div class="alert alert-info">
         You have outstanding requests to approve.
     </div>
     {% endif %}
-{% endif %}   
-<table class="groupList table table-striped table-condensed">
+{% endif %}
+
+
+
+
+    <table class="groupList table table-striped table-condensed">
     <thead>
         <tr>
           <th>Serial Number</th>
@@ -42,9 +46,9 @@
     </thead>
     <tbody>
         {% for computer in computers.all %}
-        <tr><td><a href="{% url 'computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-mini" href="{% url 'computer_info' computer.id %}">Info</a></td></tr>
+        <tr><td><a href="{% url 'computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-xs" href="{% url 'computer_info' computer.id %}">Info</a></td></tr>
         {% endfor %}
-    </tbody>
+        </tbody>
 </table>
 
 {% endblock %}

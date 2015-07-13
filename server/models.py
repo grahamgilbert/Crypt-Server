@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class Computer(models.Model):
-    recovery_key = models.CharField(max_length=200, verbose_name="Recovery Key")
+    #recovery_key = models.CharField(max_length=200, verbose_name="Recovery Key")
     serial = models.CharField(max_length=200, verbose_name="Serial Number")
     username = models.CharField(max_length=200, verbose_name="User Name")
     computername = models.CharField(max_length=200, verbose_name="Computer Name")
@@ -16,9 +16,20 @@ class Computer(models.Model):
         permissions = (
                     ('can_approve', (u'Can approve requests to see encryption keys')),
                 )
-                
-class Request(models.Model):
+
+SECRET_TYPES = (('recovery_key', 'Recovery Key'),
+                ('password', 'Password'))
+
+class Secret(models.Model):
     computer = models.ForeignKey(Computer)
+    secret = models.CharField(max_length=256)
+    secret_type = models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
+    date_escrowed = models.DateTimeField(auto_now_add=True)
+    def __unicode__(self):
+        return self.secret
+
+class Request(models.Model):
+    secret = models.ForeignKey(Secret)
     requesting_user = models.ForeignKey(User, related_name='requesting_user')
     approved = models.NullBooleanField(verbose_name="Approved?")
     auth_user = models.ForeignKey(User, null=True, related_name='auth_user')
@@ -27,3 +38,6 @@ class Request(models.Model):
     date_requested = models.DateTimeField(auto_now_add=True)
     date_approved = models.DateTimeField(blank=True,null=True)
     current = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return "%s - %s" % (self.secret, self.requesting_user)

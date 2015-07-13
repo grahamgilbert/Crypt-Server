@@ -3,10 +3,15 @@ from django.conf.urls import *
 urlpatterns = patterns('server.views',
     #front. page
     url(r'^$', 'index', name='home'),
+
+    # secret info
+    url(r'^info/secret/(?P<secret_id>.+)/', 'secret_info', name='secret_info'),
+
     #computerinfo
     url(r'^info/(?P<computer_id>.+)/', 'computer_info', name='computer_info'),
+
     #request
-    url(r'^request/(?P<computer_id>.+)/', 'request', name='request'),
+    url(r'^request/(?P<secret_id>.+)/', 'request', name='request'),
     #retrieve
     url(r'^retrieve/(?P<request_id>.+)/', 'retrieve', name='retrieve'),
     #approve

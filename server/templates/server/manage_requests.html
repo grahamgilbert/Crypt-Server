@@ -5,7 +5,7 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('.groupList').dataTable({
-            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            //"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "iDisplayLength": 20,
             "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
             "sPaginationType": "bootstrap",
@@ -18,9 +18,9 @@
 {% endblock %}
 
 {% block nav %}
-<li><a href="{% url 'home' %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
+<li><a href="{% url 'home' %}"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
 {% endblock %}
-{% block content %} 
+{% block content %}
 <h3>Key Requests</h3>
 <table class="groupList table table-striped table-condensed">
     <thead>

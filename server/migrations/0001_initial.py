@@ -1,36 +1,45 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Computer'
-        db.create_table('server_computer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('recovery_key', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('serial', self.gf('django.db.models.fields.CharField')(unique=True, max_length=200)),
-            ('last_checkin', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('server', ['Computer'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Computer'
-        db.delete_table('server_computer')
-
-
-    models = {
-        'server.computer': {
-            'Meta': {'ordering': "['serial']", 'object_name': 'Computer'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_checkin': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'recovery_key': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'serial': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'})
-        }
-    }
-
-    complete_apps = ['server']
+    operations = [
+        migrations.CreateModel(
+            name='Computer',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('recovery_key', models.CharField(max_length=200, verbose_name=b'Recovery Key')),
+                ('serial', models.CharField(max_length=200, verbose_name=b'Serial Number')),
+                ('username', models.CharField(max_length=200, verbose_name=b'User Name')),
+                ('computername', models.CharField(max_length=200, verbose_name=b'Computer Name')),
+                ('last_checkin', models.DateTimeField(null=True, blank=True)),
+            ],
+            options={
+                'ordering': ['serial'],
+                'permissions': (('can_approve', 'Can approve requests to see encryption keys'),),
+            },
+        ),
+        migrations.CreateModel(
+            name='Request',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('approved', models.NullBooleanField(verbose_name=b'Approved?')),
+                ('reason_for_request', models.TextField()),
+                ('reason_for_approval', models.TextField(null=True, verbose_name=b'Approval Notes', blank=True)),
+                ('date_requested', models.DateTimeField(auto_now_add=True)),
+                ('date_approved', models.DateTimeField(null=True, blank=True)),
+                ('current', models.BooleanField(default=True)),
+                ('auth_user', models.ForeignKey(related_name='auth_user', to=settings.AUTH_USER_MODEL, null=True)),
+                ('computer', models.ForeignKey(to='server.Computer')),
+                ('requesting_user', models.ForeignKey(related_name='requesting_user', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+    ]

@@ -5,12 +5,12 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('.groupList').dataTable({
-            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-            "iDisplayLength": 20,
+            //"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            // "iDisplayLength": 20,
             "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
-            "sPaginationType": "bootstrap",
-            "bStateSave": true,
-            "aaSorting": [[1,'asc']]
+            // "sPaginationType": "bootstrap",
+            // "bStateSave": true,
+            // "aaSorting": [[1,'asc']]
         });
     } );
 </script>
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block nav %}
-<li><a href="{% url 'home' %}"><i class="icon-arrow-left icon-white"></i> Home</a></li>
+<li><a href="{% url 'home' %}"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -27,9 +27,9 @@
 </div>
 
 <div class="row">
-    <div class="span6">
-        <p><strong>Recovery Key:</strong><br /><code>{{ the_request.computer.recovery_key }}</code></p>
-        
+    <div class="col-sm-6 col-md-6">
+        <p><strong>{{ the_request.secret.get_secret_type_display }}:</strong><br /><code>{{ the_request.secret.secret }}</code></p>
+
         <p>This approval is valid for 7 days, after which you will need to submit another request for access.</p>
     </div>
 </div>
