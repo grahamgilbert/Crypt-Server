@@ -172,8 +172,19 @@ def checkin(request):
         user_name = request.POST['username']
     except:
         raise Http500
-    computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
+
+    try:
+        computer = Computer.objects.get(serial=serial)
+    except Computer.DoesNotExist:
+        computer = Computer(serial=serial)
+    #computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
+    computer.last_checkin = datetime.now()
+    computer.username=user_name
+    computer.computername = macname
     computer.save()
 
-    c ={'revovery_password':computer.recovery_key, 'serial':computer.serial, 'username':computer.username, }
+    secret = Secret(computer=computer, secret=recovery_pass, date_escrowed=datetime.now())
+    secret.save()
+
+    c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
     return HttpResponse(json.dumps(c), mimetype="application/json")

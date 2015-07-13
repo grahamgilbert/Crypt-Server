@@ -28,6 +28,10 @@ def move_keys_and_requests(apps, schema_editor):
             request.secret = secret
             request.save()
 
+        if target_computer.id != computer.id:
+            #Dupe computer, bin it
+            computer.delete()
+
 class Migration(migrations.Migration):
 
     dependencies = [
