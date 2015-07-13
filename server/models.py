@@ -30,6 +30,7 @@ class Secret(models.Model):
 
 class Request(models.Model):
     secret = models.ForeignKey(Secret)
+    #computer = models.ForeignKey(Computer, null=True, related_name='computers')
     requesting_user = models.ForeignKey(User, related_name='requesting_user')
     approved = models.NullBooleanField(verbose_name="Approved?")
     auth_user = models.ForeignKey(User, null=True, related_name='auth_user')

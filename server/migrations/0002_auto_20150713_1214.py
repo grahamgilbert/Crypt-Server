@@ -24,10 +24,15 @@ class Migration(migrations.Migration):
             name='computer',
             field=models.ForeignKey(to='server.Computer'),
         ),
+        migrations.AlterField(
+            model_name='request',
+            name='computer',
+            field=models.ForeignKey(related_name='computers', to='server.Computer'),
+        ),
         migrations.AddField(
             model_name='request',
             name='secret',
-            field=models.ForeignKey(default=1, to='server.Secret'),
+            field=models.ForeignKey(related_name='secrets', to='server.Secret'),
             preserve_default=False,
         ),
     ]
