@@ -1,15 +1,15 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ title }} | {% trans 'Crypt' %}{% endblock %}
+{% block title %}Crypt{% endblock %}
 {% block extrastyle %}
 <style>
-#header{ 
-  background-color: #333940; 
+#header{
+  background-color: #333940;
   border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	}
- 
+
 #branding h1{ color: #fff; }
 .module h2, .module caption, .inline-group h2 { background:#ccc url(/admin_media/img/admin/nav-bg.gif) bottom left repeat-x; color: #333940; }
 a.section:link, a.section:visited { color: #666666; }
@@ -17,7 +17,7 @@ a.section:link, a.section:visited { color: #666666; }
 {% endblock %}
 
 {% block branding %}
-<h1 id="site-name">{% trans 'Crypt' %}</h1>
+<h1 id="site-name">Crypt</h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
