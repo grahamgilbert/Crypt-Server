@@ -76,6 +76,10 @@ Now we need to get the other components for Crypt
 
 	pip install -r crypt/setup/requirements.txt
 
+Now we need to generate some encryption keys:
+
+	python generate_keyczart.py
+
 Next we need to make a copy of the example_settings.py file and put in your info:
 
 	cd crypt/fvserver
@@ -97,10 +101,6 @@ We need to use Django's manage.py to initialise the app's database and create an
 Stage the static files (type yes when prompted)
 
 	python manage.py collectstatic
-
-Now we need to generate some encryption keys:
-
-	python generate_keyczart.py
 
 ##Installing mod_wsgi and configuring Apache
 To run Crypt in a production environment, we need to set up a suitable webserver. Make sure you exit out of the crypt_env virtualenv and the cryptuser user (back to root) before continuing).

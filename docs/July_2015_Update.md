@@ -25,9 +25,9 @@ We're now going to run a temporary container to update the database - if you hav
 $ docker run -t -i --rm --link postgres-crypt:db -e DB_NAME=crypt -e DB_USER=admin -e DB_PASS=password macadmins/crypt-server /bin/bash
 # We're in the container now
 $ cd /home/app/crypt
+$ python generate_keyczart.py
 $ python manage.py migrate --fake-initial
 $ python manage.py migrate
-$ python generate_keyczart.py
 $ exit
 ```
 
@@ -36,7 +36,7 @@ $ exit
 ```
 $ source /usr/local/crypt_env/bin/activate
 $ cd /usr/local/crypt_env/sal
+$ python generate_keyczart.py
 $ python manage.py migrate --fake-initial
 $ python manage.py migrate
-$ python generate_keyczart.py
 ```

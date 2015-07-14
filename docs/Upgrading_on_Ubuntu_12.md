@@ -24,13 +24,13 @@ Change into the Crypt directory and update the code from GitHub
 	cd crypt
 	git pull
 
-Run the migration so your database is up to date
-
-	python manage.py migrate
-
 Now we need to generate some encryption keys:
 
 	python generate_keyczart.py
+
+Run the migration so your database is up to date
+
+	python manage.py migrate
 
 Finally, as root (not cryptuser) restart Apache
 
