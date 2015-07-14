@@ -21,13 +21,13 @@ $ docker rm crypt
 ```
 
 We're now going to run a temporary container to update the database - if you have any custom mounts (e.g. ``settings.py``), you should include them as you normally would, and replace the DB_* environment variables to match what you have used:
-
 ```
 $ docker run -t -i --rm --link postgres-crypt:db -e DB_NAME=crypt -e DB_USER=admin -e DB_PASS=password macadmins/crypt-server /bin/bash
 # We're in the container now
 $ cd /home/app/crypt
-$ python manage.py migrate --fake server 0001
+$ python manage.py migrate --fake-initial
 $ python manage.py migrate
+$ python generate_keyczart.py
 $ exit
 ```
 
@@ -37,4 +37,6 @@ $ exit
 $ source /usr/local/crypt_env/bin/activate
 $ cd /usr/local/crypt_env/sal
 $ python manage.py migrate --fake-initial
+$ python manage.py migrate
+$ python generate_keyczart.py
 ```

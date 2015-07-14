@@ -6,13 +6,13 @@ This document assumes Ubuntu 12.04 LTS and that you have an existing installatio
 Switch to the service account
 
 	su cryptuser
-	
+
 Start bash
 
 	bash
-	
+
 Change into the Crypt virtualenv directory
-	
+
 	cd /usr/local/crypt_env
 
 Activate the virtualenv
@@ -23,10 +23,14 @@ Change into the Crypt directory and update the code from GitHub
 
 	cd crypt
 	git pull
-	
+
 Run the migration so your database is up to date
-	
+
 	python manage.py migrate
+
+Now we need to generate some encryption keys:
+
+	python generate_keyczart.py
 
 Finally, as root (not cryptuser) restart Apache
 
