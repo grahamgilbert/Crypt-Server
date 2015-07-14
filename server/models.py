@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
+from django_extensions.db.fields.encrypted import EncryptedCharField
 
 # Create your models here.
 class Computer(models.Model):
@@ -22,8 +23,8 @@ SECRET_TYPES = (('recovery_key', 'Recovery Key'),
 
 class Secret(models.Model):
     computer = models.ForeignKey(Computer)
-    secret = models.CharField(max_length=256)
-    secret_type = models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
+    secret = EncryptedCharField(max_length=256)
+    secret_type =  models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
     date_escrowed = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
         return self.secret

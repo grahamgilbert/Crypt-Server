@@ -2,7 +2,7 @@ import os
 # Django settings for fvserver project.
 
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.pardir))
-
+ENCRYPTED_FIELD_KEYS_DIR = os.path.join(PROJECT_DIR, 'keyset')
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'server',
     'south',
     'bootstrap_toolkit',
+    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging

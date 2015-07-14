@@ -5,5 +5,5 @@ local_settings.py
 fvserver/settings.py
 crypt.db
 fvserver.db
-
+keyset
 *.db copy

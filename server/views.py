@@ -60,13 +60,14 @@ def secret_info(request, secret_id):
     computer = secret.computer
 
     ##check if the user has outstanding request for this
-    pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True).filter(secret=secret)
+    pending = secret.request_set.filter(requesting_user=request.user).filter(approved__isnull=True)
     if pending.count() == 0:
         can_request = True
     else:
         can_request = False
     ##if it's been approved, we'll show a link to retrieve the key
-    approved = Request.objects.filter(requesting_user=request.user).filter(approved=True).filter(current=True).filter(secret=secret)
+    approved = secret.request_set.filter(requesting_user=request.user).filter(approved=True).filter(current=True)
+    
     c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret}
     if approved.count() != 0:
         return render_to_response('server/secret_approved_button.html', c, context_instance=RequestContext(request))
