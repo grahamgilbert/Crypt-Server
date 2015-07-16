@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Request Secret</h1>
 <p>{{ secret.computer.computername }} ({{ secret.computer.serial }})</p>
-<p>{{ secret.get_secret_type_display }} - {{ secret.escrow_date }}</p>
+<p>{{ secret.get_secret_type_display }} - {{ secret.date_escrowed }}</p>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <form action="{% url 'request' secret.id %}" method="post">{% csrf_token %}
 
