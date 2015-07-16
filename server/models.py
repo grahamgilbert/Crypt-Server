@@ -28,6 +28,8 @@ class Secret(models.Model):
     date_escrowed = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
         return self.secret
+    class Meta:
+        ordering = ['-date_escrowed']
 
 class Request(models.Model):
     secret = models.ForeignKey(Secret)

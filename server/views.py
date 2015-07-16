@@ -34,6 +34,7 @@ def index(request):
     return render_to_response('server/index.html', c, context_instance=RequestContext(request))
 
 ##view to see computer info
+@login_required
 def computer_info(request, computer_id):
     cleanup()
     computer = get_object_or_404(Computer, pk=computer_id)
@@ -52,6 +53,7 @@ def computer_info(request, computer_id):
 
     return render_to_response('server/computer_info.html', c, context_instance=RequestContext(request))
 
+@login_required
 def secret_info(request, secret_id):
     cleanup()
 
@@ -67,7 +69,7 @@ def secret_info(request, secret_id):
         can_request = False
     ##if it's been approved, we'll show a link to retrieve the key
     approved = secret.request_set.filter(requesting_user=request.user).filter(approved=True).filter(current=True)
-    
+
     c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret}
     if approved.count() != 0:
         return render_to_response('server/secret_approved_button.html', c, context_instance=RequestContext(request))
@@ -75,6 +77,7 @@ def secret_info(request, secret_id):
         return render_to_response('server/secret_request_button.html', c, context_instance=RequestContext(request))
 
 ##request key view
+@login_required
 def request(request, secret_id):
     ##we will auto approve this if the user has the right perms
     secret = get_object_or_404(Secret, pk=secret_id)
@@ -116,6 +119,7 @@ def request(request, secret_id):
 
 
 ##retrieve key view
+@login_required
 def retrieve(request, request_id):
     cleanup()
     the_request = get_object_or_404(Request, pk=request_id)
@@ -151,6 +155,44 @@ def managerequests(request):
     c = {'user': request.user, 'requests':requests, }
     return render_to_response('server/manage_requests.html', c, context_instance=RequestContext(request))
 
+# Add new manual computer
+@login_required
+def new_computer(request):
+    c = {}
+    c.update(csrf(request))
+    if request.method == 'POST':
+        form = ComputerForm(request.POST)
+        if form.is_valid():
+            new_computer = form.save(commit=False)
+            new_computer.save()
+            form.save_m2m()
+            return redirect('computer_info', new_computer.id)
+    else:
+        form = ComputerForm()
+    c = {'form': form}
+    return render_to_response('server/new_computer_form.html', c, context_instance=RequestContext(request))
+
+
+@login_required
+def new_secret(request, computer_id):
+    c = {}
+    c.update(csrf(request))
+    computer = get_object_or_404(Computer, pk=computer_id)
+    if request.method == 'POST':
+        form = SecretForm(request.POST)
+        if form.is_valid():
+            new_secret = form.save(commit=False)
+            new_secret.computer = computer
+            new_secret.date_escrowed = datetime.now()
+            new_secret.save()
+            #form.save_m2m()
+            return redirect('computer_info', computer.id)
+    else:
+        form = SecretForm()
+
+    c = {'form': form, 'computer': computer, }
+    return render_to_response('server/new_secret_form.html', c, context_instance=RequestContext(request))
+
 
 ##checkin view
 @csrf_exempt
@@ -175,6 +217,11 @@ def checkin(request):
         raise Http500
 
     try:
+        secret_type = request.POST['secret_type']
+    except:
+        secret_type = 'recovery_key'
+
+    try:
         computer = Computer.objects.get(serial=serial)
     except Computer.DoesNotExist:
         computer = Computer(serial=serial)
@@ -182,6 +229,7 @@ def checkin(request):
     computer.last_checkin = datetime.now()
     computer.username=user_name
     computer.computername = macname
+    computer.secret_type = secret_type
     computer.save()
 
     secret = Secret(computer=computer, secret=recovery_pass, date_escrowed=datetime.now())

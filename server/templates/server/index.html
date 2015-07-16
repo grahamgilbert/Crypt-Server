@@ -16,6 +16,9 @@
 
 {% endblock %}
 
+{% block dropdown %}
+<li><a href="{% url 'new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
+{% endblock %}
 {% block nav %}
 {% if perms.server.can_approve %}
     <li><a href="{% url 'managerequests' %}">Approve requests</a></li>

@@ -4,6 +4,11 @@ urlpatterns = patterns('server.views',
     #front. page
     url(r'^$', 'index', name='home'),
 
+    # Add computer
+    url(r'^new/computer/', 'new_computer', name='new_computer'),
+    # Add secret
+    url(r'^new/secret/(?P<computer_id>.+)/', 'new_secret', name='new_secret'),
+
     # secret info
     url(r'^info/secret/(?P<secret_id>.+)/', 'secret_info', name='secret_info'),
 
