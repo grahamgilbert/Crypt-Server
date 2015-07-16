@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from datetime import datetime, timedelta
 from django.db.models import Q
 from forms import *
+from django.views.defaults import server_error
 # Create your views here.
 
 ##clean up old requests
@@ -200,11 +201,11 @@ def checkin(request):
     try:
         serial_num = request.POST['serial']
     except:
-        raise Http500
+        return HttpResponse(status=500)
     try:
         recovery_pass = request.POST['recovery_password']
     except:
-        raise Http500
+        return HttpResponse(status=500)
 
     try:
         macname = request.POST['macname']
@@ -214,7 +215,7 @@ def checkin(request):
     try:
         user_name = request.POST['username']
     except:
-        raise Http500
+        return HttpResponse(status=500)
 
     try:
         secret_type = request.POST['secret_type']
@@ -222,9 +223,9 @@ def checkin(request):
         secret_type = 'recovery_key'
 
     try:
-        computer = Computer.objects.get(serial=serial)
+        computer = Computer.objects.get(serial=serial_num)
     except Computer.DoesNotExist:
-        computer = Computer(serial=serial)
+        computer = Computer(serial=serial_num)
     #computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
     computer.last_checkin = datetime.now()
     computer.username=user_name
@@ -236,4 +237,4 @@ def checkin(request):
     secret.save()
 
     c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
-    return HttpResponse(json.dumps(c), mimetype="application/json")
+    return HttpResponse(json.dumps(c), content_type="application/json")
