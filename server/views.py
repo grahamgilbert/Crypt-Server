@@ -209,7 +209,7 @@ def checkin(request):
     try:
         macname = request.POST['macname']
     except:
-        raise Http500
+        macname = serial_num
 
     try:
         user_name = request.POST['username']
