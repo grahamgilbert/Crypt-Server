@@ -118,9 +118,9 @@ And then enter something like:
 
 	<VirtualHost *:443>
         ServerName crypt.yourdomain.com
-        WSGIScriptAlias / /home/app/crypt/crypt/crypt.wsgi
+        WSGIScriptAlias / /home/app/crypt_env/crypt/crypt.wsgi
         WSGIDaemonProcess cryptuser user=cryptuser group=cryptgroup
-        Alias /static/ /opt/crypt_env/crypt/static/
+        Alias /static/ /home/app/crypt_env/crypt/static/
         SSLEngine on
         SSLCertificateFile      "/etc/puppetlabs/puppet/ssl/certs/cryptserver.yourdomain.com.pem"
         SSLCertificateKeyFile   "/etc/puppetlabs/puppet/ssl/private_keys/cryptserver.yourdomain.com.pem"
@@ -130,10 +130,7 @@ And then enter something like:
         SSLProtocol             +TLSv1
         SSLCipherSuite          ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA
         SSLHonorCipherOrder     On
-        ErrorLog "/var/log/httpd/crypt_error_ssl.log"
-        ServerSignature Off
-        CustomLog "/var/log/httpd/crypt_access_ssl.log" combined
-        <Directory /opt/crypt_env/crypt>
+        <Directory /home/app/crypt_env/crypt>
             WSGIProcessGroup cryptuser
             WSGIApplicationGroup %{GLOBAL}
             Order deny,allow
@@ -141,7 +138,7 @@ And then enter something like:
         </Directory>
     </VirtualHost>
     WSGISocketPrefix /var/run/wsgi
-    WSGIPythonHome /home/app/crypt
+    WSGIPythonHome /home/app/crypt_env
 
 Now we just need to enable our site, and then your can go and configure your clients (exit back to root for this):
 
