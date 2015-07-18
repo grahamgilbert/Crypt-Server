@@ -39,6 +39,8 @@ Add cryptuser to the cryptgroup group:
 
 	usermod -g cryptgroup cryptuser
 
+(You may also want a home folder for cryptuser, if it barks when spinning up your wsgi script)
+
 ##Create the virtual environment
 When a virtualenv is created, pip will also be installed to manage a virtualenv's local packages. Create a virtualenv which will handle installing Django in a contained environment. In this example we'll create a virtualenv for Crypt at /usr/local. This should be run from Bash, as this is what the virtualenv activate script expects.
 
@@ -108,47 +110,35 @@ To run Crypt in a production environment, we need to set up a suitable webserver
 	apt-get install libapache2-mod-wsgi
 
 ##Set up an Apache virtualhost
-You will probably need to edit some of these bits to suit your environment, but this works for me. Make a new file at /etc/apache2/sites-available (call it whatever you want)
+You will probably need to edit most of these bits to suit your environment, especially to add SSL encryption. There are many different options, especially if you prefer nginx, the below example is for apache with an internal puppet CA. Make a new file at /etc/apache2/sites-available (call it whatever you want)
 
-	nano /etc/apache2/sites-available/crypt.conf
+	vim /etc/apache2/sites-available/crypt.conf
 
 And then enter something like:
 
-	<VirtualHost *:80>
-	ServerName crypt.yourdomain.com
-   	WSGIScriptAlias / /usr/local/crypt_env/crypt/crypt.wsgi
-   	WSGIDaemonProcess crypt user=cryptuser group=cryptgroup
-   	Alias /static/ /usr/local/crypt_env/crypt/static/
-   	<Directory /usr/local/crypt_env/crypt>
-    	   WSGIProcessGroup crypt
-       		WSGIApplicationGroup %{GLOBAL}
-       		Order deny,allow
-       		Allow from all
-   	</Directory>
-	</VirtualHost>
-
-We're nearly done. Switch back to your cryptuser user and create /usr/local/crypt_env/crypt/crypt.wsgi with the following contents:
-
-	su cryptuser
-	bash
-	nano /usr/local/crypt_env/crypt/crypt.wsgi
-
-And the contents of the file:
-
-	import os, sys
-	import site
-
-	CRYPT_ENV_DIR = '/usr/local/crypt_env'
-
-	# Use site to load the site-packages directory of our virtualenv
-	site.addsitedir(os.path.join(CRYPT_ENV_DIR, 'lib/python2.7/site-packages'))
-
-	# Make sure we have the virtualenv and the Django app itself added to our path
-	sys.path.append(CRYPT_ENV_DIR)
-	sys.path.append(os.path.join(CRYPT_ENV_DIR, 'crypt'))
-	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fvserver.settings")
-	import django.core.handlers.wsgi
-	application = django.core.handlers.wsgi.WSGIHandler()
+	<VirtualHost *:443>
+        ServerName crypt.yourdomain.com
+        WSGIScriptAlias / /home/app/crypt_env/crypt/crypt.wsgi
+        WSGIDaemonProcess cryptuser user=cryptuser group=cryptgroup
+        Alias /static/ /home/app/crypt_env/crypt/static/
+        SSLEngine on
+        SSLCertificateFile      "/etc/puppetlabs/puppet/ssl/certs/cryptserver.yourdomain.com.pem"
+        SSLCertificateKeyFile   "/etc/puppetlabs/puppet/ssl/private_keys/cryptserver.yourdomain.com.pem"
+        SSLCACertificatePath    "/etc/puppetlabs/puppet/ssl/certs"
+        SSLCACertificateFile    "/etc/puppetlabs/puppet/ssl/certs/ca.pem"
+        SSLCARevocationFile     "/etc/puppetlabs/puppet/ssl/crl.pem"
+        SSLProtocol             +TLSv1
+        SSLCipherSuite          ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA
+        SSLHonorCipherOrder     On
+        <Directory /home/app/crypt_env/crypt>
+            WSGIProcessGroup cryptuser
+            WSGIApplicationGroup %{GLOBAL}
+            Order deny,allow
+            Allow from all
+        </Directory>
+    </VirtualHost>
+    WSGISocketPrefix /var/run/wsgi
+    WSGIPythonHome /home/app/crypt_env
 
 Now we just need to enable our site, and then your can go and configure your clients (exit back to root for this):
 

@@ -30,7 +30,6 @@ $ exit
 ```
 
 # Legacy (Apache)
-If you modified your `crypt.wsgi`, keep in mind that this [new version of django requires mod_wsgi to be compiled against python2.7](http://stackoverflow.com/questions/28681398/re-building-python-and-mod-wsgi), which RHEL wouldn't have by default.
 
 It is recommended that you start with a fresh ``fvserver/settings.py`` (copied from ``fvserver/example_settings.py``), as there have been quite a few changes. Plug in your database and time zone/language information as needed.
 
@@ -40,4 +39,7 @@ It is recommended that you start with a fresh ``fvserver/settings.py`` (copied f
 ```
 $ python manage.py migrate --fake-initial
 ```
-You may see another warning that `changes are not yet reflected in a migration`, you would do the provided command and then run the final migrate 
+You may see another warning that `changes are not yet reflected in a migration`, you would do the prompted command (`makemigration`) and then run the final migrate
+
+If you're on RHEL or CENTOS 6, the [new version of django requires mod_wsgi to be compiled against python2.7](http://stackoverflow.com/questions/28681398/re-building-python-and-mod-wsgi), and other tweaks too numerous to mention may make this a upgrade a world of pain. But here's a few while the wounds are still fresh:  
+You would be building python 2.7 as instructed in the link above(substitute in more recent versions as applicable), the cryptuser probably wants a home folder(with the .profile containing `export LD_LIBRARY_ROOT=/usr/local/lib`), the vitualenv may need to be rebuilt if you didn't explicitly use 2.7, the vhost wants the WSGIPythonHome to point to your venv, the cryptuser of course needs access to python2.7's complete lib and bin paths, and of course double-back `chcon`'ing applicable paths as necessary(e.g. `-R --reference=/var/www /path/to/allow/apache`).
