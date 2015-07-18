@@ -8,3 +8,4 @@ six==1.9.0
 pyasn1==0.1.8
 pycrypto==2.6.1
 python-keyczar==0.715
+django-bootstrap3==5.4.0
