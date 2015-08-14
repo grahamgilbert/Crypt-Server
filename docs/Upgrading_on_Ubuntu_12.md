@@ -24,6 +24,10 @@ Change into the Crypt directory and update the code from GitHub
 	cd crypt
 	git pull
 
+Then we'll make sure all needed dependencies are up-to-date:
+
+	pip install -r setup/requirements.txt
+
 Now we need to generate some encryption keys:
 
 	python generate_keyczart.py

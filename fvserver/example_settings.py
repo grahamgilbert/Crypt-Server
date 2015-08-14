@@ -137,8 +137,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'server',
-    'south',
-    'bootstrap_toolkit',
+    'bootstrap3',
     'django_extensions',
 )
 
