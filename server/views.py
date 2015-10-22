@@ -70,8 +70,9 @@ def secret_info(request, secret_id):
         can_request = False
     ##if it's been approved, we'll show a link to retrieve the key
     approved = secret.request_set.filter(requesting_user=request.user).filter(approved=True).filter(current=True)
+    requests = secret.request_set.all()
 
-    c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret}
+    c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret, 'requests':requests}
     if approved.count() != 0:
         return render_to_response('server/secret_approved_button.html', c, context_instance=RequestContext(request))
     else:
