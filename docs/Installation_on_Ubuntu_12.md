@@ -80,7 +80,7 @@ Now we need to get the other components for Crypt
 
 Now we need to generate some encryption keys:
 
-	python generate_keyczart.py
+	python crypt/generate_keyczart.py
 
 Next we need to make a copy of the example_settings.py file and put in your info:
 
