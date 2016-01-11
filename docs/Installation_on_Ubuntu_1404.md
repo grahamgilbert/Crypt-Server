@@ -98,6 +98,15 @@ Edit settings.py:
 * Change ALLOWED_HOSTS to be a list of hosts that the server will be 
 accessible from (e.g. ``ALLOWED_HOSTS=['crypt.grahamgilbert.dev']``
 
+## Using with MySQL
+In order to use Crypt-Server with MySQL, you need to configure it to connect to 
+a MySQL server instead of the default sqlite3. To do this, locate the DATABASES
+section of settings.py, and change ENGINE to 'django.db.backends.mysql'. Set the 
+NAME as the database name, USER and PASSWORD to your user and password, and 
+either leave HOST as blank for localhost or insert an IP or hostname of your 
+MySQL server.
+
+
 ###More Setup
 We need to use Django's manage.py to initialise the app's database and 
 create an admin user. Running the syncdb command will ask you to create 
