@@ -1,6 +1,6 @@
 Installation on Ubuntu 14.04 LTS
 =====================
-This document assumes Ubuntu 14.04 LTS. 
+This document assumes a bare install of Ubuntu 14.04 LTS server. 
 
 All commands should be run as root, unless specified
 
@@ -11,9 +11,9 @@ All commands should be run as root, unless specified
 	apt-get isntall gcc
 ###Install git
 	apt-get install git
-###Install the python c headers (I can't remember why I needed this. I think it was for the encryption library) !! GO BACK AND CHECK !!
+###Install the python C headers (I can't remember why I needed this. I think it was for the encryption library) !! GO BACK AND CHECK !!
 	apt-get install python-dev
-###If you want to use mysql, you need some of the following !! GO BACK AND NARROW THIS DOWN !!
+###If you want to use MySQL, you need some of the following !! GO BACK AND NARROW THIS DOWN !!
 	apt-get install libmysqlclient libmysqlclient-dev \
 	python-mysqldb mysql-client
 ###Install the python dev tools
@@ -71,7 +71,7 @@ Now we can activate the virtualenv:
 	cd crypt_env
 	source bin/activate
 
-##Copy and configure Crypt
+##Install and configure Crypt
 Still inside the crypt_env virtualenv, use git to clone the current 
 version of Crypt-Server
 
