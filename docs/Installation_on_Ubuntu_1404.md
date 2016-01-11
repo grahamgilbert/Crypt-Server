@@ -103,7 +103,7 @@ In order to use Crypt-Server with MySQL, you need to configure it to connect to
 a MySQL server instead of the default sqlite3. To do this, locate the DATABASES
 section of settings.py, and change ENGINE to 'django.db.backends.mysql'. Set the 
 NAME as the database name, USER and PASSWORD to your user and password, and 
-either leave HOST as blank for localhost or insert an IP or hostname of your 
+either leave HOST as blank for localhost, or insert an IP or hostname of your 
 MySQL server.
 
 
