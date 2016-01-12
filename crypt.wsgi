@@ -1,7 +1,7 @@
 import os, sys
 import site
 
-CRYPT_ENV_DIR = '/home/app/crypt_env'
+CRYPT_ENV_DIR = '/usr/local/crypt_env'
 
 # Use site to load the site-packages directory of our virtualenv
 site.addsitedir(os.path.join(CRYPT_ENV_DIR, 'lib/python2.7/site-packages'))
