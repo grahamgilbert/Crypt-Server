@@ -168,9 +168,9 @@ And then enter something like:
         <Directory /usr/local/crypt_env/crypt>
             WSGIProcessGroup cryptuser
             WSGIApplicationGroup %{GLOBAL}
-	    Options FollowSymLinks
-	    AllowOverride None
-	    Require all granted
+            Options FollowSymLinks
+            AllowOverride None
+            Require all granted
         </Directory>
     </VirtualHost>
     WSGISocketPrefix /var/run/wsgi
