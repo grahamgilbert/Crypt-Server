@@ -118,7 +118,7 @@ NAME as the database name, USER and PASSWORD to your user and password, and
 either leave HOST as blank for localhost, or insert an IP or hostname of your 
 MySQL server. You will also need to install the correct python and apt packages.
 
-	apt-get isntall libmysqlclient-dev python-dev mysql-client
+	apt-get install libmysqlclient-dev python-dev mysql-client
 	pip install mysql-python
 
 
