@@ -50,9 +50,6 @@ Add cryptuser to the cryptgroup group:
 
 	usermod -g cryptgroup cryptuser
 
-(You may also want a home folder for cryptuser, if it barks when 
-spinning up your wsgi script)
-
 ##Create the virtual environment
 When a virtualenv is created, pip will also be installed to manage a 
 virtualenv's local packages. Create a virtualenv which will handle 
