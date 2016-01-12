@@ -6,21 +6,35 @@ All commands should be run as root, unless specified
 
 ##Install Prerequisites
 ###Install Apache and the Apache modules
+
  	apt-get install apache2 libapache2-mod-wsgi
+
 ###Install GCC (Needed for the encryption library)
+
 	apt-get install gcc
+
 ###Install git
+
 	apt-get install git
-###Install the python C headers (I can't remember why I needed this. I think it was for the encryption library) !! GO BACK AND CHECK !!
+
+###Install the python C headers (so you can compile  the encryption library)
+
 	apt-get install python-dev
-###If you want to use MySQL, you need some of the following !! GO BACK AND NARROW THIS DOWN !!
-	apt-get install libmysqlclient libmysqlclient-dev \
-	python-mysqldb mysql-client
+
+###If you want to use MySQL, you the following
+
+	apt-get install libmysqlclient-dev python-mysqldb mysql-client
+
 ###Install the python dev tools
+
 	apt-get install python-setuptools
+
 ###Verify virtual env is installed
+
 	virtualenv --version
+
 ###If is isn't, install it with 
+
 	easy_install virtualenv
 
 ##Create a non-admin service account and group
@@ -81,7 +95,7 @@ Now we need to get the other components for Crypt
 
 	pip install -r crypt/setup/requirements.txt
 
-Now we need to generate some encryption keys:
+Now we need to generate some encryption keys (make sure these go in crypt/keyset):
 
 	python crypt/generate_keyczart.py
 
@@ -104,7 +118,10 @@ a MySQL server instead of the default sqlite3. To do this, locate the DATABASES
 section of settings.py, and change ENGINE to 'django.db.backends.mysql'. Set the 
 NAME as the database name, USER and PASSWORD to your user and password, and 
 either leave HOST as blank for localhost, or insert an IP or hostname of your 
-MySQL server.
+MySQL server. You will also need to install the correct python and apt packages.
+
+	apt-get isntall libmysqlclient-dev python-dev mysql-client
+	pip install mysql-python
 
 
 ###More Setup
@@ -138,9 +155,9 @@ And then enter something like:
 
 	<VirtualHost *:443>
         ServerName crypt.yourdomain.com
-        WSGIScriptAlias / /home/app/crypt_env/crypt/crypt.wsgi
+        WSGIScriptAlias / /usr/local/crypt_env/crypt/crypt.wsgi
         WSGIDaemonProcess cryptuser user=cryptuser group=cryptgroup
-        Alias /static/ /home/app/crypt_env/crypt/static/
+        Alias /static/ /usr/local/crypt_env/crypt/static/
         SSLEngine on
         SSLCertificateFile      "/etc/puppetlabs/puppet/ssl/certs/cryptserver.yourdomain.com.pem"
         SSLCertificateKeyFile   "/etc/puppetlabs/puppet/ssl/private_keys/cryptserver.yourdomain.com.pem"
@@ -150,15 +167,16 @@ And then enter something like:
         SSLProtocol             +TLSv1
         SSLCipherSuite          ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA
         SSLHonorCipherOrder     On
-        <Directory /home/app/crypt_env/crypt>
+        <Directory /usr/local/crypt_env/crypt>
             WSGIProcessGroup cryptuser
             WSGIApplicationGroup %{GLOBAL}
-            Order deny,allow
-            Allow from all
+	    Options FollowSymLinks
+	    AllowOverride None
+	    Require all granted
         </Directory>
     </VirtualHost>
     WSGISocketPrefix /var/run/wsgi
-    WSGIPythonHome /home/app/crypt_env
+    WSGIPythonHome /usr/local/crypt_env
 
 Now we just need to enable our site, and then your can go and configure 
 your clients:
