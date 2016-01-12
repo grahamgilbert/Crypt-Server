@@ -40,7 +40,7 @@ All commands should be run as root, unless specified
 ##Create a non-admin service account and group
 Create the Crypt user:
 
-	useradd cryptuser
+	useradd -d /usr/local/crypt_env cryptuser
 
 Create the Crypt group:
 
