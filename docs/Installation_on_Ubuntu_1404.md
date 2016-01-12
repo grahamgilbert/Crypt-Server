@@ -8,7 +8,7 @@ All commands should be run as root, unless specified
 ###Install Apache and the Apache modules
  	apt-get install apache2 libapache2-mod-wsgi
 ###Install GCC (Needed for the encryption library)
-	apt-get isntall gcc
+	apt-get install gcc
 ###Install git
 	apt-get install git
 ###Install the python C headers (I can't remember why I needed this. I think it was for the encryption library) !! GO BACK AND CHECK !!
