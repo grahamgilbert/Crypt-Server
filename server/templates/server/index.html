@@ -26,7 +26,7 @@
 {% endblock %}
 {% block content %}
 {% if perms.server.can_approve %}
-    {% if outstanding.count < 0 %}
+    {% if outstanding.count > 0 %}
     <div class="alert alert-info">
         You have outstanding requests to approve.
     </div>
