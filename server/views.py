@@ -234,7 +234,7 @@ def checkin(request):
     computer.secret_type = secret_type
     computer.save()
 
-    secret = Secret(computer=computer, secret=recovery_pass, date_escrowed=datetime.now())
+    secret = Secret(computer=computer, secret=recovery_pass, secret_type=secret_type, date_escrowed=datetime.now())
     secret.save()
 
     c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
