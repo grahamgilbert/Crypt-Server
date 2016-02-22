@@ -265,8 +265,11 @@ def checkin(request):
     computer.secret_type = secret_type
     computer.save()
 
-    secret = Secret(computer=computer, secret=recovery_pass, secret_type=secret_type, date_escrowed=datetime.now())
-    secret.save()
+    try:
+        secret = Secret(computer=computer, secret=recovery_pass, secret_type=secret_type, date_escrowed=datetime.now())
+        secret.save()
+    except ValidationError:
+        pass
 
     c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
     return HttpResponse(json.dumps(c), content_type="application/json")
