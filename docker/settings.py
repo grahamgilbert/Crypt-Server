@@ -19,18 +19,30 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-# PG Database
-if os.environ.has_key('DB_PORT_5432_TCP_ADDR'):
+
+host = None
+port = None
+
+if os.environ.has_key('DB_HOST'):
+    host = os.environ('DB_HOST')
+    port = os.environ.get('DB_PORT')
+
+elif os.environ.has_key('DB_PORT_5432_TCP_ADDR'):
+    host = os.environ('DB_PORT_5432_TCP_ADDR')
+    port = os.environ.get('DB_PORT_5432_TCP_PORT', '5432')
+
+if host and port:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ['DB_NAME'],
             'USER': os.environ['DB_USER'],
             'PASSWORD': os.environ['DB_PASS'],
-            'HOST': os.environ['DB_PORT_5432_TCP_ADDR'],
-            'PORT': os.environ['DB_PORT_5432_TCP_PORT'],
+            'HOST': host,
+            'PORT': port,
         }
     }
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
