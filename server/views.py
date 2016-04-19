@@ -12,6 +12,9 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from forms import *
 from django.views.defaults import server_error
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.urlresolvers import reverse
 # Create your views here.
 
 ##clean up old requests
@@ -95,19 +98,32 @@ def request(request, secret_id):
             new_request = form.save(commit=False)
             new_request.requesting_user = request.user
             new_request.secret = secret
+            new_request.save()
             if approver:
                 new_request.auth_user = request.user
                 new_request.approved = True
                 new_request.date_approved = datetime.now()
+                new_request.save()
             else:
                 # User isn't an approver, send an email to all of the approvers
                 perm = Permission.objects.get(codename='can_approve')
-                users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
-                print users
-                for user in users:
-                    if user.email:
-                        print user.email
-            new_request.save()
+                users = User.objects.filter(Q(is_superuser=True) | Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
+
+                if hasattr(settings, 'HOST_NAME'):
+                    server_name = settings.HOST_NAME.rstrip('/')
+                else:
+                    server_name = 'http://crypt'
+                if hasattr(settings, 'EMAIL_HOST'):
+                    for user in users:
+                        if user.email:
+                            email_message = """ There has been a new key request by %s. You can review this request at %s%s
+                            """ % (request.user.username, server_name, reverse('server.views.approve', args=[new_request.id]))
+                            email_sender = 'requests@%s' % request.META['SERVER_NAME']
+                            send_mail('Crypt Key Request', email_message, email_sender,
+    [user.email], fail_silently=False)
+                else:
+                    print 'not using email'
+
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
                 return redirect('server.views.retrieve', new_request.id)

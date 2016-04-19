@@ -41,6 +41,21 @@ elif locale.getdefaultlocale():
 else:
     LANGUAGE_CODE = 'en_US'
 
+if getenv('DOCKER_CRYPT_EMAIL_HOST'):
+    EMAIL_HOST = getenv('DOCKER_CRYPT_EMAIL_HOST')
+
+if getenv('DOCKER_CRYPT_EMAIL_PORT'):
+    EMAIL_PORT = getenv('DOCKER_CRYPT_EMAIL_PORT')
+
+if getenv('DOCKER_CRYPT_EMAIL_USER'):
+    EMAIL_USER = getenv('DOCKER_CRYPT_EMAIL_USER')
+
+if getenv('DOCKER_CRYPT_EMAIL_PASSWORD'):
+    EMAIL_PASSWORD = getenv('DOCKER_CRYPT_EMAIL_PASSWORD')
+
+if getenv('DOCKER_CRYPT_HOST_NAME'):
+    HOST_NAME = getenv('DOCKER_CRYPT_HOST_NAME')
+
 # Read the list of allowed hosts from the $DOCKER_CRYPT_ALLOWED env var, or
 # allow all hosts if none was set.
 if getenv('DOCKER_CRYPT_ALLOWED'):
