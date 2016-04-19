@@ -19,6 +19,4 @@ chmod go+x $APP_DIR
 mkdir -p /var/log/gunicorn
 export PYTHONPATH=$PYTHONPATH:$APP_DIR
 export DJANGO_SETTINGS_MODULE='fvserver.settings'
-#export SECRET_KEY='no-so-secret' # Fix for your own site!
-# chdir /var/www/django/sd_sample_project/sd_sample_project
 supervisord --nodaemon -c $APP_DIR/supervisord.conf
