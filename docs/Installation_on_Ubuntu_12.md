@@ -93,6 +93,20 @@ Edit settings.py:
 * Set TIME_ZONE to the appropriate timezone
 * Change ALLOWED_HOSTS to be a list of hosts that the server will be accessible from (e.g. ``ALLOWED_HOSTS=['crypt.grahamgilbert.dev']``
 
+If you wish to use email notifications, add the following to your settings.py:
+
+``` python
+# This is the host and port you are sending email on
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+
+# If your email server requires Authentication
+EMAIL_HOST_USER = 'youruser'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+# This is the URL at the front of any links in the emails
+HOST_NAME = 'http://localhost'
+```
+
 ###More Setup
 We need to use Django's manage.py to initialise the app's database and create an admin user. Running the syncdb command will ask you to create an admin user - make sure you do this!
 

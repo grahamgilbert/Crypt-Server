@@ -1,6 +1,6 @@
 Installation on Ubuntu 14.04 LTS
 =====================
-This document assumes a bare install of Ubuntu 14.04 LTS server. 
+This document assumes a bare install of Ubuntu 14.04 LTS server.
 
 All commands should be run as root, unless specified
 
@@ -33,7 +33,7 @@ All commands should be run as root, unless specified
 
 	virtualenv --version
 
-###If is isn't, install it with 
+###If is isn't, install it with
 
 	easy_install virtualenv
 
@@ -51,10 +51,10 @@ Add cryptuser to the cryptgroup group:
 	usermod -g cryptgroup cryptuser
 
 ##Create the virtual environment
-When a virtualenv is created, pip will also be installed to manage a 
-virtualenv's local packages. Create a virtualenv which will handle 
-installing Django in a contained environment. In this example we'll 
-create a virtualenv for Crypt at /usr/local. This should be run from 
+When a virtualenv is created, pip will also be installed to manage a
+virtualenv's local packages. Create a virtualenv which will handle
+installing Django in a contained environment. In this example we'll
+create a virtualenv for Crypt at /usr/local. This should be run from
 Bash, as this is what the virtualenv activate script expects.
 
 Go to where we're going to install the virtualenv:
@@ -83,7 +83,7 @@ Now we can activate the virtualenv:
 	source bin/activate
 
 ##Install and configure Crypt
-Still inside the crypt_env virtualenv, use git to clone the current 
+Still inside the crypt_env virtualenv, use git to clone the current
 version of Crypt-Server
 
 	git clone https://github.com/grahamgilbert/Crypt-Server.git crypt
@@ -97,7 +97,7 @@ Now we need to generate some encryption keys (make sure these go in crypt/keyset
 	cd crypt
 	python ./generate_keyczart.py
 
-Next we need to make a copy of the example_settings.py file and put 
+Next we need to make a copy of the example_settings.py file and put
 in your info:
 
 	cd ./fvserver
@@ -107,15 +107,29 @@ Edit settings.py:
 
 * Set ADMINS to an administrative name and email
 * Set TIME_ZONE to the appropriate timezone
-* Change ALLOWED_HOSTS to be a list of hosts that the server will be 
+* Change ALLOWED_HOSTS to be a list of hosts that the server will be
 accessible from (e.g. ``ALLOWED_HOSTS=['crypt.grahamgilbert.dev']``
 
+If you wish to use email notifications, add the following to your settings.py:
+
+``` python
+# This is the host and port you are sending email on
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+
+# If your email server requires Authentication
+EMAIL_HOST_USER = 'youruser'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+# This is the URL at the front of any links in the emails
+HOST_NAME = 'http://localhost'
+```
+
 ## Using with MySQL
-In order to use Crypt-Server with MySQL, you need to configure it to connect to 
+In order to use Crypt-Server with MySQL, you need to configure it to connect to
 a MySQL server instead of the default sqlite3. To do this, locate the DATABASES
-section of settings.py, and change ENGINE to 'django.db.backends.mysql'. Set the 
-NAME as the database name, USER and PASSWORD to your user and password, and 
-either leave HOST as blank for localhost, or insert an IP or hostname of your 
+section of settings.py, and change ENGINE to 'django.db.backends.mysql'. Set the
+NAME as the database name, USER and PASSWORD to your user and password, and
+either leave HOST as blank for localhost, or insert an IP or hostname of your
 MySQL server. You will also need to install the correct python and apt packages.
 
 	apt-get install libmysqlclient-dev python-dev mysql-client
@@ -123,8 +137,8 @@ MySQL server. You will also need to install the correct python and apt packages.
 
 
 ## More Setup
-We need to use Django's manage.py to initialise the app's database and 
-create an admin user. Running the syncdb command will ask you to create 
+We need to use Django's manage.py to initialise the app's database and
+create an admin user. Running the syncdb command will ask you to create
 an admin user - make sure you do this!
 
 	cd ..
@@ -136,15 +150,15 @@ Stage the static files (type yes when prompted)
 	python manage.py collectstatic
 
 ##Installing mod_wsgi and configuring Apache
-To run Crypt in a production environment, we need to set up a suitable 
-webserver. Make sure you exit out of the crypt_env virtualenv and the 
+To run Crypt in a production environment, we need to set up a suitable
+webserver. Make sure you exit out of the crypt_env virtualenv and the
 cryptuser user (back to root) before continuing).
 
 ##Set up an Apache virtualhost
-You will probably need to edit most of these bits to suit your 
-environment, especially to add SSL encryption. There are many different 
-options, especially if you prefer nginx, the below example is for apache 
-with an internal puppet CA. Make a new file at 
+You will probably need to edit most of these bits to suit your
+environment, especially to add SSL encryption. There are many different
+options, especially if you prefer nginx, the below example is for apache
+with an internal puppet CA. Make a new file at
 /etc/apache2/sites-available (call it whatever you want)
 
 	vim /etc/apache2/sites-available/crypt.conf
@@ -176,7 +190,7 @@ And then enter something like:
     WSGISocketPrefix /var/run/wsgi
     WSGIPythonHome /usr/local/crypt_env
 
-Now we just need to enable our site, and then your can go and configure 
+Now we just need to enable our site, and then your can go and configure
 your clients:
 
 	a2ensite crypt.conf
