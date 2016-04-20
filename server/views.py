@@ -120,9 +120,7 @@ def request(request, secret_id):
                             """ % (request.user.username, server_name, reverse('server.views.approve', args=[new_request.id]))
                             email_sender = 'requests@%s' % request.META['SERVER_NAME']
                             send_mail('Crypt Key Request', email_message, email_sender,
-    [user.email], fail_silently=False)
-                else:
-                    print 'not using email'
+    [user.email], fail_silently=True)
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
@@ -147,7 +145,7 @@ def retrieve(request, request_id):
     else:
         raise Http404
 
-##approve key view
+## approve key view
 @permission_required('server.can_approve', login_url='/login/')
 def approve(request, request_id):
     the_request = get_object_or_404(Request, pk=request_id)
@@ -160,6 +158,23 @@ def approve(request, request_id):
             new_request.auth_user = request.user
             new_request.date_approved = datetime.now()
             new_request.save()
+
+            # Send an email to the requester with a link to retrieve (or not)
+            if hasattr(settings, 'HOST_NAME'):
+                server_name = settings.HOST_NAME.rstrip('/')
+            else:
+                server_name = 'http://crypt'
+            if new_request.approved == True:
+                request_status = 'approved'
+            elif new_request.approved == False:
+                request_status = 'denied'
+            if hasattr(settings, 'EMAIL_HOST'):
+                if new_request.requesting_user.email:
+                    email_message = """ Your key request has been %s by %s. %s%s
+                    """ % (request_status, request.user.username, server_name, reverse('server.views.secret_info', args=[new_request.id]))
+                    email_sender = 'requests@%s' % request.META['SERVER_NAME']
+                    send_mail('Crypt Key Request', email_message, email_sender,
+[new_request.requesting_user.email], fail_silently=True)
             return redirect('server.views.managerequests')
     else:
         form = ApproveForm(instance=the_request)
