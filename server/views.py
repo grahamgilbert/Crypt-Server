@@ -52,6 +52,7 @@ def computer_info(request, computer_id):
         secret.approved = Request.objects.filter(requesting_user=request.user).filter(approved=True).filter(current=True).filter(secret=secret)
         secret.pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True).filter(secret=secret)
 
+    print vars(secrets)
     c = {'user': request.user, 'computer':computer, 'secrets':secrets }
 
     return render_to_response('server/computer_info.html', c, context_instance=RequestContext(request))
@@ -257,25 +258,15 @@ def checkin(request):
         computer = Computer.objects.get(serial=serial_num)
     except Computer.DoesNotExist:
         computer = Computer(serial=serial_num)
-        print 'computer doesnt exist'
-
+    #computer = Computer(recovery_key=recovery_pass, serial=serial_num, last_checkin = datetime.now(), username=user_name, computername=macname)
     computer.last_checkin = datetime.now()
     computer.username=user_name
     computer.computername = macname
     computer.secret_type = secret_type
     computer.save()
 
-    secret_exists = False
-    for secret in computer.secret_set.all():
-        if secret.secret == recovery_pass and \
-        secret.secret_type == secret_type:
-            secret_exists = True
-            break
-    if secret_exists == False:
-        secret = Secret(computer=computer, secret=recovery_pass, secret_type=secret_type, date_escrowed=datetime.now())
-        print 'secret escrowed for first time'
-
-        secret.save()
+    secret = Secret(computer=computer, secret=recovery_pass, secret_type=secret_type, date_escrowed=datetime.now())
+    secret.save()
 
     c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
     return HttpResponse(json.dumps(c), content_type="application/json")
