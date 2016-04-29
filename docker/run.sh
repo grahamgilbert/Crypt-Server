@@ -19,4 +19,11 @@ chmod go+x $APP_DIR
 mkdir -p /var/log/gunicorn
 export PYTHONPATH=$PYTHONPATH:$APP_DIR
 export DJANGO_SETTINGS_MODULE='fvserver.settings'
-supervisord --nodaemon -c $APP_DIR/supervisord.conf
+
+if [ "$DOCKER_CRYPT_DEBUG" = "true" ] || [ "$DOCKER_CRYPT_DEBUG" = "True" ] || [ "$DOCKER_CRYPT_DEBUG" = "TRUE" ] ; then
+    service nginx stop
+    echo "RUNNING IN DEBUG MODE"
+    python manage.py runserver 0.0.0.0:8000
+else
+    supervisord --nodaemon -c $APP_DIR/supervisord.conf
+fi

@@ -7,6 +7,7 @@ ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ America/New_York
 ENV APP_DIR /home/docker/crypt
+ENV DOCKER_SAL_DEBUG false
 # DOCKER_CRYPT_* env vars configure the following possible settings in Crypt's
 # settings.py:
 # DOCKER_CRYPT_ADMINS = A list of lists (tuples) of names and email addresses of authorized admins
