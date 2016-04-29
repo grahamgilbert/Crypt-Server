@@ -20,7 +20,7 @@ mkdir -p /var/log/gunicorn
 export PYTHONPATH=$PYTHONPATH:$APP_DIR
 export DJANGO_SETTINGS_MODULE='fvserver.settings'
 
-if [ "$DOCKER_CRYPT_DEBUG" = "true" ] || [ "$DOCKER_CRYPT_DEBUG" = "True" ] || [ "$DOCKER_CRYPT_DEBUG" = "TRUE" ] ; then
+if [ "${DOCKER_CRYPT_DEBUG}" = "true" ] || [ "${DOCKER_CRYPT_DEBUG}" = "True" ] || [ "${DOCKER_CRYPT_DEBUG}" = "TRUE" ] ; then
     service nginx stop
     echo "RUNNING IN DEBUG MODE"
     python manage.py runserver 0.0.0.0:8000
