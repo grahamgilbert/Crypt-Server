@@ -28,6 +28,12 @@ __Features__
 ##Installation instructions
 It is recommended that you use [Docker](Docker.md) to run this, but if you wish to run directly on a host, installation instructions are over on the in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_12.md)
 
+##Settings
+
+* ``APPROVE_OWN`` - By default, users with approval permissons can approve their own key requests. By setting this to False in settings.py (or by using the `DOCKER_CRYPT_APPROVE_OWN` environment variable with Docker), users cannot approve their own requests.
+
+* ``ALL_APPROVE`` - By default, users need to be explicitly given approval permissions to approve key retrieval requests. By setting this to True in settings.py (or by using the `DOCKER_CRYPT_ALL_APPROVE` environment variable with Docker), all users are given this permission when they log in.
+
 ##New features in latest release
 - Records Bonjour Name of Macs submitting keys
 - Introduces the can_approve permission - users must have this permission to authorise key retrieval

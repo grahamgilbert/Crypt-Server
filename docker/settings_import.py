@@ -2,6 +2,22 @@
 from os import getenv
 import locale
 
+try:
+    if getenv('DOCKER_CRYPT_APPROVE_OWN').lower() == 'false':
+        APPROVE_OWN = False
+    else:
+        APPROVE_OWN = True
+except:
+    APPROVE_OWN = True
+
+try:
+    if getenv('DOCKER_CRYPT_ALL_APPROVE').lower() == 'true':
+        ALL_APPROVE = True
+    else:
+        ALL_APPROVE = False
+except:
+    ALL_APPROVE = False
+
 # Read list of admins from $DOCKER_CRYPT_ADMINS env var
 admin_list = []
 if getenv('DOCKER_CRYPT_ADMINS'):

@@ -32,8 +32,22 @@ def index(request):
     #show table with all the keys
     computers = Computer.objects.all()
 
+    if hasattr(settings, 'ALL_APPROVE'):
+        if settings.ALL_APPROVE == True:
+            permissions = Permission.objects.all()
+            print permissions
+            for permission in permissions:
+                print permission.codename
+            permission = Permission.objects.get(codename='can_approve')
+            if not request.user.has_perm(permission):
+                request.user.user_permissions.add(permission)
+                request.user.save()
     ##get the number of oustanding requests - approved equals null
+
     outstanding = Request.objects.filter(approved__isnull=True)
+    if hasattr(settings, 'APPROVE_OWN'):
+        if settings.APPROVE_OWN == False:
+            outstanding = outstanding.filter(~Q(requesting_user=request.user))
     c = {'user': request.user, 'computers':computers, 'outstanding':outstanding, }
     return render_to_response('server/index.html', c, context_instance=RequestContext(request))
 
@@ -86,10 +100,14 @@ def secret_info(request, secret_id):
 def request(request, secret_id):
     ##we will auto approve this if the user has the right perms
     secret = get_object_or_404(Secret, pk=secret_id)
+    approver = False
     if request.user.has_perm('server.can_approve'):
         approver = True
-    else:
-        approver = False
+
+    if approver == True:
+        if hasattr(settings, 'APPROVE_OWN'):
+            if settings.APPROVE_OWN == False:
+                approver = False
     c = {}
     c.update(csrf(request))
     if request.method == 'POST':
@@ -113,14 +131,15 @@ def request(request, secret_id):
                     server_name = settings.HOST_NAME.rstrip('/')
                 else:
                     server_name = 'http://crypt'
-                if hasattr(settings, 'EMAIL_HOST'):
-                    for user in users:
-                        if user.email:
-                            email_message = """ There has been a new key request by %s. You can review this request at %s%s
-                            """ % (request.user.username, server_name, reverse('server.views.approve', args=[new_request.id]))
-                            email_sender = 'requests@%s' % request.META['SERVER_NAME']
-                            send_mail('Crypt Key Request', email_message, email_sender,
-    [user.email], fail_silently=True)
+                if hasattr(settings, 'SEND_EMAIL'):
+                    if settings.SEND_EMAIL == True:
+                        for user in users:
+                            if user.email:
+                                email_message = """ There has been a new key request by %s. You can review this request at %s%s
+                                """ % (request.user.username, server_name, reverse('server.views.approve', args=[new_request.id]))
+                                email_sender = 'requests@%s' % request.META['SERVER_NAME']
+                                send_mail('Crypt Key Request', email_message, email_sender,
+        [user.email], fail_silently=True)
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
@@ -168,13 +187,14 @@ def approve(request, request_id):
                 request_status = 'approved'
             elif new_request.approved == False:
                 request_status = 'denied'
-            if hasattr(settings, 'EMAIL_HOST'):
-                if new_request.requesting_user.email:
-                    email_message = """ Your key request has been %s by %s. %s%s
-                    """ % (request_status, request.user.username, server_name, reverse('server.views.secret_info', args=[new_request.id]))
-                    email_sender = 'requests@%s' % request.META['SERVER_NAME']
-                    send_mail('Crypt Key Request', email_message, email_sender,
-[new_request.requesting_user.email], fail_silently=True)
+            if hasattr(settings, 'SEND_EMAIL'):
+                if settings.SEND_EMAIL == True:
+                    if new_request.requesting_user.email:
+                        email_message = """ Your key request has been %s by %s. %s%s
+                        """ % (request_status, request.user.username, server_name, reverse('server.views.secret_info', args=[new_request.id]))
+                        email_sender = 'requests@%s' % request.META['SERVER_NAME']
+                        send_mail('Crypt Key Request', email_message, email_sender,
+    [new_request.requesting_user.email], fail_silently=True)
             return redirect('server.views.managerequests')
     else:
         form = ApproveForm(instance=the_request)
@@ -185,6 +205,9 @@ def approve(request, request_id):
 @permission_required('server.can_approve', login_url='/login/')
 def managerequests(request):
     requests = Request.objects.filter(approved__isnull=True)
+    if hasattr(settings, 'APPROVE_OWN'):
+        if settings.APPROVE_OWN == False:
+            requests = requests.filter(~Q(requesting_user=request.user))
     c = {'user': request.user, 'requests':requests, }
     return render_to_response('server/manage_requests.html', c, context_instance=RequestContext(request))
 

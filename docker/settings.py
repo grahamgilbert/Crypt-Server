@@ -1,4 +1,4 @@
-from settings_import import ADMINS, TIME_ZONE, LANGUAGE_CODE, ALLOWED_HOSTS
+from settings_import import *
 import os
 # Django settings for fvserver project.
 
