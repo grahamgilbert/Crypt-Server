@@ -36,7 +36,7 @@ def index(request):
         if settings.ALL_APPROVE == True:
             permissions = Permission.objects.all()
             permission = Permission.objects.get(codename='can_approve')
-            if request.user.has_perm('server.can_approve') == False
+            if request.user.has_perm('server.can_approve') == False:
                 request.user.user_permissions.add(permission)
                 request.user.save()
     ##get the number of oustanding requests - approved equals null
