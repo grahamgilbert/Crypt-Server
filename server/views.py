@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import HttpResponse, Http404
 from django.contrib.auth.models import Permission, User
 from django.conf import settings
-from django.core.context_processors import csrf
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.template.context_processors import csrf
+from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime, timedelta
 from django.db.models import Q
 from forms import *
@@ -46,7 +46,7 @@ def index(request):
         if settings.APPROVE_OWN == False:
             outstanding = outstanding.filter(~Q(requesting_user=request.user))
     c = {'user': request.user, 'computers':computers, 'outstanding':outstanding, }
-    return render_to_response('server/index.html', c, context_instance=RequestContext(request))
+    return render(request,'server/index.html', c)
 
 ##view to see computer info
 @login_required
@@ -63,10 +63,9 @@ def computer_info(request, computer_id):
         secret.approved = Request.objects.filter(requesting_user=request.user).filter(approved=True).filter(current=True).filter(secret=secret)
         secret.pending = Request.objects.filter(requesting_user=request.user).filter(approved__isnull=True).filter(secret=secret)
 
-    print vars(secrets)
     c = {'user': request.user, 'computer':computer, 'secrets':secrets }
 
-    return render_to_response('server/computer_info.html', c, context_instance=RequestContext(request))
+    return render(request,'server/computer_info.html', c)
 
 @login_required
 def secret_info(request, secret_id):
@@ -88,9 +87,9 @@ def secret_info(request, secret_id):
 
     c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret, 'requests':requests}
     if approved.count() != 0:
-        return render_to_response('server/secret_approved_button.html', c, context_instance=RequestContext(request))
+        return render(request,'server/secret_approved_button.html')
     else:
-        return render_to_response('server/secret_request_button.html', c, context_instance=RequestContext(request))
+        return render(request,'server/secret_request_button.html', c)
 
 ##request key view
 @login_required
@@ -146,7 +145,7 @@ def request(request, secret_id):
     else:
         form = RequestForm()
     c = {'form': form, 'secret':secret, }
-    return render_to_response('server/request.html', c, context_instance=RequestContext(request))
+    return render(request,'server/request.html', c)
 
 
 
@@ -157,7 +156,7 @@ def retrieve(request, request_id):
     the_request = get_object_or_404(Request, pk=request_id)
     if the_request.approved == True and the_request.current==True:
         c = {'user': request.user, 'the_request':the_request, }
-        return render_to_response('server/retrieve.html', c, context_instance=RequestContext(request))
+        return render(request,'server/retrieve.html', c)
     else:
         raise Http404
 
@@ -196,7 +195,7 @@ def approve(request, request_id):
     else:
         form = ApproveForm(instance=the_request)
     c = {'form':form, 'user': request.user, 'the_request':the_request, }
-    return render_to_response('server/approve.html', c, context_instance=RequestContext(request))
+    return render(request,'server/approve.html', c)
 
 ##manage requests
 @permission_required('server.can_approve', login_url='/login/')
@@ -206,7 +205,7 @@ def managerequests(request):
         if settings.APPROVE_OWN == False:
             requests = requests.filter(~Q(requesting_user=request.user))
     c = {'user': request.user, 'requests':requests, }
-    return render_to_response('server/manage_requests.html', c, context_instance=RequestContext(request))
+    return render(request,'server/manage_requests.html', c)
 
 # Add new manual computer
 @login_required
@@ -223,7 +222,7 @@ def new_computer(request):
     else:
         form = ComputerForm()
     c = {'form': form}
-    return render_to_response('server/new_computer_form.html', c, context_instance=RequestContext(request))
+    return redner(request, 'server/new_computer_form.html', c)
 
 
 @login_required
@@ -244,7 +243,7 @@ def new_secret(request, computer_id):
         form = SecretForm()
 
     c = {'form': form, 'computer': computer, }
-    return render_to_response('server/new_secret_form.html', c, context_instance=RequestContext(request))
+    return render(request, 'server/new_secret_form.html', c)
 
 
 ##checkin view

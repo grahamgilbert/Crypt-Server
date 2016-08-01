@@ -7,3 +7,4 @@ crypt.db
 fvserver.db
 keyset
 *.db copy
+*.db
