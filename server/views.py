@@ -132,16 +132,16 @@ def request(request, secret_id):
                         for user in users:
                             if user.email:
                                 email_message = """ There has been a new key request by %s. You can review this request at %s%s
-                                """ % (request.user.username, server_name, reverse('server.views.approve', args=[new_request.id]))
+                                """ % (request.user.username, server_name, reverse('approve', args=[new_request.id]))
                                 email_sender = 'requests@%s' % request.META['SERVER_NAME']
                                 send_mail('Crypt Key Request', email_message, email_sender,
         [user.email], fail_silently=True)
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
-                return redirect('server.views.retrieve', new_request.id)
+                return redirect('retrieve', new_request.id)
             else:
-                return redirect('server.views.secret_info', secret.id)
+                return redirect('secret_info', secret.id)
     else:
         form = RequestForm()
     c = {'form': form, 'secret':secret, }
@@ -187,11 +187,11 @@ def approve(request, request_id):
                 if settings.SEND_EMAIL == True:
                     if new_request.requesting_user.email:
                         email_message = """ Your key request has been %s by %s. %s%s
-                        """ % (request_status, request.user.username, server_name, reverse('server.views.secret_info', args=[new_request.id]))
+                        """ % (request_status, request.user.username, server_name, reverse('secret_info', args=[new_request.id]))
                         email_sender = 'requests@%s' % request.META['SERVER_NAME']
                         send_mail('Crypt Key Request', email_message, email_sender,
     [new_request.requesting_user.email], fail_silently=True)
-            return redirect('server.views.managerequests')
+            return redirect('managerequests')
     else:
         form = ApproveForm(instance=the_request)
     c = {'form':form, 'user': request.user, 'the_request':the_request, }
