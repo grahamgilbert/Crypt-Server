@@ -1,7 +1,7 @@
-Django==1.10.0rc1
+Django==1.10.0
 docutils==0.11
 wsgiref==0.1.2
-django-extensions==1.6.7
+django-extensions==1.6.8
 six==1.9.0
 pyasn1==0.1.8
 pycrypto==2.6.1

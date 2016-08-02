@@ -34,12 +34,12 @@ RUN apt-get update && \
     libpq-dev \
     python-dev \
     supervisor \
-    nano \
     libffi-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN easy_install pip && \
+    pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
     pip install -r $APP_DIR/setup/requirements.txt && \
     pip install psycopg2==2.5.3 && \
     pip install gunicorn && \
