@@ -4,9 +4,6 @@ import os
 
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.pardir))
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
-
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -106,12 +103,7 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '6%y8=x5(#ufxd*+d+-ohwy0b$5z^cla@7tvl@n55_h_cex0qat'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -128,12 +120,7 @@ ROOT_URLCONF = 'fvserver.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'fvserver.wsgi.application'
 ENCRYPTED_FIELD_KEYS_DIR = os.path.join(PROJECT_DIR, 'keyset')
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, 'templates'),
-)
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -150,6 +137,31 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_extensions',
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            # insert your TEMPLATE_DIRS here
+            os.path.join(PROJECT_DIR, 'templates'),
+        ],
+        'APP_DIRS':True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

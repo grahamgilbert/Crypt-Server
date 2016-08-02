@@ -2,6 +2,15 @@
 from os import getenv
 import locale
 
+# Read the DEBUG setting from env var
+try:
+    if getenv('DOCKER_CRYPT_DEBUG').lower() == 'true':
+        DEBUG = True
+    else:
+        DEBUG = False
+except:
+    DEBUG = False
+
 try:
     if getenv('DOCKER_CRYPT_APPROVE_OWN').lower() == 'false':
         APPROVE_OWN = False
