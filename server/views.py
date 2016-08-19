@@ -87,7 +87,7 @@ def secret_info(request, secret_id):
 
     c = {'user': request.user, 'computer':computer, 'can_request':can_request, 'approved':approved, 'secret':secret, 'requests':requests}
     if approved.count() != 0:
-        return render(request,'server/secret_approved_button.html')
+        return render(request,'server/secret_approved_button.html', c)
     else:
         return render(request,'server/secret_request_button.html', c)
 
