@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^retrieve/(?P<request_id>.+)/', retrieve, name='retrieve'),
     #approve
     url(r'^approve/(?P<request_id>.+)/', approve, name='approve'),
+    # verify
+    url(r'^verify/(?P<serial>.+)/(?P<secret_type>.+)/', verify, name='verify'),
     #checkin
     url(r'^checkin/', checkin, name='checkin'),
     #manage

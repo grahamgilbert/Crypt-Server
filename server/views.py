@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext, Template, Context
 import json
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.contrib.auth.models import Permission, User
 from django.conf import settings
 from django.template.context_processors import csrf
@@ -245,6 +245,16 @@ def new_secret(request, computer_id):
     c = {'form': form, 'computer': computer, }
     return render(request, 'server/new_secret_form.html', c)
 
+# Verify key escrow
+@csrf_exempt
+def verify(request, serial, secret_type):
+    computer = get_object_or_404(Computer, serial=serial)
+    try:
+        secret = Secret.objects.filter(computer=computer, secret_type=secret_type).latest('date_escrowed')
+        output = {'escrowed': True, 'date_escrowed':secret.date_escrowed}
+    except Secret.DoesNotExist:
+        output = {'escrowed': False}
+    return JsonResponse(output)
 
 ##checkin view
 @csrf_exempt
