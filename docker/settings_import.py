@@ -66,6 +66,13 @@ elif locale.getdefaultlocale():
 else:
     LANGUAGE_CODE = 'en_US'
 
+# Set the display name from the $DOCKER_CRYPT_DISPLAY_NAME env var, or
+# use the default
+if getenv('DOCKER_CRYPT_DISPLAY_NAME'):
+    DISPLAY_NAME = getenv('DOCKER_CRYPT_DISPLAY_NAME')
+else:
+    DISPLAY_NAME = 'Crypt'    
+
 if getenv('DOCKER_CRYPT_EMAIL_HOST'):
     EMAIL_HOST = getenv('DOCKER_CRYPT_EMAIL_HOST')
 
