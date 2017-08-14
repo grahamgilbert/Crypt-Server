@@ -4,8 +4,10 @@ This document assumes Ubuntu 12.04 LTS. The instructions are largely based on th
 
 All commands should be run as root, unless specified
 
-##Install Prerequisites
-###Setup the Virtual Environment
+## Install Prerequisites
+
+### Setup the Virtual Environment
+
 Make sure git is installed:
 
 	which git
@@ -26,7 +28,7 @@ If it's not, install it:
 
 	easy_install virtualenv
 
-###Create a non-admin service account and group
+### Create a non-admin service account and group
 Create the Crypt user:
 
 	useradd cryptuser
@@ -41,7 +43,8 @@ Add cryptuser to the cryptgroup group:
 
 (You may also want a home folder for cryptuser, if it barks when spinning up your wsgi script)
 
-##Create the virtual environment
+## Create the virtual environment
+
 When a virtualenv is created, pip will also be installed to manage a virtualenv's local packages. Create a virtualenv which will handle installing Django in a contained environment. In this example we'll create a virtualenv for Crypt at /usr/local. This should be run from Bash, as this is what the virtualenv activate script expects.
 
 Go to where we're going to install the virtualenv:
@@ -69,7 +72,7 @@ Now we can activate the virtualenv:
 	cd crypt_env
 	source bin/activate
 
-##Copy and configure Crypt
+## Copy and configure Crypt
 Still inside the crypt_env virtualenv, use git to clone the current version of Crypt-Server
 
 	git clone https://github.com/grahamgilbert/Crypt-Server.git crypt
@@ -107,7 +110,7 @@ EMAIL_HOST_PASSWORD = 'yourpassword'
 HOST_NAME = 'http://localhost'
 ```
 
-###More Setup
+### More Setup
 We need to use Django's manage.py to initialise the app's database and create an admin user. Running the syncdb command will ask you to create an admin user - make sure you do this!
 
 	cd ..
@@ -118,12 +121,12 @@ Stage the static files (type yes when prompted)
 
 	python manage.py collectstatic
 
-##Installing mod_wsgi and configuring Apache
+## Installing mod_wsgi and configuring Apache
 To run Crypt in a production environment, we need to set up a suitable webserver. Make sure you exit out of the crypt_env virtualenv and the cryptuser user (back to root) before continuing).
 
 	apt-get install libapache2-mod-wsgi
 
-##Set up an Apache virtualhost
+## Set up an Apache virtualhost
 You will probably need to edit most of these bits to suit your environment, especially to add SSL encryption. There are many different options, especially if you prefer nginx, the below example is for apache with an internal puppet CA. Make a new file at /etc/apache2/sites-available (call it whatever you want)
 
 	vim /etc/apache2/sites-available/crypt.conf
