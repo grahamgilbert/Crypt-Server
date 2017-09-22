@@ -26,7 +26,7 @@ __Features__
   [1]: https://github.com/grahamgilbert/Crypt
 
 ## Installation instructions
-It is recommended that you use [Docker](Docker.md) to run this, but if you wish to run directly on a host, installation instructions are over on the in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_12.md)
+It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Docker.md) to run this, but if you wish to run directly on a host, installation instructions are over on the in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_14.md)
 
 ## Settings
 
