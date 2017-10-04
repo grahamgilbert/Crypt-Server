@@ -222,7 +222,7 @@ def new_computer(request):
     else:
         form = ComputerForm()
     c = {'form': form}
-    return redner(request, 'server/new_computer_form.html', c)
+    return render(request, 'server/new_computer_form.html', c)
 
 
 @login_required
