@@ -1,6 +1,6 @@
-# Crypt Server Dockerfile
+# Crypt Server Dockerfile 16.04
 FROM ubuntu:16.04
-MAINTAINER James Mathison  <ejmathison@ucdavis.edu>
+MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
 
 # Basic env vars for apt and Passenger
 ENV HOME /root
