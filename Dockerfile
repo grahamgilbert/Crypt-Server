@@ -1,11 +1,11 @@
 # Crypt Server Dockerfile
-FROM ubuntu:14.04.1
-MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
+FROM ubuntu:16.04
+MAINTAINER James Mathison  <ejmathison@ucdavis.edu>
 
 # Basic env vars for apt and Passenger
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
-ENV TZ America/New_York
+ENV TZ America/Los_Angeles
 ENV APP_DIR /home/docker/crypt
 ENV DOCKER_SAL_DEBUG false
 # DOCKER_CRYPT_* env vars configure the following possible settings in Crypt's
@@ -19,7 +19,6 @@ ENV DOCKER_SAL_DEBUG false
 ENV DOCKER_CRYPT_ADMINS Admin User,admin@test.com
 # ENV DOCKER_CRYPT_ALLOWED myhost,1.2.3.4,anotherhost.fqdn.com
 ENV DOCKER_CRYPT_LANG en_US
-ENV DOCKER_CRYPT_TZ America/New_York
 ADD / $APP_DIR
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
@@ -27,19 +26,19 @@ RUN apt-get update && \
     add-apt-repository -y ppa:nginx/stable && \
     apt-get -y install \
     git \
-    python-setuptools \
+    python-dev\
     nginx \
     postgresql \
     postgresql-contrib \
     libpq-dev \
     python-dev \
     supervisor \
-    libffi-dev && \
+    libffi-dev  \
+    python-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN easy_install pip && \
-    pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
+RUN pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
     pip install -r $APP_DIR/setup/requirements.txt && \
     pip install psycopg2==2.5.3 && \
     pip install gunicorn && \
