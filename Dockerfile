@@ -19,6 +19,7 @@ ENV DOCKER_SAL_DEBUG false
 ENV DOCKER_CRYPT_ADMINS Admin User,admin@test.com
 # ENV DOCKER_CRYPT_ALLOWED myhost,1.2.3.4,anotherhost.fqdn.com
 ENV DOCKER_CRYPT_LANG en_US
+ENV DOCKER_CRYPT_TZ America/Los_Angeles
 ADD / $APP_DIR
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
