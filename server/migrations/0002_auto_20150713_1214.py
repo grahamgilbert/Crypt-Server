@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404
 from django.db import models, migrations
+import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
@@ -22,17 +23,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='secret',
             name='computer',
-            field=models.ForeignKey(to='server.Computer'),
+            field=models.ForeignKey(to='server.Computer', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AlterField(
             model_name='request',
             name='computer',
-            field=models.ForeignKey(related_name='computers', to='server.Computer'),
+            field=models.ForeignKey(related_name='computers', to='server.Computer', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='request',
             name='secret',
-            field=models.ForeignKey(null=True, related_name='secrets', to='server.Secret'),
+            field=models.ForeignKey(null=True, related_name='secrets', to='server.Secret', on_delete=django.db.models.deletion.CASCADE),
             preserve_default=False,
         ),
     ]

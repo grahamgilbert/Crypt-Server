@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404
 from django.db import models, migrations
+import django.db.models.deletion
 
 def move_keys_and_requests(apps, schema_editor):
     seen_serials = [('dummy_serial', 'dummy_id')]
