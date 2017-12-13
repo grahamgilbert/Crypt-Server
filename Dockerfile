@@ -32,7 +32,7 @@ RUN apt-get update && \
     postgresql \
     postgresql-contrib \
     libpq-dev \
-    build-essentials \
+    build-essential \
     python-dev \
     supervisor \
     libffi-dev && \
