@@ -10,4 +10,4 @@ if not os.listdir(directory):
     keyczart.main(['create','--location=keyset','--purpose=crypt','--name=crypt'])
     keyczart.main(['addkey','--location=keyset' ,'--status=primary'])
 else:
-    print 'Keyset directory already has something in there. Skipping key generation.'
+    print ('Keyset directory already has something in there. Skipping key generation.')
