@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -37,9 +38,9 @@ class Migration(migrations.Migration):
                 ('date_requested', models.DateTimeField(auto_now_add=True)),
                 ('date_approved', models.DateTimeField(null=True, blank=True)),
                 ('current', models.BooleanField(default=True)),
-                ('auth_user', models.ForeignKey(related_name='auth_user', to=settings.AUTH_USER_MODEL, null=True)),
-                ('computer', models.ForeignKey(to='server.Computer')),
-                ('requesting_user', models.ForeignKey(related_name='requesting_user', to=settings.AUTH_USER_MODEL)),
+                ('auth_user', models.ForeignKey(related_name='auth_user', to=settings.AUTH_USER_MODEL, null=True, on_delete=django.db.models.deletion.CASCADE)),
+                ('computer', models.ForeignKey(to='server.Computer', on_delete=django.db.models.deletion.CASCADE)),
+                ('requesting_user', models.ForeignKey(related_name='requesting_user', to=settings.AUTH_USER_MODEL, on_delete=django.db.models.deletion.CASCADE)),
             ],
         ),
     ]
