@@ -102,7 +102,7 @@ TEMPLATES = [
             # insert your TEMPLATE_DIRS here
             os.path.join(PROJECT_DIR, 'templates'),
         ],
-        'debug': DEBUG,
+        'APP_DIRS':True,
         'OPTIONS': {
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
@@ -115,11 +115,10 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'debug': DEBUG,
         },
     },
 ]
-
-
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
