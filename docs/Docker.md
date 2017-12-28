@@ -13,9 +13,10 @@ macadmins/crypt-server
 
 The secrets are encrypted, with the encryption keys stored at ``/home/docker/crypt/keyset``. You should back this up as the keys are not recoverable without them.
 
-## Using an external database
+## Using Postgres as an external database
 
-Crypt, by default, uses a sqlite3 database for the django db backend.  If you would like to use an external database, such as Postgres, you need to set the following environment variables:
+Crypt, by default, uses a sqlite3 database for the django db backend.  Crypt also supports using Postgres as the django db backend.  If you would like to use an external Postgres server, you need to set the following environment variables:
+
 ```
 docker run -d --name="Crypt" \
 --restart="always" \
