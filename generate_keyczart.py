@@ -1,5 +1,5 @@
 import keyczar
-import keyczar.tool as keyczart
+from keyczar.tool import keyczart
 import os
 directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'keyset')
 
