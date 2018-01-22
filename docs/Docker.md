@@ -1,7 +1,12 @@
 # Using Docker
 
-## Basic usage
+## Prepare for first use
+When starting from scratch, create a new empty file on the docker host to hold the sqlite3 secrets database
+``` bash
+touch /somewhere/else/on/the/host
+```
 
+## Basic usage
 ``` bash
 docker run -d --name="Crypt" \
 --restart="always" \
