@@ -2,7 +2,6 @@ Django==2.0
 django-bootstrap3==9.1.0
 django-extensions==1.9.8
 pyasn1==0.4.2
-pycrypto==2.6.1
 python3-keyczar==0.71rc0
 pytz==2017.3
 six==1.11.0

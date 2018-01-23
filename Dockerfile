@@ -1,5 +1,5 @@
 # Crypt Server Dockerfile
-FROM ubuntu:14.04.1
+FROM ubuntu:16.04
 MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
 
 # Basic env vars for apt and Passenger
@@ -20,41 +20,42 @@ ENV DOCKER_CRYPT_ADMINS Admin User,admin@test.com
 # ENV DOCKER_CRYPT_ALLOWED myhost,1.2.3.4,anotherhost.fqdn.com
 ENV DOCKER_CRYPT_LANG en_US
 ENV DOCKER_CRYPT_TZ America/New_York
-ADD / $APP_DIR
+COPY setup/requirements.txt /requirements.txt
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y software-properties-common build-essential && \
     apt-get -y update && \
     add-apt-repository -y ppa:nginx/stable && \
     apt-get -y install \
     git \
-    python-setuptools \
+    python3-setuptools \
     nginx \
     postgresql \
     postgresql-contrib \
     libpq-dev \
-    python-dev \
+    python3-dev \
     supervisor \
     libffi-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN easy_install pip && \
-    pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
-    pip install -r $APP_DIR/setup/requirements.txt && \
+RUN easy_install3 pip && \
+    pip install -r requirements.txt && \
     pip install psycopg2==2.5.3 && \
     pip install gunicorn && \
-    pip install setproctitle
+    pip install setproctitle && \
+    rm /requirements.txt
 
-ADD docker/nginx/nginx-env.conf /etc/nginx/main.d/
-ADD docker/nginx/crypt.conf /etc/nginx/sites-enabled/crypt.conf
-ADD docker/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD docker/settings.py $APP_DIR/fvserver/
-ADD docker/settings_import.py $APP_DIR/fvserver/
-ADD docker/wsgi.py $APP_DIR/
-ADD docker/gunicorn_config.py $APP_DIR/
-ADD docker/django/management/ $APP_DIR/server/management/
-ADD docker/run.sh /run.sh
-ADD docker/supervisord.conf $APP_DIR/supervisord.conf
+COPY / $APP_DIR
+COPY docker/nginx/nginx-env.conf /etc/nginx/main.d/
+COPY docker/nginx/crypt.conf /etc/nginx/sites-enabled/crypt.conf
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/settings.py $APP_DIR/fvserver/
+COPY docker/settings_import.py $APP_DIR/fvserver/
+COPY docker/wsgi.py $APP_DIR/
+COPY docker/gunicorn_config.py $APP_DIR/
+COPY docker/django/management/ $APP_DIR/server/management/
+COPY docker/run.sh /run.sh
+COPY docker/supervisord.conf $APP_DIR/supervisord.conf
 
 RUN update-rc.d -f postgresql remove && \
     update-rc.d -f nginx remove && \
