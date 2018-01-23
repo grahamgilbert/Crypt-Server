@@ -39,7 +39,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN easy_install3 pip && \
-    pip install -r requirements.txt && \
     pip install psycopg2==2.5.3 && \
     pip install gunicorn && \
     pip install setproctitle && \
