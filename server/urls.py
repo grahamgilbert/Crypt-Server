@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^info/secret/(?P<secret_id>.+)/', secret_info, name='secret_info'),
 
     #computerinfo
-    url(r'^info/(?P<computer_id>.+)/', computer_info, name='computer_info'),
+    url(r'^info/(?P<computer_id>[0-9]+)/', computer_info, name='computer_info'),
+    url(r'^info/(?P<serial>[A-Z0-9]{11,12}.+)/', computer_info, name='computer_info'),
 
     #request
     url(r'^request/(?P<secret_id>.+)/', request, name='request'),

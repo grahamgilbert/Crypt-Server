@@ -50,9 +50,12 @@ def index(request):
 
 ##view to see computer info
 @login_required
-def computer_info(request, computer_id):
+def computer_info(request, computer_id=None, serial=None):
     cleanup()
-    computer = get_object_or_404(Computer, pk=computer_id)
+    if computer_id:
+        computer = get_object_or_404(Computer, pk=computer_id)
+    else:
+        computer = get_object_or_404(Computer, serial=serial)        
     can_request = None
     approved = None
 
