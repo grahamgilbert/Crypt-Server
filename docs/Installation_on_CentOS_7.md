@@ -180,6 +180,13 @@ semanage fcontext -a -t httpd_sys_rw_content_t "/etc/pki/tls/private/KEY.key"
 restorecon -Rv /etc/pki/tls/private/KEY.key
 ```
 
+### Open needed ports in the firewall
+
+```
+firewall-cmd --zone=public --add-service=https --permanent
+firewall-cmd --reload
+```
+
 ### Activate Apache and start the httpd-server
 
 ```
