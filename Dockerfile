@@ -1,5 +1,5 @@
 # Crypt Server Dockerfile
-FROM ubuntu:14.04.1
+FROM ubuntu:16.04
 MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
 
 # Basic env vars for apt and Passenger
@@ -32,6 +32,7 @@ RUN apt-get update && \
     postgresql \
     postgresql-contrib \
     libpq-dev \
+    build-essential \
     python-dev \
     supervisor \
     libffi-dev && \
