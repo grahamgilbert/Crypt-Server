@@ -4,3 +4,22 @@ h1, h2, h3, h4, h5, h6, h3 a{
 	font-weight:normal;
 	color: black;
 }
+
+code {
+    background-color: #444;
+    padding: 5px;
+}
+code span {
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 1.25em;
+}
+code span.letter {
+    color: #fff;
+}
+code span.number {
+    color: #a1bcea;
+}
+code span.other {
+    color: #f2a5bd;
+}
