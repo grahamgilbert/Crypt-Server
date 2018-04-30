@@ -31,7 +31,7 @@ class Secret(models.Model):
     rotation_required = models.BooleanField(default=False)
 
     def validate_unique(self, *args, **kwargs):
-        if self.secret in [str(s) for s in self.__class__.objects.filter(secret_type=self.secret_type, computer=self.computer)]:
+        if self.secret in [str(s) for s in self.__class__.objects.filter(secret_type=self.secret_type, computer=self.computer)] and not self.rotation_required:
             raise ValidationError('already used')
         super(Secret, self).validate_unique(*args, **kwargs)
 
