@@ -1,5 +1,5 @@
 # Crypt Server Dockerfile
-FROM ubuntu:14.04.1
+FROM ubuntu:16.04
 MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
 
 # Basic env vars for apt and Passenger
@@ -20,30 +20,33 @@ ENV DOCKER_CRYPT_ADMINS Admin User,admin@test.com
 # ENV DOCKER_CRYPT_ALLOWED myhost,1.2.3.4,anotherhost.fqdn.com
 ENV DOCKER_CRYPT_LANG en_US
 ENV DOCKER_CRYPT_TZ America/New_York
-ADD / $APP_DIR
-RUN apt-get update && \
+
+RUN apt-get -y update && \
     apt-get install -y software-properties-common && \
+    apt-get install -y python-software-properties && \
     apt-get -y update && \
+    add-apt-repository -y ppa:jonathonf/python-3.6 && \
     add-apt-repository -y ppa:nginx/stable && \
+    apt-get -y update && \
     apt-get -y install \
     git \
-    python-setuptools \
     nginx \
     postgresql \
     postgresql-contrib \
     libpq-dev \
-    python-dev \
+    python3.6-dev \
+    python3-pip \
     supervisor \
     libffi-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN easy_install pip && \
-    pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
-    pip install -r $APP_DIR/setup/requirements.txt && \
-    pip install psycopg2==2.5.3 && \
-    pip install gunicorn && \
-    pip install setproctitle
+ADD / $APP_DIR
+
+RUN pip3 install -r $APP_DIR/setup/requirements.txt && \
+    pip3 install psycopg2==2.5.3 && \
+    pip3 install gunicorn && \
+    pip3 install setproctitle
 
 ADD docker/nginx/nginx-env.conf /etc/nginx/main.d/
 ADD docker/nginx/crypt.conf /etc/nginx/sites-enabled/crypt.conf
