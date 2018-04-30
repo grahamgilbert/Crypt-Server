@@ -28,6 +28,7 @@ class Secret(models.Model):
     secret = EncryptedCharField(max_length=256)
     secret_type =  models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
     date_escrowed = models.DateTimeField(auto_now_add=True)
+    rotation_required = models.BooleanField(default=False)
 
     def validate_unique(self, *args, **kwargs):
         if self.secret in [str(s) for s in self.__class__.objects.filter(secret_type=self.secret_type, computer=self.computer)]:
