@@ -24,7 +24,7 @@ SECRET_TYPES = (('recovery_key', 'Recovery Key'),
                 ('password', 'Password'))
 
 class Secret(models.Model):
-    computer = models.ForeignKey(Computer)
+    computer = models.ForeignKey(Computer, on_delete=models.CASCADE)
     secret = EncryptedCharField(max_length=256)
     secret_type =  models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
     date_escrowed = models.DateTimeField(auto_now_add=True)
@@ -44,11 +44,11 @@ class Secret(models.Model):
         ordering = ['-date_escrowed']
 
 class Request(models.Model):
-    secret = models.ForeignKey(Secret)
+    secret = models.ForeignKey(Secret, on_delete=models.CASCADE)
     #computer = models.ForeignKey(Computer, null=True, related_name='computers')
-    requesting_user = models.ForeignKey(User, related_name='requesting_user')
+    requesting_user = models.ForeignKey(User, related_name='requesting_user', on_delete=models.CASCADE)
     approved = models.NullBooleanField(verbose_name="Approved?")
-    auth_user = models.ForeignKey(User, null=True, related_name='auth_user')
+    auth_user = models.ForeignKey(User, null=True, related_name='auth_user', on_delete=models.CASCADE)
     reason_for_request = models.TextField()
     reason_for_approval = models.TextField(blank=True,null=True, verbose_name="Approval Notes")
     date_requested = models.DateTimeField(auto_now_add=True)

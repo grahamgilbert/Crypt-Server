@@ -1,30 +1,33 @@
-from django.conf.urls import *
-from server.views import *
+from django.urls import path
+from . import views
+
+app_name = 'server'
+
 urlpatterns = [
     #front. page
-    url(r'^$', index, name='home'),
+    path('', views.index, name='home'),
 
     # Add computer
-    url(r'^new/computer/', new_computer, name='new_computer'),
+    path('new/computer/', views.new_computer, name='new_computer'),
     # Add secret
-    url(r'^new/secret/(?P<computer_id>.+)/', new_secret, name='new_secret'),
+    path('new/secret/<int:computer_id>/', views.new_secret, name='new_secret'),
 
     # secret info
-    url(r'^info/secret/(?P<secret_id>.+)/', secret_info, name='secret_info'),
+    path('info/secret/<int:secret_id>/', views.secret_info, name='secret_info'),
 
     #computerinfo
-    url(r'^info/(?P<computer_id>.+)/', computer_info, name='computer_info'),
+    path('info/<int:computer_id>/', views.computer_info, name='computer_info'),
 
     #request
-    url(r'^request/(?P<secret_id>.+)/', request, name='request'),
+    path('request/<int:secret_id>/', views.request, name='request'),
     #retrieve
-    url(r'^retrieve/(?P<request_id>.+)/', retrieve, name='retrieve'),
+    path('retrieve/<int:request_id>/', views.retrieve, name='retrieve'),
     #approve
-    url(r'^approve/(?P<request_id>.+)/', approve, name='approve'),
+    path('approve/<int:request_id>/', views.approve, name='approve'),
     # verify
-    url(r'^verify/(?P<serial>.+)/(?P<secret_type>.+)/', verify, name='verify'),
+    path('verify/<str:serial>/<str:secret_type>/', views.verify, name='verify'),
     #checkin
-    url(r'^checkin/', checkin, name='checkin'),
+    path('checkin/', views.checkin, name='checkin'),
     #manage
-    url(r'^manage-requests/', managerequests, name='managerequests'),
+    path('manage-requests/', views.managerequests, name='managerequests'),
 ]

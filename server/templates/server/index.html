@@ -17,11 +17,11 @@
 {% endblock %}
 
 {% block dropdown %}
-<li><a href="{% url 'new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
+<li><a href="{% url 'server:new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
 {% endblock %}
 {% block nav %}
 {% if perms.server.can_approve %}
-    <li><a href="{% url 'managerequests' %}">Approve requests</a></li>
+    <li><a href="{% url 'server:managerequests' %}">Approve requests</a></li>
 {% endif %}
 {% endblock %}
 {% block content %}
@@ -48,7 +48,7 @@
     </thead>
     <tbody>
         {% for computer in computers.all %}
-        <tr><td><a href="{% url 'computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-xs" href="{% url 'computer_info' computer.id %}">Info</a></td></tr>
+        <tr><td><a href="{% url 'server:computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'server:computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-xs" href="{% url 'server:computer_info' computer.id %}">Info</a></td></tr>
         {% endfor %}
         </tbody>
 </table>

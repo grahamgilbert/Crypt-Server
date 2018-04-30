@@ -37,9 +37,9 @@ class Migration(migrations.Migration):
                 ('date_requested', models.DateTimeField(auto_now_add=True)),
                 ('date_approved', models.DateTimeField(null=True, blank=True)),
                 ('current', models.BooleanField(default=True)),
-                ('auth_user', models.ForeignKey(related_name='auth_user', to=settings.AUTH_USER_MODEL, null=True)),
-                ('computer', models.ForeignKey(to='server.Computer')),
-                ('requesting_user', models.ForeignKey(related_name='requesting_user', to=settings.AUTH_USER_MODEL)),
+                ('auth_user', models.ForeignKey(related_name='auth_user', to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
+                ('computer', models.ForeignKey(to='server.Computer', on_delete=models.CASCADE)),
+                ('requesting_user', models.ForeignKey(related_name='requesting_user', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

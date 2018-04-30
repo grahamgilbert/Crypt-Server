@@ -5,7 +5,7 @@
 <h1>Approve Request</h1>
 <p>{{ the_request.secret.computer.computername }} ({{ the_request.secret.computer.serial }})</p>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    <form action="{% url 'approve' the_request.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'server:approve' the_request.id %}" method="post">{% csrf_token %}
 
 
             {% bootstrap_form form %}

@@ -22,17 +22,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='secret',
             name='computer',
-            field=models.ForeignKey(to='server.Computer'),
+            field=models.ForeignKey(to='server.Computer', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='request',
             name='computer',
-            field=models.ForeignKey(related_name='computers', to='server.Computer'),
+            field=models.ForeignKey(related_name='computers', to='server.Computer', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='request',
             name='secret',
-            field=models.ForeignKey(null=True, related_name='secrets', to='server.Secret'),
+            field=models.ForeignKey(null=True, related_name='secrets', to='server.Secret', on_delete=models.CASCADE),
             preserve_default=False,
         ),
     ]

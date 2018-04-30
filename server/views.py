@@ -1,4 +1,4 @@
-from models import *
+from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext, Template, Context
 import json
@@ -10,11 +10,11 @@ from django.template.context_processors import csrf
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime, timedelta
 from django.db.models import Q
-from forms import *
+from .forms import *
 from django.views.defaults import server_error
 from django.core.mail import send_mail
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # Create your views here.
 
 ##clean up old requests
