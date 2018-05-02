@@ -156,9 +156,9 @@ def retrieve(request, request_id):
     the_request = get_object_or_404(Request, pk=request_id)
     if the_request.approved == True and the_request.current==True:
         if hasattr(settings, 'ROTATE_VIEWED_SECRETS'):
-        if settings.ROTATE_VIEWED_SECRETS:
-            the_request.secret.rotation_required = True
-            the_request.secret.save()
+            if settings.ROTATE_VIEWED_SECRETS:
+                the_request.secret.rotation_required = True
+                the_request.secret.save()
         c = {'user': request.user, 'the_request':the_request, }
         return render(request,'server/retrieve.html', c)
     else:
