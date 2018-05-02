@@ -36,6 +36,8 @@ It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-S
 
 * ``ALL_APPROVE`` - By default, users need to be explicitly given approval permissions to approve key retrieval requests. By setting this to True in settings.py (or by using the `DOCKER_CRYPT_ALL_APPROVE` environment variable with Docker), all users are given this permission when they log in.
 
+* ``ROTATE_VIEWED_SECRETS`` - With a compatible client (such as Crypt 3.2.0 and greater), Crypt Server can instruct the client to rotate the secret and re-escrow it when the secret has been viewed. Enable by setting this to `True` or by using `DOCKER_CRYPT_ROTATE_VIEWED_SECRETS` and setting to `true`.
+
 ## New features in latest release
 - Records Bonjour Name of Macs submitting keys
 - Introduces the can_approve permission - users must have this permission to authorise key retrieval
