@@ -158,6 +158,10 @@ def retrieve(request, request_id):
     cleanup()
     the_request = get_object_or_404(Request, pk=request_id)
     if the_request.approved == True and the_request.current==True:
+        if hasattr(settings, 'ROTATE_VIEWED_SECRETS'):
+            if settings.ROTATE_VIEWED_SECRETS:
+                the_request.secret.rotation_required = True
+                the_request.secret.save()
         c = {'user': request.user, 'the_request':the_request, }
         return render(request,'server/retrieve.html', c)
     else:
@@ -303,5 +307,12 @@ def checkin(request):
     except ValidationError:
         pass
 
-    c ={'revovery_password':secret.secret, 'serial':computer.serial, 'username':computer.username, }
+    latest_secret = Secret.objects.filter(secret_type=secret_type).latest('date_escrowed')
+    rotation_required = latest_secret.rotation_required
+
+    c = {
+        'serial':computer.serial,
+        'username':computer.username,
+        'rotation_required': rotation_required
+    }
     return HttpResponse(json.dumps(c), content_type="application/json")

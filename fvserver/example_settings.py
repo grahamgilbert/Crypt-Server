@@ -5,6 +5,8 @@ PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__fil
 ENCRYPTED_FIELD_KEYS_DIR = os.path.join(PROJECT_DIR, 'keyset')
 DEBUG = False
 
+ROTATE_VIEWED_SECRETS = True
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )

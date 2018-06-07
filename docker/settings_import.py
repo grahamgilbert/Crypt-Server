@@ -20,6 +20,14 @@ except:
     APPROVE_OWN = True
 
 try:
+    if getenv('DOCKER_CRYPT_ROTATE_VIEWED_SECRETS').lower() == 'false':
+        ROTATE_VIEWED_SECRETS = False
+    else:
+        ROTATE_VIEWED_SECRETS = True
+except:
+    ROTATE_VIEWED_SECRETS = True
+
+try:
     if getenv('DOCKER_CRYPT_ALL_APPROVE').lower() == 'true':
         ALL_APPROVE = True
     else:
@@ -71,7 +79,7 @@ else:
 if getenv('DOCKER_CRYPT_DISPLAY_NAME'):
     DISPLAY_NAME = getenv('DOCKER_CRYPT_DISPLAY_NAME')
 else:
-    DISPLAY_NAME = 'Crypt'    
+    DISPLAY_NAME = 'Crypt'
 
 if getenv('DOCKER_CRYPT_EMAIL_HOST'):
     EMAIL_HOST = getenv('DOCKER_CRYPT_EMAIL_HOST')
