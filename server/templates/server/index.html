@@ -48,7 +48,7 @@
     </thead>
     <tbody>
         {% for computer in computers.all %}
-        <tr><td><a href="{% url 'computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin|date:"c" }}</td><td><a class="btn btn-info btn-xs" href="{% url 'computer_info' computer.id %}">Info</a></td></tr>
+        <tr><td><a href="{% url 'computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin|date:"Y-m-d H:i:s" }}</td><td><a class="btn btn-info btn-xs" href="{% url 'computer_info' computer.id %}">Info</a></td></tr>
         {% endfor %}
         </tbody>
 </table>
