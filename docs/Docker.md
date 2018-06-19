@@ -20,7 +20,10 @@ The secrets are encrypted, with the encryption keys stored at ``/home/docker/cry
 
 ## Using Postgres as an external database
 
-Crypt, by default, uses a sqlite3 database for the django db backend.  Crypt also supports using Postgres as the django db backend.  If you would like to use an external Postgres server, you need to set the following environment variables:
+Crypt, by default, uses a sqlite3 database for the django db backend.  Crypt also supports using Postgres as the django db backend. 
+
+### Postgres database on another server
+If you would like to use an external Postgres server, you need to set the following environment variables:
 
 ```
 docker run -d --name="Crypt" \
@@ -29,6 +32,22 @@ docker run -d --name="Crypt" \
 -p 8000:8000 \
 -e DB_HOST='db.example.com' \
 -e DB_PORT='5432' \
+-e DB_NAME='postgres_dbname' \
+-e DB_USER='postgres_user' \
+-e DB_PASS='postgres_user_pass' \
+macadmins/crypt-server
+```
+
+### Postgres database in another docker container
+If your Postgres server is another docker container, here's an example of how to link the two up, assuming your postgres container is called _postgres-crypt_ (you can call it whatever you want, though, as long as you adjust the command accordingly):
+
+```
+docker run -d --name="Crypt" \
+--restart="always" \
+--link postgres-crypt:db \
+-v /somewhere/on/the/host:/home/docker/crypt/keyset \
+-v /usr/local/crypt_data/db:/var/lib/postgresql/data \
+-p 8000:8000 \
 -e DB_NAME='postgres_dbname' \
 -e DB_USER='postgres_user' \
 -e DB_PASS='postgres_user_pass' \
