@@ -19,6 +19,7 @@ macadmins/crypt-server
 The secrets are encrypted, with the encryption keys stored at ``/home/docker/crypt/keyset``. You should back this up as the keys are not recoverable without them.
 
 ## Backing up the database with a data dump
+This dump will work in the case of you using the sqlite3 database or a linked postgres database.
 ``` bash
 docker exec -it Crypt bash
 cd /home/docker/crypt/
@@ -31,6 +32,11 @@ Optionally
 docker exec -it Crypt bash
 rm /home/docker/crypt/db.json
 exit
+```
+
+If you want to do a dump out of a Postgres docker container (substitute in the name of your docker container for _postgres-crypt_):
+```
+docker exec -t -u postgres postgres-crypt pg_dumpall -c > dbdump.sql
 ```
 
 ## Using Postgres as an external database
