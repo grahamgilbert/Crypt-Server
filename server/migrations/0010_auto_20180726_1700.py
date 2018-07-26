@@ -38,9 +38,4 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(unique_serials),
-        migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, unique=True, verbose_name=b'Serial Number'),
-        ),
     ]
