@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 class Computer(models.Model):
     #recovery_key = models.CharField(max_length=200, verbose_name="Recovery Key")
-    serial = models.CharField(max_length=200, verbose_name="Serial Number")
+    serial = models.CharField(max_length=200, verbose_name="Serial Number", unique=True)
     username = models.CharField(max_length=200, verbose_name="User Name")
     computername = models.CharField(max_length=200, verbose_name="Computer Name")
     last_checkin = models.DateTimeField(blank=True,null=True)
