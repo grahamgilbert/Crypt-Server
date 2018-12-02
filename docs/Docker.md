@@ -6,17 +6,30 @@ When starting from scratch, create a new empty file on the docker host to hold t
 touch /somewhere/else/on/the/host
 ```
 
+## Upgrading from Crypt Server 2
+
+The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys.
+
 ## Basic usage
 ``` bash
 docker run -d --name="Crypt" \
 --restart="always" \
--v /somewhere/on/the/host:/home/docker/crypt/keyset \
 -v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
+-e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 -p 8000:8000 \
 macadmins/crypt-server
 ```
 
-The secrets are encrypted, with the encryption keys stored at ``/home/docker/crypt/keyset``. You should back this up as the keys are not recoverable without them.
+The secrets are encrypted, with the encryption key passed in as an environment variable. You should back this up as the keys are not recoverable without them.
+
+### Generating an encryption key
+
+Run the following command to generate an encryption key (you should specify the string only):
+
+```
+docker run --rm -ti macadmins/crypt-server \
+python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key())"
+```
 
 ## Backing up the database with a data dump
 ``` bash
@@ -40,13 +53,13 @@ Crypt, by default, uses a sqlite3 database for the django db backend.  Crypt als
 ```
 docker run -d --name="Crypt" \
 --restart="always" \
--v /somewhere/on/the/host:/home/docker/crypt/keyset \
 -p 8000:8000 \
 -e DB_HOST='db.example.com' \
 -e DB_PORT='5432' \
 -e DB_NAME='postgres_dbname' \
 -e DB_USER='postgres_user' \
 -e DB_PASS='postgres_user_pass' \
+-e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 macadmins/crypt-server
 ```
 
@@ -65,6 +78,7 @@ docker run -d --name="Crypt" \
 -e DOCKER_CRYPT_EMAIL_USER='youruser' \
 -e DOCKER_CRYPT_EMAIL_PASSWORD='yourpassword' \
 -e DOCKER_CRYPT_HOST_NAME='https://crypt.myorg.com' \
+-e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 macadmins/crypt-server
 ```
 

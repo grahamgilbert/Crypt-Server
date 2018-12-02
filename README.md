@@ -14,7 +14,7 @@ __Changes in this version__
 
 __Client__
 ====
-The client is written in Pyobjc, and makes use of the built in fdesetup on OS X 10.8 and higher. An example login hook is provided to see how this could be implemented in your organisation.
+The client is written in Swift, and makes use of the built in fdesetup on OS X 10.8 and higher.
 
 __Features__
 =======

@@ -1,5 +1,5 @@
 # Crypt Server Dockerfile
-FROM python:3.6.6-slim-jessie
+FROM python:3.7.1-slim-stretch
 MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,29 +23,28 @@ RUN apt-get update -y && \
     mkdir -p /usr/share/man/man1 && \
     mkdir -p /usr/share/man/man7 && \
     apt-get install -y software-properties-common && \
-    apt-get -y update && \
     add-apt-repository -y ppa:nginx/stable && \
     apt-get -y install \
+    gcc \
     git \
-    build-essential \
-    python-setuptools \
     nginx \
     postgresql \
     postgresql-contrib \
     libpq-dev \
-    python-dev \
-    supervisor \
     libffi-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+    #     build-essential \
+        
+    # apt-get -y update && \
+
 ADD setup/requirements.txt /tmp/requirements.txt
 
-RUN easy_install pip && \
-    pip install -r /tmp/requirements.txt && \
-    pip install psycopg2==2.5.3 && \
-    pip install gunicorn && \
-    pip install setproctitle && \
+RUN pip3 install -r /tmp/requirements.txt && \
+    pip3 install psycopg2==2.5.3 && \
+    pip3 install gunicorn && \
+    pip3 install setproctitle && \
     rm /tmp/requirements.txt
 
 ADD / $APP_DIR

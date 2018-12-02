@@ -4,8 +4,9 @@ cffi==1.11.5
 cryptography==2.4.2
 Django==1.10
 django-bootstrap3==7.0.1
+django-encrypted-model-fields==0.5.8
 git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f
-django-fernet-fields==0.5
+git+https://github.com/Supervisor/supervisor@0fec8013b22bf047b682387828bc053ccf3358a7
 docutils==0.11
 flake8==3.6.0
 idna==2.7
