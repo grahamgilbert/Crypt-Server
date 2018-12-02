@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django_extensions.db.fields.encrypted import EncryptedCharField as OldEncryptedCharField
 from encrypted_model_fields.fields import EncryptedCharField
 
 from django.core.exceptions import ValidationError
@@ -13,7 +12,7 @@ class Computer(models.Model):
     username = models.CharField(max_length=200, verbose_name="User Name")
     computername = models.CharField(max_length=200, verbose_name="Computer Name")
     last_checkin = models.DateTimeField(blank=True,null=True)
-    def __unicode__(self):
+    def __str__(self):
         return self.computername
     class Meta:
         ordering = ['serial']
@@ -40,7 +39,7 @@ class Secret(models.Model):
         self.validate_unique()
         super(Secret, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.secret
     class Meta:
         ordering = ['-date_escrowed']
@@ -57,5 +56,5 @@ class Request(models.Model):
     date_approved = models.DateTimeField(blank=True,null=True)
     current = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s - %s" % (self.secret, self.requesting_user)
