@@ -30,6 +30,8 @@ It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-S
 
 ## Settings
 
+* ``FIELD_ENCRYPTION_KEY`` - The key to use when encrypting the secrets. This is required.
+
 * ``SEND_EMAIL`` - Crypt Server can send email notifcations when secrets are requested and approved. Set ``SEND_EMAIL`` to True, and set ``HOST_NAME`` to your server's host and URL scheme (e.g. ``https://crypt.example.com``). For configuring your email settings, see the [Django documentation](https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-EMAIL_HOST).
 
 * ``APPROVE_OWN`` - By default, users with approval permissons can approve their own key requests. By setting this to False in settings.py (or by using the `DOCKER_CRYPT_APPROVE_OWN` environment variable with Docker), users cannot approve their own requests.
