@@ -1,8 +1,6 @@
 # Crypt Server Dockerfile
-FROM ubuntu:14.04.1
+FROM python:3.6.6-slim-jessie
 MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
-
-# Basic env vars for apt and Passenger
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ America/New_York
@@ -20,13 +18,16 @@ ENV DOCKER_CRYPT_ADMINS Admin User,admin@test.com
 # ENV DOCKER_CRYPT_ALLOWED myhost,1.2.3.4,anotherhost.fqdn.com
 ENV DOCKER_CRYPT_LANG en_US
 ENV DOCKER_CRYPT_TZ America/New_York
-ADD / $APP_DIR
-RUN apt-get update && \
+
+RUN apt-get update -y && \
+    mkdir -p /usr/share/man/man1 && \
+    mkdir -p /usr/share/man/man7 && \
     apt-get install -y software-properties-common && \
     apt-get -y update && \
     add-apt-repository -y ppa:nginx/stable && \
     apt-get -y install \
     git \
+    build-essential \
     python-setuptools \
     nginx \
     postgresql \
@@ -38,12 +39,16 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ADD setup/requirements.txt /tmp/requirements.txt
+
 RUN easy_install pip && \
-    pip install git+https://github.com/django-extensions/django-extensions@243abe93451c3b53a5f562023afcd809b79c9b7f && \
-    pip install -r $APP_DIR/setup/requirements.txt && \
+    pip install -r /tmp/requirements.txt && \
     pip install psycopg2==2.5.3 && \
     pip install gunicorn && \
-    pip install setproctitle
+    pip install setproctitle && \
+    rm /tmp/requirements.txt
+
+ADD / $APP_DIR
 
 ADD docker/nginx/nginx-env.conf /etc/nginx/main.d/
 ADD docker/nginx/crypt.conf /etc/nginx/sites-enabled/crypt.conf

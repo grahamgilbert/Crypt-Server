@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django_extensions.db.fields.encrypted import EncryptedCharField
+from django_extensions.db.fields.encrypted import EncryptedCharField as OldEncryptedCharField
+from encrypted_model_fields.fields import EncryptedCharField
 
 from django.core.exceptions import ValidationError
 
@@ -26,7 +27,7 @@ SECRET_TYPES = (('recovery_key', 'Recovery Key'),
 class Secret(models.Model):
     computer = models.ForeignKey(Computer)
     secret = EncryptedCharField(max_length=256)
-    secret_type =  models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
+    secret_type = models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
     date_escrowed = models.DateTimeField(auto_now_add=True)
     rotation_required = models.BooleanField(default=False)
 
