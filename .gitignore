@@ -8,3 +8,5 @@ fvserver.db
 keyset
 *.db copy
 *.db
+
+.vscode
