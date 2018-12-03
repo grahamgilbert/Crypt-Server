@@ -25,6 +25,11 @@ def cleanup():
         the_req.current = False
         the_req.save()
 
+def get_server_version():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    version = plistlib.readPlist(os.path.join(os.path.dirname(current_dir), 'fvserver', 'version.plist'))
+    return version['version']
+
 ##index view
 @login_required
 def index(request):
