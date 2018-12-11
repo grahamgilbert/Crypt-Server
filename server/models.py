@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django_extensions.db.fields.encrypted import EncryptedCharField
+from encrypted_model_fields.fields import EncryptedCharField
 
 from django.core.exceptions import ValidationError
 
@@ -12,7 +12,7 @@ class Computer(models.Model):
     username = models.CharField(max_length=200, verbose_name="User Name")
     computername = models.CharField(max_length=200, verbose_name="Computer Name")
     last_checkin = models.DateTimeField(blank=True,null=True)
-    def __unicode__(self):
+    def __str__(self):
         return self.computername
     class Meta:
         ordering = ['serial']
@@ -26,7 +26,7 @@ SECRET_TYPES = (('recovery_key', 'Recovery Key'),
 class Secret(models.Model):
     computer = models.ForeignKey(Computer)
     secret = EncryptedCharField(max_length=256)
-    secret_type =  models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
+    secret_type = models.CharField(max_length=256, choices=SECRET_TYPES, default='recovery_key')
     date_escrowed = models.DateTimeField(auto_now_add=True)
     rotation_required = models.BooleanField(default=False)
 
@@ -39,7 +39,7 @@ class Secret(models.Model):
         self.validate_unique()
         super(Secret, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.secret
     class Meta:
         ordering = ['-date_escrowed']
@@ -56,5 +56,5 @@ class Request(models.Model):
     date_approved = models.DateTimeField(blank=True,null=True)
     current = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s - %s" % (self.secret, self.requesting_user)

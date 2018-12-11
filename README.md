@@ -14,7 +14,7 @@ __Changes in this version__
 
 __Client__
 ====
-The client is written in Pyobjc, and makes use of the built in fdesetup on OS X 10.8 and higher. An example login hook is provided to see how this could be implemented in your organisation.
+The client is written in Swift, and makes use of the built in fdesetup on OS X 10.8 and higher.
 
 __Features__
 =======
@@ -29,6 +29,8 @@ __Features__
 It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Docker.md) to run this, but if you wish to run directly on a host, installation instructions are over on the in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_1404.md)
 
 ## Settings
+
+* ``FIELD_ENCRYPTION_KEY`` - The key to use when encrypting the secrets. This is required.
 
 * ``SEND_EMAIL`` - Crypt Server can send email notifcations when secrets are requested and approved. Set ``SEND_EMAIL`` to True, and set ``HOST_NAME`` to your server's host and URL scheme (e.g. ``https://crypt.example.com``). For configuring your email settings, see the [Django documentation](https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-EMAIL_HOST).
 
