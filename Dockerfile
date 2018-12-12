@@ -1,6 +1,6 @@
 # Crypt Server Dockerfile
 FROM python:3.7.1-slim-stretch
-MAINTAINER Graham Gilbert <graham@grahamgilbert.com>
+LABEL maintainer="graham@grahamgilbert.com"
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ America/New_York
@@ -35,17 +35,14 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-    #     build-essential \
-        
-    # apt-get -y update && \
-
 ADD setup/requirements.txt /tmp/requirements.txt
 
 RUN pip3 install -r /tmp/requirements.txt && \
     pip3 install psycopg2==2.5.3 && \
     pip3 install gunicorn && \
     pip3 install setproctitle && \
-    rm /tmp/requirements.txt
+    rm /tmp/requirements.txt && \
+    rm -rf /root/.cache
 
 ADD / $APP_DIR
 
