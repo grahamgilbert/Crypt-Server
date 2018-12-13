@@ -14,7 +14,7 @@ from .forms import *
 from django.views.defaults import server_error
 from django.core.mail import send_mail
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # Create your views here.
 
 ##clean up old requests
@@ -60,7 +60,7 @@ def computer_info(request, computer_id=None, serial=None):
     if computer_id:
         computer = get_object_or_404(Computer, pk=computer_id)
     else:
-        computer = get_object_or_404(Computer, serial=serial)        
+        computer = get_object_or_404(Computer, serial=serial)
     can_request = None
     approved = None
 
