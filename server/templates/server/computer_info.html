@@ -17,11 +17,11 @@
 {% endblock %}
 
 {% block dropdown %}
-<li><a href="{% url 'new_secret' computer.id %}"><span class="glyphicon glyphicon-plus"></span> New secret</a></li>
+<li><a href="{% url 'server:new_secret' computer.id %}"><span class="glyphicon glyphicon-plus"></span> New secret</a></li>
 {% endblock %}
 
 {% block nav %}
-<li><a href="{% url 'home' %}"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
+<li><a href="{% url 'server:home' %}"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -63,7 +63,7 @@
 
                 <td>{{ secret.get_secret_type_display }}</td>
                 <td>{{ secret.date_escrowed }}</td>
-                <td><a class="btn btn-info btn-xs" href="{% url 'secret_info' secret.id %}">Info / Request</a></td>
+                <td><a class="btn btn-info btn-xs" href="{% url 'server:secret_info' secret.id %}">Info / Request</a></td>
             </tr>
 
             {% endfor %}
