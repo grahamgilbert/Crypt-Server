@@ -55,12 +55,12 @@ def index(request):
 
 ##view to see computer info
 @login_required
-def computer_info(request, computer_id=None, serial=None):
+def computer_info(request, computer_id=None):
     cleanup()
-    if computer_id:
+    try:
         computer = get_object_or_404(Computer, pk=computer_id)
-    else:
-        computer = get_object_or_404(Computer, serial=serial)
+    except:
+        computer = get_object_or_404(Computer, serial=computer_id)
     can_request = None
     approved = None
 
@@ -147,9 +147,9 @@ def request(request, secret_id):
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
-                return redirect('retrieve', new_request.id)
+                return redirect('server:retrieve', new_request.id)
             else:
-                return redirect('secret_info', secret.id)
+                return redirect('server:secret_info', secret.id)
     else:
         form = RequestForm()
     c = {'form': form, 'secret':secret, }

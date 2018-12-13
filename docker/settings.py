@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'server',
-    'bootstrap3',
+    'bootstrap4',
     'django_extensions',
 )
 
@@ -157,6 +157,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'fvserver.context_processors.crypt_version',
             ],
             'debug': DEBUG,
         },
