@@ -16,8 +16,8 @@ urlpatterns = [
     path('info/secret/<int:secret_id>/', views.secret_info, name='secret_info'),
 
     #computerinfo
-    url(r'^info/(?P<computer_id>[0-9]+)/', computer_info, name='computer_info'),
-    url(r'^info/(?P<serial>[A-Z0-9]{11,12}.+)/', computer_info, name='computer_info'),
+    path('info/<int:computer_id>/', views.computer_info, name='computer_info'),
+    path('info/<str:serial>', views.computer_info, name='computer_info'),
 
     #request
     path('request/<int:secret_id>/', views.request, name='request'),
