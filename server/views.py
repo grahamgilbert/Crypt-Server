@@ -203,7 +203,7 @@ def approve(request, request_id):
                         email_sender = 'requests@%s' % request.META['SERVER_NAME']
                         send_mail('Crypt Key Request', email_message, email_sender,
     [new_request.requesting_user.email], fail_silently=True)
-            return redirect('managerequests')
+            return redirect('server:managerequests')
     else:
         form = ApproveForm(instance=the_request)
     c = {'form':form, 'user': request.user, 'the_request':the_request, }

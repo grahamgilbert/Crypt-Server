@@ -9,7 +9,10 @@
             "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
             // "sPaginationType": "bootstrap",
             // "bStateSave": true,
-             "aaSorting": [[3,'desc']]
+             "aaSorting": [[3,'desc']],
+             columnDefs: [
+                { orderable: false, targets: -1 }
+        ]
         });
     } );
 </script>
@@ -17,11 +20,11 @@
 {% endblock %}
 
 {% block dropdown %}
-<li><a href="{% url 'server:new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'server:new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
 {% endblock %}
 {% block nav %}
 {% if perms.server.can_approve %}
-    <li><a href="{% url 'server:managerequests' %}">Approve requests</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'server:managerequests' %}">Approve requests</a></li>
 {% endif %}
 {% endblock %}
 {% block content %}
