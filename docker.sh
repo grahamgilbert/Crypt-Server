@@ -1,9 +1,5 @@
 #!/bin/bash
 CWD=`pwd`
-# if [ ! -d "$CWD/Data" ] ; then
-#     echo "Script must be run from root of crypt directory"
-#     exit 1
-# fi
 
 
 # Check that Docker Machine exists
@@ -26,6 +22,7 @@ CWD=`pwd`
 # Clean up
 
 docker ps -aq | xargs docker rm -f
+
 KEYSET=$CWD/keyset
 docker build -t "macadmins/crypt-server" $CWD
 docker run -d \

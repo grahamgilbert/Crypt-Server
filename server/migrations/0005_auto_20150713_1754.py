@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='request',
             name='secret',
-            field=models.ForeignKey(to='server.Secret'),
+            field=models.ForeignKey(to='server.Secret', on_delete=models.CASCADE),
         ),
     ]

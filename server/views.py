@@ -14,7 +14,7 @@ from .forms import *
 from django.views.defaults import server_error
 from django.core.mail import send_mail
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # Create your views here.
 
 ##clean up old requests
@@ -55,12 +55,12 @@ def index(request):
 
 ##view to see computer info
 @login_required
-def computer_info(request, computer_id=None, serial=None):
+def computer_info(request, computer_id=None):
     cleanup()
-    if computer_id:
+    try:
         computer = get_object_or_404(Computer, pk=computer_id)
-    else:
-        computer = get_object_or_404(Computer, serial=serial)        
+    except:
+        computer = get_object_or_404(Computer, serial=computer_id)
     can_request = None
     approved = None
 
@@ -147,9 +147,9 @@ def request(request, secret_id):
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
-                return redirect('retrieve', new_request.id)
+                return redirect('server:retrieve', new_request.id)
             else:
-                return redirect('secret_info', secret.id)
+                return redirect('server:secret_info', secret.id)
     else:
         form = RequestForm()
     c = {'form': form, 'secret':secret, }
@@ -203,7 +203,7 @@ def approve(request, request_id):
                         email_sender = 'requests@%s' % request.META['SERVER_NAME']
                         send_mail('Crypt Key Request', email_message, email_sender,
     [new_request.requesting_user.email], fail_silently=True)
-            return redirect('managerequests')
+            return redirect('server:managerequests')
     else:
         form = ApproveForm(instance=the_request)
     c = {'form':form, 'user': request.user, 'the_request':the_request, }
