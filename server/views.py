@@ -35,7 +35,7 @@ def get_server_version():
 def index(request):
     cleanup()
     #show table with all the keys
-    computers = Computer.objects.all()
+    computers = Computer.objects.none()
 
     if hasattr(settings, 'ALL_APPROVE'):
         if settings.ALL_APPROVE == True:
@@ -52,6 +52,89 @@ def index(request):
             outstanding = outstanding.filter(~Q(requesting_user=request.user))
     c = {'user': request.user, 'computers':computers, 'outstanding':outstanding, }
     return render(request,'server/index.html', c)
+
+
+@login_required
+def tableajax(request):
+    """Table ajax for dataTables"""
+    # Pull our variables out of the GET request
+    get_data = request.GET['args']
+    get_data = json.loads(get_data)
+    draw = get_data.get('draw', 0)
+    start = int(get_data.get('start', 0))
+    length = int(get_data.get('length', 0))
+    search_value = ''
+    if 'search' in get_data:
+        if 'value' in get_data['search']:
+            search_value = get_data['search']['value']
+
+    # default ordering
+    order_column = 2
+    order_direction = 'desc'
+    order_name = ''
+    if 'order' in get_data:
+        order_column = get_data['order'][0]['column']
+        order_direction = get_data['order'][0]['dir']
+    for column in get_data.get('columns', None):
+        if column['data'] == order_column:
+            order_name = column['name']
+            break
+
+    machines = Computer.objects.all().values('id', 'serial', 'username', 'computername', 'last_checkin')
+
+    if len(order_name) != 0:
+        if order_direction == 'desc':
+            order_string = "-%s" % order_name
+        else:
+            order_string = "%s" % order_name
+
+    if len(search_value) != 0:
+        searched_machines = machines.filter(
+            Q(serial__icontains=search_value) |
+            Q(username__icontains=search_value) |
+            Q(computername__icontains=search_value) |
+            Q(last_checkin__icontains=search_value)).order_by(order_string)
+    else:
+        searched_machines = machines.order_by(order_string)
+
+    limited_machines = searched_machines[start:(start + length)]
+
+    return_data = {}
+    return_data['draw'] = int(draw)
+    return_data['recordsTotal'] = machines.count()
+    return_data['recordsFiltered'] = return_data['recordsTotal']
+
+    return_data['data'] = []
+    settings_time_zone = None
+    try:
+        settings_time_zone = pytz.timezone(settings.TIME_ZONE)
+    except Exception:
+        pass
+
+    for machine in limited_machines:
+        if machine['last_checkin']:
+            # formatted_date = pytz.utc.localize(machine.last_checkin)
+            if settings_time_zone:
+                formatted_date = machine['last_checkin'].astimezone(
+                    settings_time_zone).strftime("%Y-%m-%d %H:%M %Z")
+            else:
+                formatted_date = machine['last_checkin'].strftime("%Y-%m-%d %H:%M")
+        else:
+            formatted_date = ""
+
+        serial_link = "<a href=\"%s\">%s</a>" % (
+            reverse('server:computer_info', args=[machine['id']]), machine['serial'])
+
+        computername_link = "<a href=\"%s\">%s</a>" % (
+            reverse('server:computer_info', args=[machine['id']]), machine['computername'])
+
+        info_button = "<a class=\"btn btn-info btn-xs\" href=\"%s\">Info</a>" % (
+            reverse('server:computer_info', args=[machine['id']]))
+
+        list_data = [serial_link, computername_link, machine['username'], formatted_date, info_button]
+        return_data['data'].append(list_data)
+
+    return JsonResponse(return_data)
 
 ##view to see computer info
 @login_required
