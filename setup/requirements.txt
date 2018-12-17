@@ -22,5 +22,5 @@ pylint==2.1.1
 python3-keyczar==0.71rc0
 pytz==2018.7
 six==1.9.0
-supervisor==4.0.0.dev0
+git+https://github.com/Supervisor/supervisor@0fec8013b22bf047b682387828bc053ccf3358a7
 wrapt==1.10.11
