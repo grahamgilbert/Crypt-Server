@@ -34,7 +34,7 @@ jobs:
             . venv/bin/activate
             cp fvserver/example_settings.py fvserver/settings.py
             python generate_keyczart.py
-            python manage.py test
+            # python manage.py test
             python manage.py migrate
       - run:
           name: run linting
