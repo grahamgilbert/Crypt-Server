@@ -39,7 +39,7 @@ jobs:
       - run:
           name: run linting
           command: |
-            .venv/bin/activate
+            . .venv/bin/activate
             black --check .
 
       - store_artifacts:
