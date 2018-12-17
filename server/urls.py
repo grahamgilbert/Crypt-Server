@@ -6,6 +6,7 @@ app_name = 'server'
 urlpatterns = [
     #front. page
     path('', views.index, name='home'),
+    path('ajax/', views.tableajax, name='tableajax'),
 
     # Add computer
     path('new/computer/', views.new_computer, name='new_computer'),
@@ -17,8 +18,7 @@ urlpatterns = [
 
     #computerinfo
     path('info/<str:computer_id>/', views.computer_info, name='computer_info'),
-    # path('info/<str:serial>/', views.computer_info, name='computer_info_serial'),
-
+    path('info/<str:serial>/', views.computer_info, name='computer_info_serial'),
     #request
     path('request/<int:secret_id>/', views.request, name='request'),
     #retrieve
@@ -31,4 +31,5 @@ urlpatterns = [
     path('checkin/', views.checkin, name='checkin'),
     #manage
     path('manage-requests/', views.managerequests, name='managerequests'),
+
 ]

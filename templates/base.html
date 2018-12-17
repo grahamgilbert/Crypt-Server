@@ -12,6 +12,9 @@
     <!-- Le styles -->
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css' />
   {# Load CSS and JavaScript #}
+  <link rel="stylesheet"
+  href='{{ STATIC_URL }}dataTables/css/dataTables.bootstrap4.css'
+  type="text/css" media="all" />
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
     <style type="text/css">
@@ -22,9 +25,6 @@
     </style>
     <!--link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"-->
 <link href="{{ STATIC_URL }}style.css" rel="stylesheet">
-<link rel="stylesheet"
-  href='{{ STATIC_URL }}dataTables/css/dataTables.bootstrap4.css'
-  type="text/css" media="all" />
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
