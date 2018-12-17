@@ -1,0 +1,119 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.7.1
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "setup/requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r setup/requirements.txt
+            pip install flake8
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "setup/requirements.txt" }}
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            cp sal/example_settings.py sal/settings.py
+            python manage.py test
+            python manage.py migrate
+      - run:
+          name: run linting
+          command: |
+            . venv/bin/activate
+            flake8
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+  build_latest:
+    docker:
+      - image: docker:18.06.1-ce-git
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t macadmins/sal:latest .
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker push macadmins/sal:latest
+      - run: apk add python2 py2-pip
+      - run: pip install requests
+      - run: python remote_build.py latest
+
+  build_branch:
+    docker:
+      - image: docker:18.06.1-ce-git
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: docker build -t macadmins/crypt-server:$CIRCLE_BRANCH .
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker push macadmins/crypt-server:$CIRCLE_BRANCH
+      - run: apk update
+      - run: apk add python2 py2-pip
+      - run: pip install requests
+      - run: python remote_build.py $CIRCLE_BRANCH
+
+  build_tag:
+    docker:
+      - image: docker:18.06.1-ce-git
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: docker build -t macadmins/crypt-server:$CIRCLE_TAG .
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker push macadmins/crypt-server:$CIRCLE_TAG
+      - run: apk add python2 py2-pip
+      - run: pip install requests
+      - run: python remote_build.py $CIRCLE_TAG
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - build_latest:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - build_branch:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: master
+      - build_tag:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
