@@ -1,4 +1,5 @@
-from settings_import import *
+from fvserver.system_settings import *
+from fvserver.settings_import import *
 import os
 
 # Django settings for fvserver project.
@@ -19,11 +20,11 @@ DATABASES = {
 host = None
 port = None
 
-if os.environ.has_key("DB_HOST"):
+if "DB_HOST" in os.environ:
     host = os.environ.get("DB_HOST")
     port = os.environ.get("DB_PORT")
 
-elif os.environ.has_key("DB_PORT_5432_TCP_ADDR"):
+elif "DB_PORT_5432_TCP_ADDR" in os.environ:
     host = os.environ.get("DB_PORT_5432_TCP_ADDR")
     port = os.environ.get("DB_PORT_5432_TCP_PORT", "5432")
 

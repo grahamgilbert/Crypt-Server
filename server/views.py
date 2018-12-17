@@ -91,6 +91,7 @@ def tableajax(request):
         "id", "serial", "username", "computername", "last_checkin"
     )
 
+    order_string = None
     if len(order_name) != 0:
         if order_direction == "desc":
             order_string = "-%s" % order_name
@@ -103,9 +104,14 @@ def tableajax(request):
             | Q(username__icontains=search_value)
             | Q(computername__icontains=search_value)
             | Q(last_checkin__icontains=search_value)
-        ).order_by(order_string)
+        )
+
+
     else:
-        searched_machines = machines.order_by(order_string)
+        searched_machines = machines
+
+    if order_name != 'info_button':
+        searched_machines = searched_machines.order_by(order_string)
 
     limited_machines = searched_machines[start : (start + length)]
 
