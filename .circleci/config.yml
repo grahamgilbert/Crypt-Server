@@ -40,7 +40,7 @@ jobs:
           name: run linting
           command: |
             . venv/bin/activate
-            flake8
+            black --check .
 
       - store_artifacts:
           path: test-reports
