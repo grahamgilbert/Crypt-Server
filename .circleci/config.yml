@@ -20,7 +20,7 @@ jobs:
           name: install dependencies
           command: |
             python -m venv .venv
-            .venv/bin/activate
+            . .venv/bin/activate
             pip install -r setup/requirements.txt
             pip install flake8
 
@@ -31,7 +31,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            .venv/bin/activate
+            . .venv/bin/activate
             cp fvserver/example_settings.py fvserver/settings.py
             python generate_keyczart.py
             # python manage.py test
