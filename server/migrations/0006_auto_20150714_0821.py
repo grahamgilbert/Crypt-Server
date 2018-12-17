@@ -7,14 +7,14 @@ import django_extensions.db.fields.encrypted
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0005_auto_20150713_1754'),
-    ]
+    dependencies = [("server", "0005_auto_20150713_1754")]
 
     operations = [
         migrations.AlterField(
-            model_name='secret',
-            name='secret',
-            field=django_extensions.db.fields.encrypted.EncryptedCharField(max_length=256),
-        ),
+            model_name="secret",
+            name="secret",
+            field=django_extensions.db.fields.encrypted.EncryptedCharField(
+                max_length=256
+            ),
+        )
     ]

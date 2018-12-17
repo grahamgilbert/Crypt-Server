@@ -6,17 +6,9 @@ from django.db import models, migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0003_auto_20150713_1215'),
-    ]
+    dependencies = [("server", "0003_auto_20150713_1215")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='computer',
-            name='recovery_key',
-        ),
-        migrations.RemoveField(
-            model_name='request',
-            name='computer',
-        ),
+        migrations.RemoveField(model_name="computer", name="recovery_key"),
+        migrations.RemoveField(model_name="request", name="computer"),
     ]

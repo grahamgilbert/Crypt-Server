@@ -5,39 +5,43 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0008_auto_20150814_2140'),
-    ]
+    dependencies = [("server", "0008_auto_20150814_2140")]
 
     operations = [
         migrations.AlterField(
-            model_name='computer',
-            name='computername',
-            field=models.CharField(max_length=200, verbose_name='Computer Name'),
+            model_name="computer",
+            name="computername",
+            field=models.CharField(max_length=200, verbose_name="Computer Name"),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, verbose_name='Serial Number'),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(max_length=200, verbose_name="Serial Number"),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='username',
-            field=models.CharField(max_length=200, verbose_name='User Name'),
+            model_name="computer",
+            name="username",
+            field=models.CharField(max_length=200, verbose_name="User Name"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='approved',
-            field=models.NullBooleanField(verbose_name='Approved?'),
+            model_name="request",
+            name="approved",
+            field=models.NullBooleanField(verbose_name="Approved?"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='reason_for_approval',
-            field=models.TextField(blank=True, null=True, verbose_name='Approval Notes'),
+            model_name="request",
+            name="reason_for_approval",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Approval Notes"
+            ),
         ),
         migrations.AlterField(
-            model_name='secret',
-            name='secret_type',
-            field=models.CharField(choices=[('recovery_key', 'Recovery Key'), ('password', 'Password')], default='recovery_key', max_length=256),
+            model_name="secret",
+            name="secret_type",
+            field=models.CharField(
+                choices=[("recovery_key", "Recovery Key"), ("password", "Password")],
+                default="recovery_key",
+                max_length=256,
+            ),
         ),
     ]

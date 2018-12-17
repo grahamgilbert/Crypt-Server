@@ -8,15 +8,13 @@ import encrypted_model_fields.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0012_auto_20181128_2038'),
-    ]
+    dependencies = [("server", "0012_auto_20181128_2038")]
 
     operations = [
         migrations.AddField(
-            model_name='secret',
-            name='new_secret',
-            field=encrypted_model_fields.fields.EncryptedCharField(default=''),
+            model_name="secret",
+            name="new_secret",
+            field=encrypted_model_fields.fields.EncryptedCharField(default=""),
             preserve_default=False,
-        ),
+        )
     ]
