@@ -23,7 +23,6 @@ RUN apt-get update -y && \
     mkdir -p /usr/share/man/man1 && \
     mkdir -p /usr/share/man/man7 && \
     apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:nginx/stable && \
     apt-get -y update && \
     apt-get -y install \
     gcc \
