@@ -31,6 +31,6 @@ docker run -d \
   -e ADMIN_PASS='password' \
   -e FIELD_ENCRYPTION_KEY='jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg=' \
   --restart="always" \
-  -e DOCKER_CRYPT_DEBUG="true" \
+  -e DOCKER_CRYPT_DEBUG="false" \
   -p 8000:8000 \
   macadmins/crypt-server
