@@ -106,11 +106,10 @@ def tableajax(request):
             | Q(last_checkin__icontains=search_value)
         )
 
-
     else:
         searched_machines = machines
 
-    if order_name != 'info_button':
+    if order_name != "info_button":
         searched_machines = searched_machines.order_by(order_string)
 
     limited_machines = searched_machines[start : (start + length)]
