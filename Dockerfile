@@ -39,7 +39,9 @@ COPY docker/gunicorn_config.py $APP_DIR/
 COPY docker/django/management/ $APP_DIR/server/management/
 COPY docker/run.sh /run.sh
 
-RUN chmod +x /run.sh
+RUN chmod +x /run.sh \
+    && mkdir -p /home/app \
+    && ln -s ${APP_DIR} /home/app/crypt
 
 EXPOSE 8000
 
