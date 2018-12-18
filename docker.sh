@@ -24,12 +24,12 @@ CWD=`pwd`
 docker ps -aq | xargs docker rm -f
 
 KEYSET=$CWD/keyset
+#   -v $KEYSET:/home/app/crypt/keyset
 docker build -t "macadmins/crypt-server" $CWD
 docker run -d \
   --name="crypt" \
   -e ADMIN_PASS='password' \
   -e FIELD_ENCRYPTION_KEY='jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg=' \
-  -v $KEYSET:/home/app/crypt/keyset \
   --restart="always" \
   -e DOCKER_CRYPT_DEBUG="true" \
   -p 8000:8000 \
