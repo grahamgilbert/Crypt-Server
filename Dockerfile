@@ -28,7 +28,8 @@ RUN set -ex \
                     | sort -u \
     )" \
     && apk add --virtual .python-rundeps $runDeps \
-    && apk del .build-deps
+    && apk del .build-deps \
+    && rm /tmp/requirements.txt
 
 COPY / $APP_DIR
 COPY docker/settings.py $APP_DIR/fvserver/
