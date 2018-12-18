@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 cd $APP_DIR
 ADMIN_PASS=${ADMIN_PASS:-}
 python3 generate_keyczart.py
