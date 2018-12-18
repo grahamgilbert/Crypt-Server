@@ -1,10 +1,15 @@
+appdirs==1.4.3
 asn1crypto==0.24.0
 astroid==2.0.4
+attrs==18.2.0
+black==18.9b0
 cffi==1.11.5
+Click==7.0
 cryptography==2.4.2
 Django==2.1.4
 django-bootstrap3==11.0.0
 django-bootstrap4==0.0.7
+django-debug-toolbar==1.11
 django-encrypted-model-fields==0.5.8
 django-extensions==2.1.4
 docutils==0.11
@@ -23,5 +28,7 @@ pylint==2.1.1
 python3-keyczar==0.71rc0
 pytz==2018.7
 six==1.9.0
+sqlparse==0.2.4
 git+https://github.com/Supervisor/supervisor@0fec8013b22bf047b682387828bc053ccf3358a7
+toml==0.10.0
 wrapt==1.10.11

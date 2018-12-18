@@ -8,18 +8,11 @@ import encrypted_model_fields.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0014_migrate_secrets'),
-    ]
+    dependencies = [("server", "0014_migrate_secrets")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='secret',
-            name='secret',
-        ),
+        migrations.RemoveField(model_name="secret", name="secret"),
         migrations.RenameField(
-            model_name='secret',
-            old_name='new_secret',
-            new_name='secret',
+            model_name="secret", old_name="new_secret", new_name="secret"
         ),
     ]

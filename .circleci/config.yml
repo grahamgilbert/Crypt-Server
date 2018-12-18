@@ -12,26 +12,26 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "setup/requirements.txt" }}
+          - v2-dependencies-{{ checksum "setup/requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
 
       - run:
           name: install dependencies
           command: |
-            python -m venv venv
-            . venv/bin/activate
+            python -m venv .venv
+            . .venv/bin/activate
             pip install -r setup/requirements.txt
             pip install flake8
 
       - save_cache:
           paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup/requirements.txt" }}
+            - .venv
+          key: v2-dependencies-{{ checksum "setup/requirements.txt" }}
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
+            . .venv/bin/activate
             cp fvserver/example_settings.py fvserver/settings.py
             python generate_keyczart.py
             # python manage.py test
@@ -39,8 +39,8 @@ jobs:
       - run:
           name: run linting
           command: |
-            . venv/bin/activate
-            flake8
+            . .venv/bin/activate
+            black --check .
 
       - store_artifacts:
           path: test-reports

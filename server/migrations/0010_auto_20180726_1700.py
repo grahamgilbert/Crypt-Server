@@ -19,7 +19,7 @@ def unique_serials(apps, schema_editor):
             # not seen it before, add it to the list of devices we've seen
             seen_serials.append(computer.serial)
         else:
-            # we've seen it before, select all the secrets for the 
+            # we've seen it before, select all the secrets for the
             # machine and move them to the first instance of the serial number
             secrets = Secret.objects.filter(computer=computer)
             # reselect here so we don't get bit when we delete the computer
@@ -32,10 +32,6 @@ def unique_serials(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0009_secret_rotation_required'),
-    ]
+    dependencies = [("server", "0009_secret_rotation_required")]
 
-    operations = [
-        migrations.RunPython(unique_serials),
-    ]
+    operations = [migrations.RunPython(unique_serials)]

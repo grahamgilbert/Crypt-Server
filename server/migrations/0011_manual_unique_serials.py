@@ -8,14 +8,14 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('server', '0010_auto_20180726_1700'),
-    ]
+    dependencies = [("server", "0010_auto_20180726_1700")]
 
     operations = [
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, unique=True, verbose_name=b'Serial Number'),
-        ),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(
+                max_length=200, unique=True, verbose_name=b"Serial Number"
+            ),
+        )
     ]
