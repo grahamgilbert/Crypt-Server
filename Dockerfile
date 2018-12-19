@@ -22,6 +22,9 @@ RUN set -ex \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
+WORKDIR ${APP_DIR}
+RUN python manage.py collectstatic
+
     # && runDeps="$( \
     #         scanelf --needed --nobanner --recursive /venv \
     #                 | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
