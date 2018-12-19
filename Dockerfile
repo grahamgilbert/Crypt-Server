@@ -20,16 +20,17 @@ RUN set -ex \
             pcre-dev \
             postgresql-dev \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
-    && runDeps="$( \
-            scanelf --needed --nobanner --recursive /venv \
-                    | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-                    | sort -u \
-                    | xargs -r apk info --installed \
-                    | sort -u \
-    )" \
-    && apk add --virtual .python-rundeps $runDeps \
-    && apk del .build-deps \
     && rm /tmp/requirements.txt
+
+    # && runDeps="$( \
+    #         scanelf --needed --nobanner --recursive /venv \
+    #                 | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+    #                 | sort -u \
+    #                 | xargs -r apk info --installed \
+    #                 | sort -u \
+    # )" \
+    # && apk add --virtual .python-rundeps $runDeps \
+    # && apk del .build-deps \
 
 COPY / $APP_DIR
 COPY docker/settings.py $APP_DIR/fvserver/
