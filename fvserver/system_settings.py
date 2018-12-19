@@ -140,6 +140,7 @@ WSGI_APPLICATION = "fvserver.wsgi.application"
 
 
 INSTALLED_APPS = (
+    "whitenoise.runserver_nostatic",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
