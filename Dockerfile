@@ -45,7 +45,7 @@ RUN chmod +x /run.sh \
     && ln -s ${APP_DIR} /home/app/crypt
 
 WORKDIR ${APP_DIR}
-RUN python manage.py collectstatic --noinput
+RUN export FIELD_ENCRYPTION_KEY="jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg="; python manage.py collectstatic --noinput; export FIELD_ENCRYPTION_KEY=""
 
 EXPOSE 8000
 
