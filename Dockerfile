@@ -45,6 +45,7 @@ RUN chmod +x /run.sh \
     && ln -s ${APP_DIR} /home/app/crypt
 
 WORKDIR ${APP_DIR}
+# don't use this key anywhere else, this is just for collectstatic to run
 RUN export FIELD_ENCRYPTION_KEY="jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg="; python manage.py collectstatic --noinput; export FIELD_ENCRYPTION_KEY=""
 
 EXPOSE 8000
