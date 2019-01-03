@@ -19,6 +19,7 @@ RUN set -ex \
             linux-headers \
             pcre-dev \
             postgresql-dev \
+            xmlsec-dev \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
