@@ -3,9 +3,9 @@ FROM python:3.7.2-alpine3.7
 LABEL maintainer="graham@grahamgilbert.com"
 
 ENV APP_DIR /home/docker/crypt
-ENV DOCKER_SAL_DEBUG false
-ENV DOCKER_CRYPT_LANG en_US
-ENV DOCKER_CRYPT_TZ America/New_York
+ENV DEBUG false
+ENV LANG en_US
+ENV TZ America/New_York
 
 COPY setup/requirements.txt /tmp/requirements.txt
 
@@ -23,20 +23,9 @@ RUN set -ex \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
-    # && runDeps="$( \
-    #         scanelf --needed --nobanner --recursive /venv \
-    #                 | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-    #                 | sort -u \
-    #                 | xargs -r apk info --installed \
-    #                 | sort -u \
-    # )" \
-    # && apk add --virtual .python-rundeps $runDeps \
-    # && apk del .build-deps \
-
 COPY / $APP_DIR
 COPY docker/settings.py $APP_DIR/fvserver/
 COPY docker/settings_import.py $APP_DIR/fvserver/
-# COPY docker/wsgi.py $APP_DIR
 COPY docker/gunicorn_config.py $APP_DIR/
 COPY docker/django/management/ $APP_DIR/server/management/
 COPY docker/run.sh /run.sh

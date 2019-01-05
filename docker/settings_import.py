@@ -4,7 +4,7 @@ import locale
 
 # Read the DEBUG setting from env var
 try:
-    if getenv("DOCKER_CRYPT_DEBUG").lower() == "true":
+    if getenv("DEBUG").lower() == "true":
         DEBUG = True
     else:
         DEBUG = False
@@ -12,7 +12,7 @@ except:
     DEBUG = False
 
 try:
-    if getenv("DOCKER_CRYPT_APPROVE_OWN").lower() == "false":
+    if getenv("APPROVE_OWN").lower() == "false":
         APPROVE_OWN = False
     else:
         APPROVE_OWN = True
@@ -20,7 +20,7 @@ except:
     APPROVE_OWN = True
 
 try:
-    if getenv("DOCKER_CRYPT_ROTATE_VIEWED_SECRETS").lower() == "false":
+    if getenv("ROTATE_VIEWED_SECRETS").lower() == "false":
         ROTATE_VIEWED_SECRETS = False
     else:
         ROTATE_VIEWED_SECRETS = True
@@ -28,17 +28,17 @@ except:
     ROTATE_VIEWED_SECRETS = True
 
 try:
-    if getenv("DOCKER_CRYPT_ALL_APPROVE").lower() == "true":
+    if getenv("ALL_APPROVE").lower() == "true":
         ALL_APPROVE = True
     else:
         ALL_APPROVE = False
 except:
     ALL_APPROVE = False
 
-# Read list of admins from $DOCKER_CRYPT_ADMINS env var
+# Read list of admins from $ADMINS env var
 admin_list = []
-if getenv("DOCKER_CRYPT_ADMINS"):
-    admins_var = getenv("DOCKER_CRYPT_ADMINS")
+if getenv("ADMINS"):
+    admins_var = getenv("ADMINS")
     if "," in admins_var and ":" in admins_var:
         for admin in admins_var.split(":"):
             admin_list.append(tuple(admin.split(",")))
@@ -49,11 +49,11 @@ if getenv("DOCKER_CRYPT_ADMINS"):
 else:
     ADMINS = ("Admin User", "admin@test.com")
 
-# Read the preferred time zone from $DOCKER_CRYPT_TZ, use system locale or
+# Read the preferred time zone from $TZ, use system locale or
 # set to 'America/New_York' if neither are set
-if getenv("DOCKER_CRYPT_TZ"):
-    if "/" in getenv("DOCKER_CRYPT_TZ"):
-        TIME_ZONE = getenv("DOCKER_CRYPT_TZ")
+if getenv("TZ"):
+    if "/" in getenv("TZ"):
+        TIME_ZONE = getenv("TZ")
     else:
         TIME_ZONE = "America/New_York"
 elif getenv("TZ"):
@@ -61,11 +61,11 @@ elif getenv("TZ"):
 else:
     TIME_ZONE = "America/New_York"
 
-# Read the preferred language code from $DOCKER_CRYPT_LANG, use system locale or
+# Read the preferred language code from $LANG, use system locale or
 # set to 'en_US' if neither are set
-if getenv("DOCKER_CRYPT_LANG"):
-    if "_" in getenv("DOCKER_CRYPT_LANG"):
-        LANGUAGE_CODE = getenv("DOCKER_CRYPT_LANG")
+if getenv("LANG"):
+    if "_" in getenv("LANG"):
+        LANGUAGE_CODE = getenv("LANG")
     else:
         LANGUAGE_CODE = "en_US"
 elif locale.getdefaultlocale():
@@ -73,31 +73,31 @@ elif locale.getdefaultlocale():
 else:
     LANGUAGE_CODE = "en_US"
 
-# Set the display name from the $DOCKER_CRYPT_DISPLAY_NAME env var, or
+# Set the display name from the $DISPLAY_NAME env var, or
 # use the default
-if getenv("DOCKER_CRYPT_DISPLAY_NAME"):
-    DISPLAY_NAME = getenv("DOCKER_CRYPT_DISPLAY_NAME")
+if getenv("DISPLAY_NAME"):
+    DISPLAY_NAME = getenv("DISPLAY_NAME")
 else:
     DISPLAY_NAME = "Crypt"
 
-if getenv("DOCKER_CRYPT_EMAIL_HOST"):
-    EMAIL_HOST = getenv("DOCKER_CRYPT_EMAIL_HOST")
+if getenv("EMAIL_HOST"):
+    EMAIL_HOST = getenv("EMAIL_HOST")
 
-if getenv("DOCKER_CRYPT_EMAIL_PORT"):
-    EMAIL_PORT = getenv("DOCKER_CRYPT_EMAIL_PORT")
+if getenv("EMAIL_PORT"):
+    EMAIL_PORT = getenv("EMAIL_PORT")
 
-if getenv("DOCKER_CRYPT_EMAIL_USER"):
-    EMAIL_USER = getenv("DOCKER_CRYPT_EMAIL_USER")
+if getenv("EMAIL_USER"):
+    EMAIL_USER = getenv("EMAIL_USER")
 
-if getenv("DOCKER_CRYPT_EMAIL_PASSWORD"):
-    EMAIL_PASSWORD = getenv("DOCKER_CRYPT_EMAIL_PASSWORD")
+if getenv("EMAIL_PASSWORD"):
+    EMAIL_PASSWORD = getenv("EMAIL_PASSWORD")
 
-if getenv("DOCKER_CRYPT_HOST_NAME"):
-    HOST_NAME = getenv("DOCKER_CRYPT_HOST_NAME")
+if getenv("HOST_NAME"):
+    HOST_NAME = getenv("HOST_NAME")
 
 # Read the list of allowed hosts from the $DOCKER_CRYPT_ALLOWED env var, or
 # allow all hosts if none was set.
-if getenv("DOCKER_CRYPT_ALLOWED"):
-    ALLOWED_HOSTS = getenv("DOCKER_CRYPT_ALLOWED").split(",")
+if getenv("ALLOWED_HOSTS"):
+    ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split(",")
 else:
     ALLOWED_HOSTS = ["*"]
