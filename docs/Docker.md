@@ -8,7 +8,7 @@ touch /somewhere/else/on/the/host
 
 ## Upgrading from Crypt Server 2
 
-The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys.
+The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys. Crypt 3 is a major update, you should ensure any custom settings you pass are still valid.
 
 ## Basic usage
 ``` bash
@@ -73,13 +73,13 @@ docker run -d --name="Crypt" \
 -v /somewhere/on/the/host:/home/docker/crypt/keyset \
 -v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
 -p 8000:8000 \
--e DOCKER_CRYPT_EMAIL_HOST='mail.yourdomain.com' \
--e DOCKER_CRYPT_EMAIL_PORT='25' \
--e DOCKER_CRYPT_EMAIL_USER='youruser' \
--e DOCKER_CRYPT_EMAIL_PASSWORD='yourpassword' \
--e DOCKER_CRYPT_HOST_NAME='https://crypt.myorg.com' \
+-e EMAIL_HOST='mail.yourdomain.com' \
+-e EMAIL_PORT='25' \
+-e EMAIL_USER='youruser' \
+-e EMAIL_PASSWORD='yourpassword' \
+-e HOST_NAME='https://crypt.myorg.com' \
 -e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 macadmins/crypt-server
 ```
 
-If your SMTP server doesn't need a setting (username and password for example), you should omit it. The `DOCKER_CRYPT_HOST_NAME` setting should be the hostname of your server - this will be used to generate links in emails.
+If your SMTP server doesn't need a setting (username and password for example), you should omit it. The `HOST_NAME` setting should be the hostname of your server - this will be used to generate links in emails.
