@@ -52,7 +52,11 @@
 {% endblock %}
 {% block nav %}
 {% if perms.server.can_approve %}
-    <li class="nav-item"><a class="nav-link" href="{% url 'server:managerequests' %}">Approve requests</a></li>
+{% if outstanding.count > 0 %}
+    <li class="nav-item"><a class="btn btn-info" href="{% url 'server:managerequests' %}">Approve requests</a></li>
+{% else %}
+<li class="nav-item"><a class="nav-link" href="{% url 'server:managerequests' %}">Approve requests</a></li>
+{% endif %}
 {% endif %}
 {% endblock %}
 {% block content %}

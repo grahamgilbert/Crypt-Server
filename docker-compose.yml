@@ -1,0 +1,25 @@
+version: '3'
+services:
+  caddy:
+    image: "wemakeservices/caddy-docker:latest"
+    volumes:
+      - ./docker/Caddyfile:/etc/Caddyfile  # to mount custom Caddyfile
+    ports:
+      - "80:80"
+      # - "443:443" # uncomment this for https. Make sure you edit the Caddyfile above to reflect your hostname
+    depends_on:
+      - crypt
+    restart: always
+
+  crypt:
+    image: "macadmins/crypt-server"
+    # build: . # uncomment this to build your own image and comment out the above
+    environment:
+      - FIELD_ENCRYPTION_KEY="jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg=" # please change this
+      - ADMIN_PASS='password'
+      - DEBUG="false"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ${PWD}/crypt.db:/home/app/crypt/crypt.db
+    restart: always
