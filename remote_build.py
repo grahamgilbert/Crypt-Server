@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 api_user_token = os.getenv("CIRCLE_API_USER_TOKEN")
 project_reponame = "crypt-server-saml"
-project_username = "grahamgilbert"
+project_username = "macadmins"
 
 post_data = {}
 post_data["build_parameters"] = {"TAG": args.build_tag}
