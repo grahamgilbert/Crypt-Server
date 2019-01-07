@@ -1,6 +1,6 @@
 Installation on Ubuntu 14.04 LTS
 =====================
-This document assumes a bare install of Ubuntu 14.04 LTS server.
+This document assumes a bare install of Ubuntu 14.04 LTS server. This document has not been updated for Crypt Server 3.0. Pull requests to update this (and to update to Ubuntu 18) are gratefully accepted.
 
 All commands should be run as root, unless specified
 

@@ -39,11 +39,8 @@ All settings that would be entered into `settings.py` can also be passed into th
 Main Page:
 ![Crypt Main Page](https://raw.github.com/grahamgilbert/Crypt-Server/master/docs/images/home.png)
 
-User Computer Info:
-![User computer info](https://raw.github.com/grahamgilbert/Crypt-Server/master/docs/images/user_computer_info.png)
-
-Admin Computer Info:
-![Admin computer info](https://raw.github.com/grahamgilbert/Crypt-Server/master/docs/images/admin_computer_info.png)
+Computer Info:
+![Computer info](https://raw.github.com/grahamgilbert/Crypt-Server/master/docs/images/admin_computer_info.png)
 
 User Key Request:
 ![Userkey request](https://raw.github.com/grahamgilbert/Crypt-Server/master/docs/images/user_key_request.png)

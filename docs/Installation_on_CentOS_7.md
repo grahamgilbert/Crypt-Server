@@ -1,7 +1,6 @@
 # Installation on CentOS 7
 
-This document assumes CentOS 7, and are based on [Installation on Ubuntu 12.04
-LTS](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_12.md).
+This document has not been updated for Crypt Server 3. Pull requests to update this are gratefully accepted.
 
 All commands should be run as root, unless specified.
 
@@ -15,7 +14,7 @@ Install needed packages:
 postgresql-libs postgresql-devel`
 
 Check if `virtualenv` is installed via `virtualenv --version` and install it if
-needed: 
+needed:
 
 `easy_install virtualenv`
 
@@ -50,7 +49,7 @@ the bash shell: `bash`.
 Now let's activate the virtualenv:
 
 ```
-cd crypt_env 
+cd crypt_env
 source bin/activate
 ```
 
