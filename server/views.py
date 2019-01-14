@@ -2,6 +2,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext, Template, Context
 import json
+import copy
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.contrib.auth.models import Permission, User
@@ -394,7 +395,7 @@ def new_computer(request):
             new_computer = form.save(commit=False)
             new_computer.save()
             form.save_m2m()
-            return redirect("computer_info", new_computer.id)
+            return redirect("server:computer_info", new_computer.id)
     else:
         form = ComputerForm()
     c = {"form": form}
@@ -407,14 +408,17 @@ def new_secret(request, computer_id):
     c.update(csrf(request))
     computer = get_object_or_404(Computer, pk=computer_id)
     if request.method == "POST":
-        form = SecretForm(request.POST)
+        form_data = copy.copy(request.POST)
+        form_data["computer"] = computer.id
+        print(form_data)
+        form = SecretForm(data=form_data)
         if form.is_valid():
             new_secret = form.save(commit=False)
             new_secret.computer = computer
             new_secret.date_escrowed = datetime.now()
             new_secret.save()
             # form.save_m2m()
-            return redirect("computer_info", computer.id)
+            return redirect("server:computer_info", computer.id)
     else:
         form = SecretForm()
 
