@@ -12,12 +12,12 @@ services:
     restart: always
 
   crypt:
-    # image: "macadmins/crypt-server"
-    build: . # uncomment this to build your own image and comment out the above
+    image: "macadmins/crypt-server"
+    # build: . # uncomment this to build your own image and comment out the above
     environment:
       - FIELD_ENCRYPTION_KEY=jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg= # please change this
       - ADMIN_PASS=password
-      - DEBUG=true
+      - DEBUG=false
     ports:
       - "8000:8000"
     volumes:
