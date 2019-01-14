@@ -31,4 +31,5 @@ class ComputerForm(forms.ModelForm):
 class SecretForm(forms.ModelForm):
     class Meta:
         model = Secret
-        fields = ("secret_type", "secret")
+        fields = ("secret_type", "secret", "computer")
+        widgets = {"computer": forms.HiddenInput()}
