@@ -410,7 +410,6 @@ def new_secret(request, computer_id):
     if request.method == "POST":
         form_data = copy.copy(request.POST)
         form_data["computer"] = computer.id
-        print(form_data)
         form = SecretForm(data=form_data)
         if form.is_valid():
             new_secret = form.save(commit=False)
