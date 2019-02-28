@@ -20,6 +20,7 @@ RUN set -ex \
             pcre-dev \
             postgresql-dev \
             xmlsec-dev \
+    && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --upgrade pip==19.0.3" \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
