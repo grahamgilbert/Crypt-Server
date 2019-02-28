@@ -9,6 +9,9 @@ ENV TZ America/New_York
 
 COPY setup/requirements.txt /tmp/requirements.txt
 
+# This is gross, but needed until we get pip patched in the upstream image
+RUN LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --upgrade pip==19.0.3"
+
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
             gcc \
@@ -20,7 +23,6 @@ RUN set -ex \
             pcre-dev \
             postgresql-dev \
             xmlsec-dev \
-    && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --upgrade pip==19.0.3" \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
