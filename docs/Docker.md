@@ -90,6 +90,12 @@ It is recommended to use either an Nginx proxy in front of the Crypt app for SSL
 
 _Note Caddy is only free for personal use. For commercial deployments you should build from source yourself or use Nginx._
 
+## X-Frame-Options
+
+The nginx config included with the docker container configures the X-Frame-Options as sameorigin. This protects against a potential attacker using iframes to do bad stuff with Crypt.
+
+Depending on your environment you may need to also configure X-Frame-Options on any proxies in front of Crypt.
+
 ## docker-cimpose
 
 An example `docker-compose.yml` is included. For basic usuage, you should only need to edit the `FIELD_ENCRYPTION_KEY`.
