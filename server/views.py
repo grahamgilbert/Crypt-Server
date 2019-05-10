@@ -285,7 +285,7 @@ def request(request, secret_id):
                                 """ % (
                                     request.user.username,
                                     server_name,
-                                    reverse("approve", args=[new_request.id]),
+                                    reverse("server:approve", args=[new_request.id]),
                                 )
                                 email_sender = (
                                     "requests@%s" % request.META["SERVER_NAME"]
@@ -356,7 +356,7 @@ def approve(request, request_id):
                             request_status,
                             request.user.username,
                             server_name,
-                            reverse("secret_info", args=[new_request.id]),
+                            reverse("server:secret_info", args=[new_request.id]),
                         )
                         email_sender = "requests@%s" % request.META["SERVER_NAME"]
                         send_mail(
