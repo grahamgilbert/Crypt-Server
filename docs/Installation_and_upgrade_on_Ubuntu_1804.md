@@ -249,6 +249,28 @@ All commands should be run as root, unless specified
 
 We are assuming that you already have a user if you were running Crypt 2 so if you need to create a new user refer to the above core install instructions otherwise skip.
 
+##Update the virtual environment
+When a virtualenv is created, pip will also be installed to manage a
+virtualenv's local packages. Create a virtualenv which will handle
+installing Django in a contained environment. In this example we'll
+create a virtualenv for Crypt at /usr/local. This should be run from
+Bash, as this is what the virtualenv activate script expects. 
+
+For the update this process simply rebuilds the virtual environment. It will 
+not overwrite it completely nor the files inside it. 
+
+Go to where we're going to install the virtualenv:
+
+	 cd /usr/local
+
+Create the virtualenv for Crypt:
+
+	python3 -m venv crypt_env
+
+Make sure cryptuser has permissions to the new crypt_env folder:
+
+	chown -R cryptuser crypt_env
+
 Switch to the service account:
 
 	su cryptuser
@@ -262,7 +284,8 @@ Now we can activate the virtualenv:
 	cd crypt_env
 	source bin/activate
 
-##Install and configure Crypt
+
+##Update and configure Crypt
 Still inside the crypt_env virtualenv, use git to clone the current
 version of Crypt-Server
 
