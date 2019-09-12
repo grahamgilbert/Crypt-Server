@@ -96,6 +96,6 @@ The nginx config included with the docker container configures the X-Frame-Optio
 
 Depending on your environment you may need to also configure X-Frame-Options on any proxies in front of Crypt.
 
-## docker-cimpose
+## docker-compose
 
 An example `docker-compose.yml` is included. For basic usuage, you should only need to edit the `FIELD_ENCRYPTION_KEY`.
