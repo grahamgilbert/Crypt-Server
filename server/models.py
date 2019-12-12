@@ -23,7 +23,11 @@ class Computer(models.Model):
         )
 
 
-SECRET_TYPES = (("recovery_key", "Recovery Key"), ("password", "Password"), ("unlock_pin", "Unlock PIN"))
+SECRET_TYPES = (
+    ("recovery_key", "Recovery Key"),
+    ("password", "Password"),
+    ("unlock_pin", "Unlock PIN"),
+)
 
 
 class Secret(models.Model):
