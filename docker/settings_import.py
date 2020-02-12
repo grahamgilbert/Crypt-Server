@@ -67,11 +67,11 @@ if getenv("LANG"):
     if "_" in getenv("LANG"):
         LANGUAGE_CODE = getenv("LANG")
     else:
-        LANGUAGE_CODE = "en_US"
+        LANGUAGE_CODE = "en-us"
 elif locale.getdefaultlocale():
     LANGUAGE_CODE = locale.getdefaultlocale()[0]
 else:
-    LANGUAGE_CODE = "en_US"
+    LANGUAGE_CODE = "en-us"
 
 # Set the display name from the $DISPLAY_NAME env var, or
 # use the default
