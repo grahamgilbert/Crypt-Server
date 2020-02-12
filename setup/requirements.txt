@@ -6,7 +6,7 @@ black==18.9b0
 cffi==1.11.5
 Click==7.0
 cryptography==2.4.2
-Django==2.1.15
+Django==2.2.10
 django-bootstrap3==11.0.0
 django-bootstrap4==0.0.7
 django-debug-toolbar==1.11
