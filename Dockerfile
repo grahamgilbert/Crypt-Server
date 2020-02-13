@@ -4,7 +4,7 @@ LABEL maintainer="graham@grahamgilbert.com"
 
 ENV APP_DIR /home/docker/crypt
 ENV DEBUG false
-ENV LANG en_US
+ENV LANG en-us
 ENV TZ America/New_York
 
 COPY setup/requirements.txt /tmp/requirements.txt

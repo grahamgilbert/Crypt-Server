@@ -62,7 +62,7 @@ else:
     TIME_ZONE = "America/New_York"
 
 # Read the preferred language code from $LANG, use system locale or
-# set to 'en_US' if neither are set
+# set to 'en-us' if neither are set
 if getenv("LANG"):
     if "_" in getenv("LANG"):
         LANGUAGE_CODE = getenv("LANG")
