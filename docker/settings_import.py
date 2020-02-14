@@ -61,15 +61,10 @@ elif getenv("TZ"):
 else:
     TIME_ZONE = "America/New_York"
 
-# Read the preferred language code from $LANG, use system locale or
-# set to 'en-us' if neither are set
+# Read the preferred language code from $LANG & default to en-us if not set
+# note django does not support locale-format for LANG
 if getenv("LANG"):
-    if "_" in getenv("LANG"):
-        LANGUAGE_CODE = getenv("LANG")
-    else:
-        LANGUAGE_CODE = "en-us"
-elif locale.getdefaultlocale():
-    LANGUAGE_CODE = locale.getdefaultlocale()[0]
+     LANGUAGE_CODE = getenv("LANG")
 else:
     LANGUAGE_CODE = "en-us"
 
