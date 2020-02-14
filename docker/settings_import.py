@@ -64,7 +64,7 @@ else:
 # Read the preferred language code from $LANG & default to en-us if not set
 # note django does not support locale-format for LANG
 if getenv("LANG"):
-     LANGUAGE_CODE = getenv("LANG")
+    LANGUAGE_CODE = getenv("LANG")
 else:
     LANGUAGE_CODE = "en-us"
 
