@@ -23,6 +23,7 @@ RUN set -ex \
             linux-headers \
             pcre-dev \
             postgresql-dev \
+            mariadb-dev \
             xmlsec-dev \
             tzdata \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \

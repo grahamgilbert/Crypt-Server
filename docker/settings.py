@@ -19,6 +19,7 @@ DATABASES = {
 
 host = None
 port = None
+engine = "django.db.backends.postgresql_psycopg2"
 
 if "DB_HOST" in os.environ:
     host = os.environ.get("DB_HOST")
@@ -28,10 +29,13 @@ elif "DB_PORT_5432_TCP_ADDR" in os.environ:
     host = os.environ.get("DB_PORT_5432_TCP_ADDR")
     port = os.environ.get("DB_PORT_5432_TCP_PORT", "5432")
 
+if "DB_ENGINE" in os.environ:
+    engine = os.environ.get("DB_ENGINE")
+
 if host and port:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "ENGINE": engine,
             "NAME": os.environ["DB_NAME"],
             "USER": os.environ["DB_USER"],
             "PASSWORD": os.environ["DB_PASS"],
