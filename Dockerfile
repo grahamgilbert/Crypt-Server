@@ -15,16 +15,17 @@ RUN LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --upgrade pip==19.0.3"
 
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
-            gcc \
-            git \
-            libffi-dev \
-            libc-dev \
-            musl-dev \
-            linux-headers \
-            pcre-dev \
-            postgresql-dev \
-            xmlsec-dev \
-            tzdata \
+    gcc \
+    git \
+    libressl-dev \
+    libffi-dev \
+    libc-dev \
+    musl-dev \
+    linux-headers \
+    pcre-dev \
+    postgresql-dev \
+    xmlsec-dev \
+    tzdata \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
