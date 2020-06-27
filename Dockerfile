@@ -4,7 +4,7 @@ LABEL maintainer="graham@grahamgilbert.com"
 
 ENV APP_DIR /home/docker/crypt
 ENV DEBUG false
-ENV LANG en-us
+ENV LANG en
 ENV TZ America/New_York
 ENV LC_ALL en_US.UTF-8
 
