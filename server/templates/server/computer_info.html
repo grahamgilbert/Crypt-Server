@@ -1,77 +1,95 @@
-{% extends "base.html" %}
-
-{% block script %}
+{% extends "base.html" %} {% block script %}
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        $('.groupList').dataTable({
-            //"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-            // "iDisplayLength": 20,
-            "aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
-            // "sPaginationType": "bootstrap",
-            // "bStateSave": true,
-            // "aaSorting": [[1,'asc']]
-        });
-    } );
+  $(document).ready(function () {
+    $(".groupList").dataTable({
+      //"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+      // "iDisplayLength": 20,
+      aLengthMenu: [
+        [20, 50, -1],
+        [20, 50, "All"],
+      ],
+      // "sPaginationType": "bootstrap",
+      // "bStateSave": true,
+      // "aaSorting": [[1,'asc']]
+    });
+  });
 </script>
 
-{% endblock %}
-
-{% block dropdown %}
-<li class="nav-item"><a class="nav-link" href="{% url 'server:new_secret' computer.id %}"><span class="glyphicon glyphicon-plus"></span> New secret</a></li>
-{% endblock %}
-
-{% block nav %}
-<li class="nav-item"><a class="nav-link" href="{% url 'server:home' %}"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block dropdown %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'server:new_secret' computer.id %}"
+    ><span class="glyphicon glyphicon-plus"></span> New secret</a
+  >
+</li>
+{% endblock %} {% block nav %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'server:home' %}"
+    ><i class="glyphicon glyphicon-chevron-left"></i> Home</a
+  >
+</li>
+{% endblock %} {% block content %}
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+  <div class="col-sm-12 col-md-12">
     <h2>{{ computer.computername }}</h2>
     <h4>{{ computer.serial }}</h4>
-    </div>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-4 col-md-4">
-        <table class="table table-bordered table-striped table-condensed">
-            <tbody><tr><th>Username</th><td>{{ computer.username }}</td></tr>
-            <tr><th>Computer Name</th><td>{{ computer.computername }}</td></tr>
-            <tr><th>Serial Number</th><td>{{ computer.serial }}</td></tr>
-            <tr><th>Escrow Date</th><td>{{ computer.last_checkin}}</td></tr>
-        </tbody></table>
-    </div>
-    <div class="col-sm-4 col-md-4">
-        {% block button %}
-        {% endblock %}
-    </div>
+  <div class="col-sm-4 col-md-4">
+    <table class="table table-bordered table-striped table-condensed">
+      <tbody>
+        <tr>
+          <th>Username</th>
+          <td>{{ computer.username }}</td>
+        </tr>
+        <tr>
+          <th>Computer Name</th>
+          <td>{{ computer.computername }}</td>
+        </tr>
+        <tr>
+          <th>Serial Number</th>
+          <td>{{ computer.serial }}</td>
+        </tr>
+        <tr>
+          <th>Last Checked In</th>
+          <td>{{ computer.last_checkin}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-4 col-md-4">
+    {% block button %} {% endblock %}
+  </div>
 </div>
 
-
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+  <div class="col-sm-12 col-md-12">
     <h3>Secrets</h3>
-        <table class="table table-striped table-condensed groupList">
-        <thead>
+    <table class="table table-striped table-condensed groupList">
+      <thead>
+        <th>Secret Type</th>
+        <th>Escrow Date</th>
+        <th></th>
+      </thead>
+      <tbody>
+        {% for secret in secrets %}
+        <tr>
+          <td>{{ secret.get_secret_type_display }}</td>
+          <td>{{ secret.date_escrowed }}</td>
+          <td>
+            <a
+              class="btn btn-info btn-xs"
+              href="{% url 'server:secret_info' secret.id %}"
+              >Info / Request</a
+            >
+          </td>
+        </tr>
 
-                <th>Secret Type</th>
-                <th>Escrow Date</th>
-                <th></th>
-        </thead>
-        <tbody>
-            {% for secret in secrets %}
-            <tr>
-
-                <td>{{ secret.get_secret_type_display }}</td>
-                <td>{{ secret.date_escrowed }}</td>
-                <td><a class="btn btn-info btn-xs" href="{% url 'server:secret_info' secret.id %}">Info / Request</a></td>
-            </tr>
-
-            {% endfor %}
-            </tbody>
-        </table>
-        </div>
-
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-
 
 {% endblock %}

@@ -1,80 +1,100 @@
-{% extends "base.html" %}
-
-{% block script %}
+{% extends "base.html" %} {% block script %}
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-
-         $('.groupList').dataTable({
-            "serverSide": true,
-            "order": [[3,'desc']],
-            columnDefs: [
-                { orderable: false, targets: -1 },
-                { "searchable": false, "targets": -1 }
-            ],
-            "ajax": {
-                "contentType": "application/json",
-                "url": "{% url 'server:tableajax' %}",
-                "data": function ( args ) {
-                    return { "args": JSON.stringify( args ) };
-                }
-            },
-            "lengthMenu": [[20, 50, -1], [20, 50, "All"]],
-            // "pageLength": {{ page_length }},
-            stateSave: true,
-            // "order": [2,'desc'],
-            "orderMulti": false,
-            "columns": [
-                { "name": "serial" },
-                { "name": "computername" },
-                { "name": "username" },
-                { "name": "last_checkin" },
-                { "name": "info_button" },
-            ],
-        });
-    } );
+  $(document).ready(function () {
+    $(".groupList").dataTable({
+      serverSide: true,
+      order: [[3, "desc"]],
+      columnDefs: [
+        { orderable: false, targets: -1 },
+        { searchable: false, targets: -1 },
+      ],
+      ajax: {
+        contentType: "application/json",
+        url: "{% url 'server:tableajax' %}",
+        data: function (args) {
+          return { args: JSON.stringify(args) };
+        },
+      },
+      lengthMenu: [
+        [20, 50, -1],
+        [20, 50, "All"],
+      ],
+      // "pageLength": {{ page_length }},
+      stateSave: true,
+      // "order": [2,'desc'],
+      orderMulti: false,
+      columns: [
+        { name: "serial" },
+        { name: "computername" },
+        { name: "username" },
+        { name: "last_checkin" },
+        { name: "info_button" },
+      ],
+    });
+  });
 </script>
 
-{% endblock %}
-
-{% block dropdown %}
-<li class="nav-item"><a class="nav-link" href="{% url 'server:new_computer' %}"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
-{% endblock %}
-{% block nav %}
-{% if perms.server.can_approve %}
-{% if outstanding.count > 0 %}
-    <li class="nav-item"><a class="btn btn-info" href="{% url 'server:managerequests' %}">Approve requests</a></li>
+{% endblock %} {% block dropdown %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'server:new_computer' %}"
+    ><span class="glyphicon glyphicon-plus"></span> New computer</a
+  >
+</li>
+{% endblock %} {% block nav %} {% if perms.server.can_approve %} {% if
+outstanding.count > 0 %}
+<li class="nav-item">
+  <a class="btn btn-info" href="{% url 'server:managerequests' %}"
+    >Approve requests</a
+  >
+</li>
 {% else %}
-<li class="nav-item"><a class="nav-link" href="{% url 'server:managerequests' %}">Approve requests</a></li>
-{% endif %}
-{% endif %}
-{% endblock %}
-{% block content %}
-{% if perms.server.can_approve %}
-    {% if outstanding.count > 0 %}
-    <div class="alert alert-info">
-        You have outstanding requests to approve.
-    </div>
-    {% endif %}
-{% endif %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'server:managerequests' %}"
+    >Approve requests</a
+  >
+</li>
+{% endif %} {% endif %} {% endblock %} {% block content %} {% if
+perms.server.can_approve %} {% if outstanding.count > 0 %}
+<div class="alert alert-info">
+  You have outstanding requests to approve.
+</div>
+{% endif %} {% endif %}
 
-
-
-
-    <table class="groupList table table-striped table-condensed">
-    <thead>
-        <tr>
-          <th>Serial Number</th>
-          <th>Computer Name</th>
-          <th>User Name</th>
-          <th>Date Stored</th>
-          <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for computer in computers.all %}
-        <tr><td><a href="{% url 'server:computer_info' computer.id %}">{{ computer.serial }}</a></td><td><a href="{% url 'server:computer_info' computer.id %}">{{ computer.computername }}</a></td><td>{{ computer.username }}</td><td>{{ computer.last_checkin }}</td><td><a class="btn btn-info btn-xs" href="{% url 'server:computer_info' computer.id %}">Info</a></td></tr>
-        {% endfor %}
-        </tbody>
+<table class="groupList table table-striped table-condensed">
+  <thead>
+    <tr>
+      <th>Serial Number</th>
+      <th>Computer Name</th>
+      <th>User Name</th>
+      <th>Last Checked In</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for computer in computers.all %}
+    <tr>
+      <td>
+        <a href="{% url 'server:computer_info' computer.id %}"
+          >{{ computer.serial }}</a
+        >
+      </td>
+      <td>
+        <a href="{% url 'server:computer_info' computer.id %}"
+          >{{ computer.computername }}</a
+        >
+      </td>
+      <td>{{ computer.username }}</td>
+      <td>{{ computer.last_checkin }}</td>
+      <td>
+        <a
+          class="btn btn-info btn-xs"
+          href="{% url 'server:computer_info' computer.id %}"
+          >Info</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}
