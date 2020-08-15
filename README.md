@@ -20,8 +20,6 @@ It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-S
 
 ## Settings
 
-**These settings are for the upcoming Crypt Server 3 release. Please refer to [these settings](https://github.com/grahamgilbert/Crypt-Server/blob/68249f0bdfb0ba56b91f48b8826a59d11da60076/README.md) for the present 2.x releases**
-
 All settings that would be entered into `settings.py` can also be passed into the Docker container as environment variables.
 
 * ``FIELD_ENCRYPTION_KEY`` - The key to use when encrypting the secrets. This is required.
