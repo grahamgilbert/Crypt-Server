@@ -1,4 +1,4 @@
-FROM python:3.7.2-alpine3.7
+FROM python:3.7.9-alpine3.11
 
 LABEL maintainer="graham@grahamgilbert.com"
 
@@ -17,7 +17,7 @@ RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
     gcc \
     git \
-    libressl-dev \
+    openssl-dev \
     libffi-dev \
     libc-dev \
     musl-dev \
