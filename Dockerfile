@@ -26,6 +26,7 @@ RUN set -ex \
     postgresql-dev \
     xmlsec-dev \
     tzdata \
+    postgresql-libs \
     && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
     && rm /tmp/requirements.txt
 
