@@ -5,9 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("server", "0017_merge_20181217_1829"),
-    ]
+    dependencies = [("server", "0017_merge_20181217_1829")]
 
     operations = [
         migrations.AlterField(
