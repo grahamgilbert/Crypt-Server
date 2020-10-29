@@ -6,18 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('server', '0017_merge_20181217_1829'),
+        ("server", "0017_merge_20181217_1829"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, unique=True, verbose_name='Serial Number'),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(
+                max_length=200, unique=True, verbose_name="Serial Number"
+            ),
         ),
         migrations.AlterField(
-            model_name='secret',
-            name='secret_type',
-            field=models.CharField(choices=[('recovery_key', 'Recovery Key'), ('password', 'Password'), ('unlock_pin', 'Unlock PIN')], default='recovery_key', max_length=256),
+            model_name="secret",
+            name="secret_type",
+            field=models.CharField(
+                choices=[
+                    ("recovery_key", "Recovery Key"),
+                    ("password", "Password"),
+                    ("unlock_pin", "Unlock PIN"),
+                ],
+                default="recovery_key",
+                max_length=256,
+            ),
         ),
     ]
