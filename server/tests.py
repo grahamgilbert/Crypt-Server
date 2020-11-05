@@ -6,6 +6,12 @@ from server.models import Computer, Secret, Request
 
 class RequestProcess(TestCase):
     def test_request_passes_correct_data_to_template(self):
+        """
+        Correct request login request.
+
+        Args:
+            self: (todo): write your description
+        """
         admin = User.objects.create_superuser("admin", "a@a.com", "sekrit")
         tech = User.objects.create_user("tech", "a@a.com", "password")
         tech.save()

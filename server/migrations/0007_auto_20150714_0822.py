@@ -5,6 +5,13 @@ from django.db import models, migrations
 
 
 def encrypt_secrets(apps, schema_editor):
+    """
+    Encrypts the secret.
+
+    Args:
+        apps: (todo): write your description
+        schema_editor: (todo): write your description
+    """
 
     Secret = apps.get_model("server", "Secret")
 

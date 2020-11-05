@@ -23,6 +23,13 @@ class Command(BaseCommand):
     #         help='Admin password'),
     # )
     def add_arguments(self, parser):
+        """
+        Add command line arguments.
+
+        Args:
+            self: (todo): write your description
+            parser: (todo): write your description
+        """
         parser.add_argument(
             "--username",
             action="store",
@@ -40,6 +47,13 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """
+        Creates username and password
+
+        Args:
+            self: (todo): write your description
+            options: (dict): write your description
+        """
         username = options.get("username")
         password = options.get("password")
         if not username or not password:

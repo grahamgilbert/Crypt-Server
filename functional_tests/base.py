@@ -7,6 +7,12 @@ from datetime import datetime
 
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
+        """
+        Creates the default user
+
+        Args:
+            self: (todo): write your description
+        """
         self.browser = webdriver.Firefox()
         User.objects.create_superuser("admin", "a@a.com", "sekrit")
         User.objects._create_user(
@@ -24,6 +30,12 @@ class FunctionalTest(StaticLiveServerTestCase):
         secret.save()
 
     def tearDown(self):
+        """
+        Tear down the browser.
+
+        Args:
+            self: (todo): write your description
+        """
         self.browser.quit()
 
     # currently doesn't work to find entered elements

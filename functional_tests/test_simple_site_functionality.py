@@ -5,6 +5,12 @@ from selenium.webdriver.common.keys import Keys
 
 class LoginAndBasicFunctionality(FunctionalTest):
     def test_admin_can_create_and_browse(self):
+        """
+        This method is called when the user and update the admin.
+
+        Args:
+            self: (todo): write your description
+        """
         # Admin goes to fv2 key mgmt site, sees it's named Crypt post-redirect to a login
         self.browser.get(self.live_server_url)
         self.assertIn("Crypt", self.browser.title)
@@ -51,6 +57,12 @@ class LoginAndBasicFunctionality(FunctionalTest):
         self.assertEqual(key, "LICE-NSEP-LATE")
 
     def test_standard_user_can_request_and_admin_can_approve(self):
+        """
+        This method is called when the standard standard admin.
+
+        Args:
+            self: (todo): write your description
+        """
         # Standard tech user can log in and finds previously-created computer+secret
         self.browser.get(self.live_server_url)
         self.assertIn("Crypt", self.browser.title)
