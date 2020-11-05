@@ -14,6 +14,12 @@ class Computer(models.Model):
     last_checkin = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
+        """
+        Str : str
+
+        Args:
+            self: (todo): write your description
+        """
         return self.computername
 
     class Meta:
@@ -40,6 +46,12 @@ class Secret(models.Model):
     rotation_required = models.BooleanField(default=False)
 
     def validate_unique(self, *args, **kwargs):
+        """
+        Validate that the secrets are unique.
+
+        Args:
+            self: (todo): write your description
+        """
         if (
             self.secret
             in [
@@ -54,10 +66,22 @@ class Secret(models.Model):
         super(Secret, self).validate_unique(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        """
+        ** code **
+
+        Args:
+            self: (todo): write your description
+        """
         self.validate_unique()
         super(Secret, self).save(*args, **kwargs)
 
     def __str__(self):
+        """
+        Return a string representation of this key.
+
+        Args:
+            self: (todo): write your description
+        """
         return self.secret
 
     class Meta:
@@ -83,4 +107,10 @@ class Request(models.Model):
     current = models.BooleanField(default=True)
 
     def __str__(self):
+        """
+        The string representation of this request.
+
+        Args:
+            self: (todo): write your description
+        """
         return "%s - %s" % (self.secret, self.requesting_user)

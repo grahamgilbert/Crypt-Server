@@ -21,6 +21,11 @@ from django.urls import reverse
 
 ##clean up old requests
 def cleanup():
+    """
+    Cleanup all expired objects.
+
+    Args:
+    """
     how_many_days = 7
     the_requests = Request.objects.filter(
         date_approved__lte=datetime.now() - timedelta(days=how_many_days)
@@ -31,6 +36,11 @@ def cleanup():
 
 
 def get_server_version():
+    """
+    Return the server version of the server.
+
+    Args:
+    """
     current_dir = os.path.dirname(os.path.realpath(__file__))
     version = plistlib.readPlist(
         os.path.join(os.path.dirname(current_dir), "fvserver", "version.plist")
@@ -41,6 +51,12 @@ def get_server_version():
 ##index view
 @login_required
 def index(request):
+    """
+    Displays page.
+
+    Args:
+        request: (todo): write your description
+    """
     cleanup()
     # show table with all the keys
     computers = Computer.objects.none()
@@ -170,6 +186,13 @@ def tableajax(request):
 ##view to see computer info
 @login_required
 def computer_info(request, computer_id=None):
+    """
+    Displays info.
+
+    Args:
+        request: (todo): write your description
+        computer_id: (str): write your description
+    """
     cleanup()
     try:
         computer = get_object_or_404(Computer, pk=computer_id)
@@ -201,6 +224,13 @@ def computer_info(request, computer_id=None):
 
 @login_required
 def secret_info(request, secret_id):
+    """
+    Displays information.
+
+    Args:
+        request: (todo): write your description
+        secret_id: (str): write your description
+    """
     cleanup()
 
     secret = get_object_or_404(Secret, pk=secret_id)
@@ -240,6 +270,13 @@ def secret_info(request, secret_id):
 ##request key view
 @login_required
 def request(request, secret_id):
+    """
+    Process request.
+
+    Args:
+        request: (todo): write your description
+        secret_id: (str): write your description
+    """
     ##we will auto approve this if the user has the right perms
     secret = get_object_or_404(Secret, pk=secret_id)
     approver = False
@@ -312,6 +349,13 @@ def request(request, secret_id):
 ##retrieve key view
 @login_required
 def retrieve(request, request_id):
+    """
+    Handles the get request.
+
+    Args:
+        request: (todo): write your description
+        request_id: (str): write your description
+    """
     cleanup()
     the_request = get_object_or_404(Request, pk=request_id)
     if the_request.approved == True and the_request.current == True:
@@ -328,6 +372,13 @@ def retrieve(request, request_id):
 ## approve key view
 @permission_required("server.can_approve", login_url="/login/")
 def approve(request, request_id):
+    """
+    Approve an email.
+
+    Args:
+        request: (todo): write your description
+        request_id: (str): write your description
+    """
     the_request = get_object_or_404(Request, pk=request_id)
     c = {}
     c.update(csrf(request))
@@ -376,6 +427,12 @@ def approve(request, request_id):
 ##manage requests
 @permission_required("server.can_approve", login_url="/login/")
 def managerequests(request):
+    """
+    Displays a list.
+
+    Args:
+        request: (todo): write your description
+    """
     requests = Request.objects.filter(approved__isnull=True)
     if hasattr(settings, "APPROVE_OWN"):
         if settings.APPROVE_OWN == False:
@@ -387,6 +444,12 @@ def managerequests(request):
 # Add new manual computer
 @login_required
 def new_computer(request):
+    """
+    Displays a new page.
+
+    Args:
+        request: (todo): write your description
+    """
     c = {}
     c.update(csrf(request))
     if request.method == "POST":
@@ -404,6 +467,13 @@ def new_computer(request):
 
 @login_required
 def new_secret(request, computer_id):
+    """
+    Create a new secret.
+
+    Args:
+        request: (todo): write your description
+        computer_id: (str): write your description
+    """
     c = {}
     c.update(csrf(request))
     computer = get_object_or_404(Computer, pk=computer_id)
@@ -428,6 +498,14 @@ def new_secret(request, computer_id):
 # Verify key escrow
 @csrf_exempt
 def verify(request, serial, secret_type):
+    """
+    Verify a request.
+
+    Args:
+        request: (todo): write your description
+        serial: (todo): write your description
+        secret_type: (str): write your description
+    """
     computer = get_object_or_404(Computer, serial=serial)
     try:
         secret = Secret.objects.filter(
@@ -442,6 +520,12 @@ def verify(request, serial, secret_type):
 ##checkin view
 @csrf_exempt
 def checkin(request):
+    """
+    Check if the user is valid.
+
+    Args:
+        request: (todo): write your description
+    """
     try:
         serial_num = request.POST["serial"]
     except:

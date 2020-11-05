@@ -5,6 +5,13 @@ from django.db import models, migrations
 
 
 def move_keys_and_requests(apps, schema_editor):
+    """
+    Moves all keys to new keys.
+
+    Args:
+        apps: (todo): write your description
+        schema_editor: (todo): write your description
+    """
     seen_serials = [("dummy_serial", "dummy_id")]
     Computer = apps.get_model("server", "Computer")
     Secret = apps.get_model("server", "Secret")
