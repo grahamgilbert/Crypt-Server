@@ -287,9 +287,14 @@ def request(request, secret_id):
                                     server_name,
                                     reverse("server:approve", args=[new_request.id]),
                                 )
-                                email_sender = (
-                                    "requests@%s" % request.META["SERVER_NAME"]
-                                )
+								if hasattr(settings, "EMAIL_SENDER"):
+									email_sender = (
+										settings.EMAIL_SENDER
+									)
+								else:
+                                	email_sender = (
+                                    	"requests@%s" % request.META["SERVER_NAME"]
+                                	)
                                 send_mail(
                                     "Crypt Key Request",
                                     email_message,
