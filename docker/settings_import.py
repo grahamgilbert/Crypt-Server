@@ -91,7 +91,9 @@ if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
 
 if getenv("EMAIL_SENDER"):
-    EMAIL_SENDER= getenv("EMAIL_SENDER")
+    EMAIL_SENDER = getenv("EMAIL_SENDER")
+else:
+    EMAIL_SENDER = "crypt@" + HOST_NAME
 
 # Read the list of allowed hosts from the $DOCKER_CRYPT_ALLOWED env var, or
 # allow all hosts if none was set.
