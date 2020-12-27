@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 ##clean up old requests
 def cleanup():
-    how_many_days = 180
+    how_many_days = 7
     the_requests = Request.objects.filter(
         date_approved__lte=datetime.now() - timedelta(days=how_many_days)
     ).filter(current=True)
@@ -298,12 +298,12 @@ def request(request, secret_id):
                                         "requests@%s" % request.META["SERVER_NAME"]
                                     )
                                 
-                                logger.error("[!] Sending request email to {} from {}".format(user.email, email_sender))
+                                logger.info("[*] Sending request email to {} from {}".format(user.email, email_sender))
                                 if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
                                     
                                     authing_user = settings.EMAIL_USER
                                     authing_password = settings.EMAIL_PASSWORD
-                                    logger.error("[!] Authing to mail server as {}".format(authing_user))
+                                    logger.info("[*] Authing to mail server as {}".format(authing_user))
                                     
                                     send_mail(
                                         "Crypt Key Request",
@@ -392,12 +392,12 @@ def approve(request, request_id):
                                 "requests@%s" % request.META["SERVER_NAME"]
                             )
                         
-                        logger.error("[!] Sending \"approved\" email to {} from {}".format(new_request.requesting_user.email, email_sender))
+                        logger.info("[*] Sending \"approved\" email to {} from {}".format(new_request.requesting_user.email, email_sender))
                         if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
                             
                             authing_user = settings.EMAIL_USER
                             authing_password = settings.EMAIL_PASSWORD
-                            logger.error("[!] Authing to mail server as {}".format(authing_user))
+                            logger.info("[*] Authing to mail server as {}".format(authing_user))
                             
                             send_mail(
                                 "Crypt Key Request",
