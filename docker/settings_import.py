@@ -89,6 +89,8 @@ if getenv("EMAIL_PASSWORD"):
 
 if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
+else:
+    HOST_NAME = "cryptexample.com"
 
 if getenv("EMAIL_SENDER"):
     EMAIL_SENDER = getenv("EMAIL_SENDER")
