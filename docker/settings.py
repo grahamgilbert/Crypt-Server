@@ -3,9 +3,6 @@ from fvserver.settings_import import *
 from django.utils.log import DEFAULT_LOGGING
 import os
 
-# Assure that errors end up to Apache error logs via console output
-# when debug mode is disabled
-DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
 # Django settings for fvserver project.
 
@@ -45,7 +42,9 @@ if host and port:
         }
     }
 
-# Enable logging to console from our modules by configuring the root logger
+# Don't filter anything going to console
+DEFAULT_LOGGING['handlers']['console']['filters'] = []
+
 DEFAULT_LOGGING['loggers'][''] = {
     'handlers': ['console'],
     'level': 'INFO',
