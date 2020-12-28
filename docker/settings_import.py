@@ -105,6 +105,12 @@ else:
     ALLOWED_HOSTS = ["*"]
 
 if getenv("SEND_EMAIL") and getenv("SEND_EMAIL").lower() == "true":
-	SEND_EMAIL = True
+    SEND_EMAIL = True
 else:
-	SEND_EMAIL = False
+    SEND_EMAIL = False
+
+if getenv("EMAIL_USE_TLS") and getenv("EMAIL_USE_TLS").lower() == "true":
+    EMAIL_USE_TLS = True
+
+if getenv("EMAIL_USE_SSL") and getenv("EMAIL_USE_SSL").lower() == "true":
+    EMAIL_USE_SSL = True
