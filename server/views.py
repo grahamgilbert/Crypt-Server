@@ -392,7 +392,7 @@ def approve(request, request_id):
                                 "requests@%s" % request.META["SERVER_NAME"]
                             )
                         
-                        logger.info("[*] Sending \"approved\" email to {} from {}".format(new_request.requesting_user.email, email_sender))
+                        logger.info("[*] Sending approved/denied email to {} from {}".format(new_request.requesting_user.email, email_sender))
                         if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
                             
                             authing_user = settings.EMAIL_USER
