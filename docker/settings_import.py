@@ -89,6 +89,13 @@ if getenv("EMAIL_PASSWORD"):
 
 if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
+else:
+    HOST_NAME = "https://cryptexample.com"
+
+if getenv("EMAIL_SENDER"):
+    EMAIL_SENDER = getenv("EMAIL_SENDER")
+else:
+    EMAIL_SENDER = "crypt@cryptexample.com"
 
 # Read the list of allowed hosts from the $DOCKER_CRYPT_ALLOWED env var, or
 # allow all hosts if none was set.
@@ -96,3 +103,14 @@ if getenv("ALLOWED_HOSTS"):
     ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split(",")
 else:
     ALLOWED_HOSTS = ["*"]
+
+if getenv("SEND_EMAIL") and getenv("SEND_EMAIL").lower() == "true":
+    SEND_EMAIL = True
+else:
+    SEND_EMAIL = False
+
+if getenv("EMAIL_USE_TLS") and getenv("EMAIL_USE_TLS").lower() == "true":
+    EMAIL_USE_TLS = True
+
+if getenv("EMAIL_USE_SSL") and getenv("EMAIL_USE_SSL").lower() == "true":
+    EMAIL_USE_SSL = True

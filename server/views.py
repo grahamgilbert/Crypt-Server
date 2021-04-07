@@ -1,3 +1,4 @@
+import logging
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext, Template, Context
@@ -18,6 +19,7 @@ from django.conf import settings
 from django.urls import reverse
 
 # Create your views here.
+logger = logging.getLogger(__name__)
 
 ##clean up old requests
 def cleanup():
@@ -287,17 +289,40 @@ def request(request, secret_id):
                                     server_name,
                                     reverse("server:approve", args=[new_request.id]),
                                 )
-                                email_sender = (
-                                    "requests@%s" % request.META["SERVER_NAME"]
-                                )
-                                send_mail(
-                                    "Crypt Key Request",
-                                    email_message,
-                                    email_sender,
-                                    [user.email],
-                                    fail_silently=True,
-                                )
-
+                                if hasattr(settings, "EMAIL_SENDER"):
+                                    email_sender = (
+                                        settings.EMAIL_SENDER
+                                    )
+                                else:
+                                    email_sender = (
+                                        "requests@%s" % request.META["SERVER_NAME"]
+                                    )
+                                
+                                logger.info("[*] Sending request email to {} from {}".format(user.email, email_sender))
+                                if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
+                                    
+                                    authing_user = settings.EMAIL_USER
+                                    authing_password = settings.EMAIL_PASSWORD
+                                    logger.info("[*] Authing to mail server as {}".format(authing_user))
+                                    
+                                    send_mail(
+                                        "Crypt Key Request",
+                                        email_message,
+                                        email_sender,
+                                        [user.email],
+                                        fail_silently=True,
+                                        auth_user=authing_user,
+                                        auth_password=authing_password
+                                    )
+                                else:
+                                    send_mail(
+                                        "Crypt Key Request",
+                                        email_message,
+                                        email_sender,
+                                        [user.email],
+                                        fail_silently=True,
+                                    )
+                                    
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
                 return redirect("server:retrieve", new_request.id)
@@ -358,14 +383,39 @@ def approve(request, request_id):
                             server_name,
                             reverse("server:secret_info", args=[new_request.secret.id]),
                         )
-                        email_sender = "requests@%s" % request.META["SERVER_NAME"]
-                        send_mail(
-                            "Crypt Key Request",
-                            email_message,
-                            email_sender,
-                            [new_request.requesting_user.email],
-                            fail_silently=True,
-                        )
+                        if hasattr(settings, "EMAIL_SENDER"):
+                            email_sender = (
+                                settings.EMAIL_SENDER
+                            )
+                        else:
+                            email_sender = (
+                                "requests@%s" % request.META["SERVER_NAME"]
+                            )
+                        
+                        logger.info("[*] Sending approved/denied email to {} from {}".format(new_request.requesting_user.email, email_sender))
+                        if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
+                            
+                            authing_user = settings.EMAIL_USER
+                            authing_password = settings.EMAIL_PASSWORD
+                            logger.info("[*] Authing to mail server as {}".format(authing_user))
+                            
+                            send_mail(
+                                "Crypt Key Request",
+                                email_message,
+                                email_sender,
+                                [new_request.requesting_user.email],
+                                fail_silently=True,
+                                auth_user=authing_user,
+                                auth_password=authing_password
+                            )
+                        else:
+                            send_mail(
+                                "Crypt Key Request",
+                                email_message,
+                                email_sender,
+                                [new_request.requesting_user.email],
+                                fail_silently=True,
+                            )
             return redirect("server:managerequests")
     else:
         form = ApproveForm(instance=the_request)
