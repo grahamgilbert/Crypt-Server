@@ -5,7 +5,7 @@ attrs==18.2.0
 black==18.9b0
 cffi==1.11.5
 Click==7.0
-cryptography==3.2
+cryptography==3.3.2
 Django==2.2.20
 django-bootstrap3==11.0.0
 django-bootstrap4==0.0.7
