@@ -9,7 +9,7 @@ cryptography==3.3.2
 Django==2.2.20
 django-bootstrap3==11.0.0
 django-bootstrap4==0.0.7
-django-debug-toolbar==1.11
+django-debug-toolbar==1.11.1
 django-encrypted-model-fields==0.5.8
 django-extensions==2.1.4
 docutils==0.11
