@@ -538,7 +538,7 @@ def checkin(request):
     except ValidationError:
         pass
 
-    latest_secret = Secret.objects.filter(secret_type=secret_type).latest(
+    latest_secret = Secret.objects.filter(secret_type=secret_type).filter(computer_id=computer.id).latest(
         "date_escrowed"
     )
     rotation_required = latest_secret.rotation_required
