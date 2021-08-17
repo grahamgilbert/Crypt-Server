@@ -2,7 +2,7 @@ appdirs==1.4.3
 asn1crypto==0.24.0
 astroid==2.0.4
 attrs==18.2.0
-black==18.9b0
+black==20.8b1
 cffi==1.11.5
 Click==7.0
 cryptography==3.3.2
