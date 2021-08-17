@@ -43,10 +43,10 @@ if host and port:
     }
 
 # Don't filter anything going to console
-DEFAULT_LOGGING['handlers']['console']['filters'] = []
+DEFAULT_LOGGING["handlers"]["console"]["filters"] = []
 
-DEFAULT_LOGGING['loggers'][''] = {
-    'handlers': ['console'],
-    'level': 'INFO',
-    'propagate': True
+DEFAULT_LOGGING["loggers"][""] = {
+    "handlers": ["console"],
+    "level": "INFO",
+    "propagate": True,
 }

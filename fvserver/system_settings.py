@@ -157,26 +157,26 @@ INSTALLED_APPS = (
 )
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
-                        '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "[DJANGO] %(levelname)s %(asctime)s %(module)s "
+            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
         },
     },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
         }
     },
-    'loggers': {
-        '*': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
+    "loggers": {
+        "*": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
         }
     },
 }
