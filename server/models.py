@@ -19,7 +19,7 @@ class Computer(models.Model):
     class Meta:
         ordering = ["serial"]
         permissions = (
-            ("can_approve", (u"Can approve requests to see encryption keys")),
+            ("can_approve", ("Can approve requests to see encryption keys")),
         )
 
 

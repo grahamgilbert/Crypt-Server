@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 # server.migrations.0007_auto_20150714_0822
 # server.migrations.0010_auto_20180726_1700
 
+
 def move_keys_and_requests(apps, schema_editor):
     seen_serials = [("dummy_serial", "dummy_id")]
     Computer = apps.get_model("server", "Computer")
@@ -46,9 +47,26 @@ def move_keys_and_requests(apps, schema_editor):
             # Dupe computer, bin it
             computer.delete()
 
+
 class Migration(migrations.Migration):
 
-    replaces = [('server', '0001_initial'), ('server', '0002_auto_20150713_1214'), ('server', '0003_auto_20150713_1215'), ('server', '0004_auto_20150713_1216'), ('server', '0005_auto_20150713_1754'), ('server', '0006_auto_20150714_0821'), ('server', '0007_auto_20150714_0822'), ('server', '0008_auto_20150814_2140'), ('server', '0009_secret_rotation_required'), ('server', '0010_auto_20180726_1700'), ('server', '0011_manual_unique_serials'), ('server', '0012_auto_20181128_2038'), ('server', '0016_auto_20181213_2145'), ('server', '0009_auto_20180430_2024'), ('server', '0017_merge_20181217_1829')]
+    replaces = [
+        ("server", "0001_initial"),
+        ("server", "0002_auto_20150713_1214"),
+        ("server", "0003_auto_20150713_1215"),
+        ("server", "0004_auto_20150713_1216"),
+        ("server", "0005_auto_20150713_1754"),
+        ("server", "0006_auto_20150714_0821"),
+        ("server", "0007_auto_20150714_0822"),
+        ("server", "0008_auto_20150814_2140"),
+        ("server", "0009_secret_rotation_required"),
+        ("server", "0010_auto_20180726_1700"),
+        ("server", "0011_manual_unique_serials"),
+        ("server", "0012_auto_20181128_2038"),
+        ("server", "0016_auto_20181213_2145"),
+        ("server", "0009_auto_20180430_2024"),
+        ("server", "0017_merge_20181217_1829"),
+    ]
 
     initial = True
 
@@ -56,147 +74,260 @@ class Migration(migrations.Migration):
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
-
     operations = [
         migrations.CreateModel(
-            name='Computer',
+            name="Computer",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recovery_key', models.CharField(max_length=200, verbose_name=b'Recovery Key')),
-                ('serial', models.CharField(max_length=200, verbose_name=b'Serial Number')),
-                ('username', models.CharField(max_length=200, verbose_name=b'User Name')),
-                ('computername', models.CharField(max_length=200, verbose_name=b'Computer Name')),
-                ('last_checkin', models.DateTimeField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "recovery_key",
+                    models.CharField(max_length=200, verbose_name=b"Recovery Key"),
+                ),
+                (
+                    "serial",
+                    models.CharField(max_length=200, verbose_name=b"Serial Number"),
+                ),
+                (
+                    "username",
+                    models.CharField(max_length=200, verbose_name=b"User Name"),
+                ),
+                (
+                    "computername",
+                    models.CharField(max_length=200, verbose_name=b"Computer Name"),
+                ),
+                ("last_checkin", models.DateTimeField(blank=True, null=True)),
             ],
             options={
-                'ordering': ['serial'],
-                'permissions': (('can_approve', 'Can approve requests to see encryption keys'),),
+                "ordering": ["serial"],
+                "permissions": (
+                    ("can_approve", "Can approve requests to see encryption keys"),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='Secret',
+            name="Secret",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('secret', models.CharField(max_length=256)),
-                ('secret_type', models.CharField(choices=[(b'recovery_key', b'Recovery Key'), (b'password', b'Password')], default=b'recovery_key', max_length=256)),
-                ('date_escrowed', models.DateTimeField(auto_now_add=True)),
-                ('computer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='server.Computer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("secret", models.CharField(max_length=256)),
+                (
+                    "secret_type",
+                    models.CharField(
+                        choices=[
+                            (b"recovery_key", b"Recovery Key"),
+                            (b"password", b"Password"),
+                        ],
+                        default=b"recovery_key",
+                        max_length=256,
+                    ),
+                ),
+                ("date_escrowed", models.DateTimeField(auto_now_add=True)),
+                (
+                    "computer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="server.Computer",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Request',
+            name="Request",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('approved', models.NullBooleanField(verbose_name=b'Approved?')),
-                ('reason_for_request', models.TextField()),
-                ('reason_for_approval', models.TextField(blank=True, null=True, verbose_name=b'Approval Notes')),
-                ('date_requested', models.DateTimeField(auto_now_add=True)),
-                ('date_approved', models.DateTimeField(blank=True, null=True)),
-                ('current', models.BooleanField(default=True)),
-                ('auth_user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='auth_user', to=settings.AUTH_USER_MODEL)),
-                ('computer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='computers', to='server.Computer')),
-                ('requesting_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='requesting_user', to=settings.AUTH_USER_MODEL)),
-                ('secret', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='secrets', to='server.Secret')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("approved", models.NullBooleanField(verbose_name=b"Approved?")),
+                ("reason_for_request", models.TextField()),
+                (
+                    "reason_for_approval",
+                    models.TextField(
+                        blank=True, null=True, verbose_name=b"Approval Notes"
+                    ),
+                ),
+                ("date_requested", models.DateTimeField(auto_now_add=True)),
+                ("date_approved", models.DateTimeField(blank=True, null=True)),
+                ("current", models.BooleanField(default=True)),
+                (
+                    "auth_user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="auth_user",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "computer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="computers",
+                        to="server.Computer",
+                    ),
+                ),
+                (
+                    "requesting_user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="requesting_user",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "secret",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="secrets",
+                        to="server.Secret",
+                    ),
+                ),
             ],
         ),
         migrations.RunPython(
             code=move_keys_and_requests,
         ),
         migrations.RemoveField(
-            model_name='computer',
-            name='recovery_key',
+            model_name="computer",
+            name="recovery_key",
         ),
         migrations.RemoveField(
-            model_name='request',
-            name='computer',
+            model_name="request",
+            name="computer",
         ),
         migrations.AlterField(
-            model_name='request',
-            name='secret',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='server.Secret'),
+            model_name="request",
+            name="secret",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="server.Secret"
+            ),
         ),
         migrations.AlterModelOptions(
-            name='secret',
-            options={'ordering': ['-date_escrowed']},
+            name="secret",
+            options={"ordering": ["-date_escrowed"]},
         ),
         migrations.AddField(
-            model_name='secret',
-            name='rotation_required',
+            model_name="secret",
+            name="rotation_required",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, unique=True, verbose_name=b'Serial Number'),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(
+                max_length=200, unique=True, verbose_name=b"Serial Number"
+            ),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='computername',
-            field=models.CharField(max_length=200, verbose_name='Computer Name'),
+            model_name="computer",
+            name="computername",
+            field=models.CharField(max_length=200, verbose_name="Computer Name"),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, unique=True, verbose_name='Serial Number'),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(
+                max_length=200, unique=True, verbose_name="Serial Number"
+            ),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='username',
-            field=models.CharField(max_length=200, verbose_name='User Name'),
+            model_name="computer",
+            name="username",
+            field=models.CharField(max_length=200, verbose_name="User Name"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='approved',
-            field=models.NullBooleanField(verbose_name='Approved?'),
+            model_name="request",
+            name="approved",
+            field=models.NullBooleanField(verbose_name="Approved?"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='reason_for_approval',
-            field=models.TextField(blank=True, null=True, verbose_name='Approval Notes'),
+            model_name="request",
+            name="reason_for_approval",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Approval Notes"
+            ),
         ),
         migrations.AlterField(
-            model_name='secret',
-            name='secret_type',
-            field=models.CharField(choices=[('recovery_key', 'Recovery Key'), ('password', 'Password')], default='recovery_key', max_length=256),
+            model_name="secret",
+            name="secret_type",
+            field=models.CharField(
+                choices=[("recovery_key", "Recovery Key"), ("password", "Password")],
+                default="recovery_key",
+                max_length=256,
+            ),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='auth_user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='auth_user', to=settings.AUTH_USER_MODEL),
+            model_name="request",
+            name="auth_user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="auth_user",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='secret',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='server.Secret'),
+            model_name="request",
+            name="secret",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT, to="server.Secret"
+            ),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='computername',
-            field=models.CharField(max_length=200, verbose_name='Computer Name'),
+            model_name="computer",
+            name="computername",
+            field=models.CharField(max_length=200, verbose_name="Computer Name"),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='serial',
-            field=models.CharField(max_length=200, verbose_name='Serial Number'),
+            model_name="computer",
+            name="serial",
+            field=models.CharField(max_length=200, verbose_name="Serial Number"),
         ),
         migrations.AlterField(
-            model_name='computer',
-            name='username',
-            field=models.CharField(max_length=200, verbose_name='User Name'),
+            model_name="computer",
+            name="username",
+            field=models.CharField(max_length=200, verbose_name="User Name"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='approved',
-            field=models.NullBooleanField(verbose_name='Approved?'),
+            model_name="request",
+            name="approved",
+            field=models.NullBooleanField(verbose_name="Approved?"),
         ),
         migrations.AlterField(
-            model_name='request',
-            name='reason_for_approval',
-            field=models.TextField(blank=True, null=True, verbose_name='Approval Notes'),
+            model_name="request",
+            name="reason_for_approval",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Approval Notes"
+            ),
         ),
         migrations.AlterField(
-            model_name='secret',
-            name='secret_type',
-            field=models.CharField(choices=[('recovery_key', 'Recovery Key'), ('password', 'Password')], default='recovery_key', max_length=256),
+            model_name="secret",
+            name="secret_type",
+            field=models.CharField(
+                choices=[("recovery_key", "Recovery Key"), ("password", "Password")],
+                default="recovery_key",
+                max_length=256,
+            ),
         ),
     ]
