@@ -3,7 +3,7 @@ asn1crypto==0.24.0
 astroid==2.0.4
 attrs==18.2.0
 black==21.7b0
-cffi==1.12
+cffi==1.15
 Click==8.0.1
 cryptography==3.3.2
 Django==2.2.27
@@ -29,7 +29,6 @@ pycparser==2.19
 pycrypto==2.6.1
 pyflakes==2.0.0
 pylint==2.1.1
-python3-keyczar==0.71rc0
 pytz==2018.7
 regex==2021.8.3
 six==1.9.0

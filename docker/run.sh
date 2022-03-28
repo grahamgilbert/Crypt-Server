@@ -4,7 +4,7 @@ set -e
 
 cd $APP_DIR
 ADMIN_PASS=${ADMIN_PASS:-}
-python3 generate_keyczart.py
+# python3 generate_keyczart.py
 python3 manage.py migrate --noinput
 
 if [ ! -z "$ADMIN_PASS" ] ; then

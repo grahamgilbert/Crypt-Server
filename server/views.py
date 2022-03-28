@@ -36,9 +36,11 @@ def cleanup():
 
 def get_server_version():
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    version = plistlib.readPlist(
-        os.path.join(os.path.dirname(current_dir), "fvserver", "version.plist")
-    )
+
+    with open(
+        os.path.join(os.path.dirname(current_dir), "fvserver", "version.plist"), "rb"
+    ) as f:
+        version = plistlib.load(f)
     return version["version"]
 
 
