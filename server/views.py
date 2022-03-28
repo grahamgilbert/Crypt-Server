@@ -17,6 +17,7 @@ from django.views.defaults import server_error
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
+from django.utils.html import escape
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -145,12 +146,12 @@ def tableajax(request):
 
         serial_link = '<a href="%s">%s</a>' % (
             reverse("server:computer_info", args=[machine["id"]]),
-            machine["serial"],
+            escape(machine["serial"]),
         )
 
         computername_link = '<a href="%s">%s</a>' % (
             reverse("server:computer_info", args=[machine["id"]]),
-            machine["computername"],
+            escape(machine["computername"]),
         )
 
         info_button = '<a class="btn btn-info btn-xs" href="%s">Info</a>' % (
@@ -160,7 +161,7 @@ def tableajax(request):
         list_data = [
             serial_link,
             computername_link,
-            machine["username"],
+            escape(machine["username"]),
             formatted_date,
             info_button,
         ]
