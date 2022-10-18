@@ -20,6 +20,6 @@ version_number = "{}.{}".format(current_version, build_number)
 
 data = {"version": version_number}
 plist_path = "{}/fvserver/version.plist".format(script_path)
-file_name=open(plist_path,'wb')
+file_name = open(plist_path, "wb")
 plistlib.dump(data, file_name)
 file_name.close()
