@@ -4,7 +4,7 @@ import os
 import plistlib
 import subprocess
 
-current_version = "3.3.0"
+current_version = "3.4.0"
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -20,4 +20,6 @@ version_number = "{}.{}".format(current_version, build_number)
 
 data = {"version": version_number}
 plist_path = "{}/fvserver/version.plist".format(script_path)
-plistlib.writePlist(data, plist_path)
+file_name=open(plist_path,'wb')
+plistlib.dump(data, file_name)
+file_name.close()
