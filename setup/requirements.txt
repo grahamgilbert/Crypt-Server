@@ -2,7 +2,7 @@ appdirs==1.4.4
 asgiref==3.5.2
 asn1crypto==1.5.1
 astroid==2.12.11
-attrs==18.2.0
+attrs==22.1.0
 beautifulsoup4==4.11.1
 black==22.10.0
 cffi==1.15.0
@@ -33,6 +33,7 @@ pyflakes==2.5.0
 pylint==2.15.4
 pytz==2022.5
 regex==2022.9.13
+selenium==4.5.0
 six==1.16.0
 soupsieve==2.3.2.post1
 sqlparse==0.4.3
