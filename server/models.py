@@ -70,7 +70,7 @@ class Request(models.Model):
     requesting_user = models.ForeignKey(
         User, related_name="requesting_user", on_delete=models.CASCADE
     )
-    approved = models.NullBooleanField(verbose_name="Approved?")
+    approved = models.BooleanField(verbose_name="Approved?", null=True)
     auth_user = models.ForeignKey(
         User, null=True, related_name="auth_user", on_delete=models.PROTECT
     )
