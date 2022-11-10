@@ -89,8 +89,10 @@ if getenv("EMAIL_PASSWORD"):
 
 if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
+    CSRF_TRUSTED_ORIGINS = [getenv("HOST_NAME")]
 else:
     HOST_NAME = "https://cryptexample.com"
+    CSRF_TRUSTED_ORIGINS = [getenv("HOST_NAME")]
 
 if getenv("EMAIL_SENDER"):
     EMAIL_SENDER = getenv("EMAIL_SENDER")
