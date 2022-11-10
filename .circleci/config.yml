@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: cimg/python:3.10
+      - image: circleci/python:3.10
 
     working_directory: ~/repo
 
@@ -19,7 +19,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv .venv
+            python -m venv .venv
             . .venv/bin/activate
             pip install -r setup/requirements.txt
 
