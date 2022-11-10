@@ -4,7 +4,7 @@ docker rm -f crypt
 docker build -t macadmins/crypt .
 docker run -d \
     -e ADMIN_PASS=pass \
-    -e DEBUG=true \
+    -e DEBUG=false \
     -e PROMETHEUS=true \
     --name=crypt \
     --restart="always" \
