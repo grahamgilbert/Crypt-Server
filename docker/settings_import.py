@@ -42,12 +42,12 @@ if getenv("ADMINS"):
     if "," in admins_var and ":" in admins_var:
         for admin in admins_var.split(":"):
             admin_list.append(tuple(admin.split(",")))
-        ADMINS = tuple(admin_list)
+        ADMINS = admin_list
     elif "," in admins_var:
         admin_list.append(tuple(admins_var.split(",")))
-        ADMINS = tuple(admin_list)
+        ADMINS = admin_list
 else:
-    ADMINS = ("Admin User", "admin@test.com")
+    ADMINS = [("Admin User", "admin@test.com")]
 
 # Read the preferred time zone from $TZ, use system locale or
 # set to 'America/New_York' if neither are set
@@ -89,8 +89,10 @@ if getenv("EMAIL_PASSWORD"):
 
 if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
+    CSRF_TRUSTED_ORIGINS = [getenv("HOST_NAME")]
 else:
     HOST_NAME = "https://cryptexample.com"
+    CSRF_TRUSTED_ORIGINS = [getenv("HOST_NAME")]
 
 if getenv("EMAIL_SENDER"):
     EMAIL_SENDER = getenv("EMAIL_SENDER")

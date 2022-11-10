@@ -38,6 +38,8 @@ All settings that would be entered into `settings.py` can also be passed into th
 
 - `ROTATE_VIEWED_SECRETS` - With a compatible client (such as Crypt 3.2.0 and greater), Crypt Server can instruct the client to rotate the secret and re-escrow it when the secret has been viewed. Enable by setting this to `True` or by using `ROTATE_VIEWED_SECRETS` and setting to `true`.
 
+- `HOST_NAME` - Set the host name of your instance - required if you do not have control over the load balancer or proxy in front of your Crypt server (see [the Django documentation](https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins)).
+
 ## Screenshots
 
 Main Page:
