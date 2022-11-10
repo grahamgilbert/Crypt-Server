@@ -13,9 +13,9 @@ ROTATE_VIEWED_SECRETS = True
 DATE_FORMAT = "Y-m-d H:i:s"
 DATETIME_FORMAT = "Y-m-d H:i:s"
 
-ADMINS = (
+ADMINS = [(
     # ('Your Name', 'your_email@example.com'),
-)
+)]
 
 FIELD_ENCRYPTION_KEY = os.environ.get("FIELD_ENCRYPTION_KEY", "")
 

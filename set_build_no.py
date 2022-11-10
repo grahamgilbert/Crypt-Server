@@ -4,7 +4,7 @@ import os
 import plistlib
 import subprocess
 
-current_version = "3.4.0"
+current_version = "3.4.1"
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 

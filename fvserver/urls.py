@@ -11,8 +11,6 @@ from django.urls import path, include
 app_name = "fvserver"
 
 urlpatterns = [
-    # Examples:
-    # url(r'^macnamer/', include('macnamer.foo.urls')),
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.logout_then_login, name="logout"),
     path(
@@ -30,5 +28,4 @@ urlpatterns = [
     path("admin/doc/", include(admindocs_urls)),
     # Uncomment the next line to enable the admin:
     path("admin/", admin.site.urls),
-    # url(r'^$', 'namer.views.index', name='home'),
 ]
