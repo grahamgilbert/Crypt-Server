@@ -2,7 +2,9 @@
 from os import getenv
 import pytz
 import locale
+import logging
 
+logger = logging.getLogger(__name__)
 
 if getenv("DEBUG"):
   if getenv("DEBUG").lower() == "true":
@@ -44,8 +46,11 @@ else:
 
 # Read the preferred time zone from $TZ, use system locale or
 # set to 'America/New_York' if neither are set
-if getenv("TZ") and getenv("TZ") in pytz.all_timezones:
-    TIME_ZONE = getenv("TZ")
+if getenv("TZ"):
+    if getenv("TZ") in pytz.all_timezones:
+        TIME_ZONE = getenv("TZ")
+    else:
+        logger.error("Invalid TZ: %s" % getenv("TZ"))
 else:
     TIME_ZONE = "America/New_York"
 
