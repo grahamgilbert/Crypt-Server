@@ -60,6 +60,7 @@ docker run -d --name="Crypt" \
 -e DB_USER='postgres_user' \
 -e DB_PASS='postgres_user_pass' \
 -e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
+-e CSRF_TRUSTED_ORIGINS='https://FirstServer.com,https://SecondServer.com' \
 macadmins/crypt-server
 ```
 
@@ -79,6 +80,7 @@ docker run -d --name="Crypt" \
 -e EMAIL_PASSWORD='yourpassword' \
 -e HOST_NAME='https://crypt.myorg.com' \
 -e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
+-e CSRF_TRUSTED_ORIGINS='https://FirstServer.com,https://SecondServer.com' \
 macadmins/crypt-server
 ```
 
