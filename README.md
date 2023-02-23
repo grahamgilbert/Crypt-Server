@@ -40,6 +40,7 @@ All settings that would be entered into `settings.py` can also be passed into th
 
 - `HOST_NAME` - Set the host name of your instance - required if you do not have control over the load balancer or proxy in front of your Crypt server (see [the Django documentation](https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins)).
 
+- `CSRF_TRUSTED_ORIGINS` - Is a list of trusted origins expected to make requests to your Crypt instance, normally this is the hostname
 ## Screenshots
 
 Main Page:
