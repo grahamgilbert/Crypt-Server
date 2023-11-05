@@ -1,38 +1,33 @@
 #!/usr/bin/env python
 from os import getenv
+import pytz
 import locale
+import logging
 
-# Read the DEBUG setting from env var
-try:
-    if getenv("DEBUG").lower() == "true":
-        DEBUG = True
-    else:
-        DEBUG = False
-except:
+logger = logging.getLogger(__name__)
+
+if getenv("DEBUG"):
+  if getenv("DEBUG").lower() == "true":
+    DEBUG = True
+else:
     DEBUG = False
 
-try:
-    if getenv("APPROVE_OWN").lower() == "false":
-        APPROVE_OWN = False
-    else:
-        APPROVE_OWN = True
-except:
-    APPROVE_OWN = True
+if getenv("APPROVE_OWN"):
+  if getenv("APPROVE_OWN").lower() == "false":
+    APPROVE_OWN = False
+else:
+   APPROVE_OWN = True
 
-try:
-    if getenv("ROTATE_VIEWED_SECRETS").lower() == "false":
-        ROTATE_VIEWED_SECRETS = False
-    else:
-        ROTATE_VIEWED_SECRETS = True
-except:
+if getenv("ROTATE_VIEWED_SECRETS"):
+  if getenv("ROTATE_VIEWED_SECRETS").lower() == "false":
+      ROTATE_VIEWED_SECRETS = False
+else:
     ROTATE_VIEWED_SECRETS = True
 
-try:
-    if getenv("ALL_APPROVE").lower() == "true":
-        ALL_APPROVE = True
-    else:
-        ALL_APPROVE = False
-except:
+if getenv("ROTATE_VIEWED_SECRETS_DAYS"):
+  if getenv("ALL_APPROVE").lower() == "true":
+      ALL_APPROVE = True
+else:
     ALL_APPROVE = False
 
 # Read list of admins from $ADMINS env var
@@ -52,12 +47,10 @@ else:
 # Read the preferred time zone from $TZ, use system locale or
 # set to 'America/New_York' if neither are set
 if getenv("TZ"):
-    if "/" in getenv("TZ"):
+    if getenv("TZ") in pytz.all_timezones:
         TIME_ZONE = getenv("TZ")
     else:
-        TIME_ZONE = "America/New_York"
-elif getenv("TZ"):
-    TIME_ZONE = getenv("TZ")
+        logger.error("Invalid TZ: %s" % getenv("TZ"))
 else:
     TIME_ZONE = "America/New_York"
 
