@@ -3,7 +3,7 @@ import os
 # Django settings for fvserver project.
 
 PROJECT_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.pardir)
+	os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.pardir)
 )
 ENCRYPTED_FIELD_KEYS_DIR = os.path.join(PROJECT_DIR, "keyset")
 DEBUG = False
@@ -13,11 +13,7 @@ ROTATE_VIEWED_SECRETS = True
 DATE_FORMAT = "Y-m-d H:i:s"
 DATETIME_FORMAT = "Y-m-d H:i:s"
 
-ADMINS = [
-    (
-        # ('Your Name', 'your_email@example.com'),
-    )
-]
+ADMINS = ()
 
 FIELD_ENCRYPTION_KEY = os.environ.get("FIELD_ENCRYPTION_KEY", "")
 
@@ -74,10 +70,10 @@ ADMIN_MEDIA_PREFIX = "/static_admin/"
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, "site_static"),
+	# Put strings here, like "/home/html/static" or "C:/www/django/static".
+	# Always use forward slashes, even on Windows.
+	# Don't forget to use absolute paths, not relative paths.
+	os.path.join(PROJECT_DIR, "site_static"),
 )
 
 LOGIN_URL = "/login/"
@@ -88,99 +84,123 @@ ALLOWED_HOSTS = ["*"]
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+	"django.contrib.staticfiles.finders.FileSystemFinder",
+	"django.contrib.staticfiles.finders.AppDirectoriesFinder",
+	#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "6%y8=x5(#ufxd*+d+-ohwy0b$5z^cla@7tvl@n55_h_cex0qat"
 
 TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            # insert your TEMPLATE_DIRS here
-            os.path.join(PROJECT_DIR, "templates")
-        ],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
-                # list if you haven't customized them:
-                "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.debug",
-                "django.template.context_processors.i18n",
-                "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.media",
-                "django.template.context_processors.static",
-                "django.template.context_processors.tz",
-                "django.template.context_processors.request",
-                "fvserver.context_processors.crypt_version",
-            ],
-            "debug": DEBUG,
-        },
-    }
+	{
+		"BACKEND": "django.template.backends.django.DjangoTemplates",
+		"DIRS": [
+			# insert your TEMPLATE_DIRS here
+			os.path.join(PROJECT_DIR, "templates")
+		],
+		"APP_DIRS": True,
+		"OPTIONS": {
+			"context_processors": [
+				# Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+				# list if you haven't customized them:
+				"django.contrib.auth.context_processors.auth",
+				"django.template.context_processors.debug",
+				"django.template.context_processors.i18n",
+				"django.contrib.messages.context_processors.messages",
+				"django.template.context_processors.media",
+				"django.template.context_processors.static",
+				"django.template.context_processors.tz",
+				"django.template.context_processors.request",
+				"fvserver.context_processors.crypt_version",
+			],
+			"debug": DEBUG,
+		},
+	}
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+	"django.middleware.security.SecurityMiddleware",
+	"whitenoise.middleware.WhiteNoiseMiddleware",
+	"django.contrib.sessions.middleware.SessionMiddleware",
+	"django.middleware.common.CommonMiddleware",
+	"django.middleware.csrf.CsrfViewMiddleware",
+	"django.contrib.auth.middleware.AuthenticationMiddleware",
+	"django.contrib.messages.middleware.MessageMiddleware",
+	"django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 
 ROOT_URLCONF = "fvserver.urls"
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = "fvserver.wsgi.application"
 
-
-INSTALLED_APPS = (
-    "whitenoise.runserver_nostatic",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.sites",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    # Uncomment the next line to enable the admin:
-    "django.contrib.admin",
-    # Uncomment the next line to enable admin documentation:
-    "django.contrib.admindocs",
-    "server",
-    "bootstrap4",
-    "django_extensions",
-)
+INSTALLED_APPS = [
+	"whitenoise.runserver_nostatic",
+	"django.contrib.auth",
+	"django.contrib.contenttypes",
+	"django.contrib.sessions",
+	"django.contrib.sites",
+	"django.contrib.messages",
+	"django.contrib.staticfiles",
+	# Uncomment the next line to enable the admin:
+	"django.contrib.admin",
+	# Uncomment the next line to enable admin documentation:
+	"django.contrib.admindocs",
+	"server",
+	"bootstrap4",
+	"django_extensions",
+]
 
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "default": {
-            "format": "[DJANGO] %(levelname)s %(asctime)s %(module)s "
-            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
-        },
-    },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        }
-    },
-    "loggers": {
-        "*": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
-        }
-    },
+	"version": 1,
+	"disable_existing_loggers": False,
+	"formatters": {
+		"default": {
+			"format": "[DJANGO] %(levelname)s %(asctime)s %(module)s "
+					  "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
+		},
+	},
+	"handlers": {
+		"console": {
+			"level": "DEBUG",
+			"class": "logging.StreamHandler",
+			"formatter": "default",
+		}
+	},
+	"loggers": {
+		"*": {
+			"handlers": ["console"],
+			"level": "DEBUG",
+			"propagate": True,
+		},
+	},
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# OIDC stuff
+AUTHENTICATION_BACKENDS = []
+
+OIDC_ENABLED = int(os.environ.get("OIDC_ENABLED", default=1))
+
+if OIDC_ENABLED:
+	OIDC_VERIFY_SSL = True
+	OIDC_CREATE_USER = True
+	OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = int(os.environ.get('OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS', default=900))
+	# OIDC_RP_IDP_SIGN_KEY = "<OP signing key in PEM or DER format>"
+	OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
+	OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
+	OIDC_RP_SCOPES = "openid profile email groups"
+	OIDC_RP_SIGN_ALGO = os.environ.get("OIDC_RP_SIGN_ALGO", None)
+	OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
+	OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", None)
+	OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
+	OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
+	OIDC_REDIRECT_URL = os.environ.get("OIDC_REDIRECT_URL", None)
+
+	INSTALLED_APPS.append('mozilla_django_oidc')
+	MIDDLEWARE = MIDDLEWARE + ['mozilla_django_oidc.middleware.SessionRefresh']
+	AUTHENTICATION_BACKENDS.append('fvserver.oidc.CustomOIDC')
+
+INSTALLED_APPS = tuple(INSTALLED_APPS)

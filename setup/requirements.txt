@@ -41,3 +41,4 @@ supervisor==4.2.4
 tomli==2.0.1
 whitenoise==6.2.0
 wrapt==1.14.1
+mozilla_django_oidc==4.0.1
