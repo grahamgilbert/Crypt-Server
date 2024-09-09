@@ -10,3 +10,4 @@ keyset
 *.db
 
 .vscode
+.idea
