@@ -7,6 +7,7 @@ from django.contrib import admin
 import django.contrib.auth.views as auth_views
 import django.contrib.admindocs.urls as admindocs_urls
 from django.urls import path, include
+from django.conf import settings
 
 app_name = "fvserver"
 
@@ -22,3 +23,18 @@ urlpatterns = [
 	# OIDC
 	path("oidc/", include("mozilla_django_oidc.urls")),
 ]
+
+# inject password reset routes if oidc is disabled
+if not settings.OIDC_ENABLED:
+	urlpatterns += [
+		path(
+			"changepassword/",
+			auth_views.PasswordChangeView.as_view(),
+			name="password_change",
+		),
+		path(
+			"changepassword/done/",
+			auth_views.PasswordChangeDoneView.as_view(),
+			name="password_change_done",
+		),
+	]

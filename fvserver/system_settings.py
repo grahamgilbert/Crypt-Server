@@ -113,6 +113,7 @@ TEMPLATES = [
 				"django.template.context_processors.tz",
 				"django.template.context_processors.request",
 				"fvserver.context_processors.crypt_version",
+				"fvserver.context_processors.oidc_enabled"
 			],
 			"debug": DEBUG,
 		},
@@ -180,9 +181,11 @@ LOGGING = {
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # OIDC stuff
-AUTHENTICATION_BACKENDS = []
+AUTHENTICATION_BACKENDS = [
+	"django.contrib.auth.backends.ModelBackend"
+]
 
-OIDC_ENABLED = int(os.environ.get("OIDC_ENABLED", default=1))
+OIDC_ENABLED = int(os.environ.get("OIDC_ENABLED", default=0))
 
 if OIDC_ENABLED:
 	OIDC_VERIFY_SSL = True
@@ -199,8 +202,10 @@ if OIDC_ENABLED:
 	OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 	OIDC_REDIRECT_URL = os.environ.get("OIDC_REDIRECT_URL", None)
 
-	INSTALLED_APPS.append('mozilla_django_oidc')
-	MIDDLEWARE = MIDDLEWARE + ['mozilla_django_oidc.middleware.SessionRefresh']
-	AUTHENTICATION_BACKENDS.append('fvserver.oidc.CustomOIDC')
+	INSTALLED_APPS.append("mozilla_django_oidc")
+	MIDDLEWARE.append("mozilla_django_oidc.middleware.SessionRefresh")
+
+	# overwrite the existing backends to disable local auth
+	AUTHENTICATION_BACKENDS = ["fvserver.oidc.CustomOIDC"]
 
 INSTALLED_APPS = tuple(INSTALLED_APPS)
