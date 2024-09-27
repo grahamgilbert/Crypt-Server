@@ -1,14 +1,59 @@
 # Using Docker
 
+## Server Initialization
+This was last tested on Ubuntu 24.04 x86
+
+``` bash
+git clone https://github.com/grahamgilbert/Crypt-Server.git
+```
+
+Install Docker and Docker Compose plugin following instructions here:
+``` bash
+https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+```
+
+Restart the Docker services
+``` bash
+sudo systemctl restart docker
+```
+
+Ensure docker permissions are set. Log out then back in after running this command: 
+``` bash
+sudo usermod -aG docker $USER
+```
+
+We will now install the Docker buildx plugin. 
+``` bash
+sudo apt install docker-buildx
+```
+
+Verify plugin state: 
+``` bash
+docker info | head -n8
+```
+
+Response should be similar to: 
+``` bash
+Client:
+ Version:    24.0.7
+ Context:    default
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  0.12.1
+    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+```
+
+Build the Dockerfile:
+``` bash
+docker buildx build -t crypt-server .
+```
+
 ## Prepare for first use
 When starting from scratch, create a new empty file on the docker host to hold the sqlite3 secrets database
 ``` bash
 touch /somewhere/else/on/the/host
 ```
-
-## Upgrading from Crypt Server 2
-
-The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys. Crypt 3 is a major update, you should ensure any custom settings you pass are still valid.
 
 ## Basic usage
 ``` bash
@@ -17,8 +62,19 @@ docker run -d --name="Crypt" \
 -v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
 -e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 -p 8000:8000 \
-macadmins/crypt-server
+crypt-server
 ```
+
+## Verify Operation
+``` bash
+docker logs Crypt
+```
+
+## Upgrading from Crypt Server 2
+
+The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys. Crypt 3 is a major update, you should ensure any custom settings you pass are still valid.
+
+
 
 The secrets are encrypted, with the encryption key passed in as an environment variable. You should back this up as the keys are not recoverable without them.
 
