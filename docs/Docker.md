@@ -2,6 +2,7 @@
 
 ## Server Initialization
 This was last tested on Ubuntu 24.04 x86
+Note: For this document, macadmins/crypt-server and crypt-server are used interchangeably. macadmins/crypt-server references the downloadedy option and crypt-server represents the local build option. 
 
 ``` bash
 git clone https://github.com/grahamgilbert/Crypt-Server.git
