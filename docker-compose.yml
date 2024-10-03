@@ -19,7 +19,7 @@ services:
       # Please change FIELD_ENCRYPTION_KEY by running 
       # from cryptography.fernet import Fernet
       # key = Fernet.generate_key()
-      - FIELD_ENCRYPTION_KEY='Og6yJ3Gdf-ROlUOkdxiS2d5Km_JGTDnfyJEXXQ15TY8='
+      - FIELD_ENCRYPTION_KEY=Og6yJ3Gdf-ROlUOkdxiS2d5Km_JGTDnfyJEXXQ15TY8=
       - ADMIN_PASS=password
       - DEBUG=false
     ports:
