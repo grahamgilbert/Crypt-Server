@@ -9,6 +9,7 @@ from optparse import make_option
 
 class Command(BaseCommand):
     help = "Creates/Updates an Admin user"
+
     # option_list = BaseCommand.option_list + (
     #     make_option('--username',
     #         action='store',
