@@ -12,7 +12,8 @@ services:
   #   restart: always
 
   crypt:
-    # image: "macadmins/crypt-server" OR "crypt-server" for local build using documentation in /docs/Docker.md
+    image: macadmins/crypt-server" 
+    # OR "crypt-server" for local build using documentation in /docs/Docker.md
     # build: . # uncomment this to build your own image through Docker Compose
     environment:
       - FIELD_ENCRYPTION_KEY=jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg= # please change this
@@ -24,15 +25,3 @@ services:
       - ${PWD}/crypt.db:/home/app/crypt/crypt.db # This will do a local database. For production you should use postgresql
       - ${PWD}/fvserver/settings.py:/home/app/crypt/fvserver/settings.py # Load in your own settings file
     restart: always
-    
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    #volumes:
-      #- ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      #- /path/to/certs:/etc/nginx/certs # Update this to point to your SSL certificates
-    ports:
-      - "443:443"
-      - "80:80"
-    depends_on:
-      - crypt
