@@ -16,10 +16,7 @@ services:
     # OR "crypt-server" for local build using documentation in /docs/Docker.md
     # build: . # uncomment this to build your own image through Docker Compose
     environment:
-      # Please change FIELD_ENCRYPTION_KEY by running 
-      # from cryptography.fernet import Fernet
-      # key = Fernet.generate_key()
-      - FIELD_ENCRYPTION_KEY="b'BIXIqOVKmE7m_H4qMz3bgAR9x8SgWRhx8EiWuHOB6ro='"
+      - FIELD_ENCRYPTION_KEY=jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg= # please change this
       - ADMIN_PASS=password
       - DEBUG=false
     ports:
