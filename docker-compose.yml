@@ -16,7 +16,7 @@ services:
     # OR "crypt-server" for local build using documentation in /docs/Docker.md
     # build: . # uncomment this to build your own image through Docker Compose
     environment:
-      - FIELD_ENCRYPTION_KEY=jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg= # please change this
+      - FIELD_ENCRYPTION_KEY=Og6yJ3Gdf-ROlUOkdxiS2d5Km_JGTDnfyJEXXQ15TY8= # please change this
       - ADMIN_PASS=password
       - DEBUG=false
     ports:
