@@ -33,6 +33,7 @@ jobs:
             . .venv/bin/activate
             cp fvserver/example_settings.py fvserver/settings.py
             # python manage.py test
+            python -c 'import os; print(os.getenv("FIELD_ENCRYPTION_KEY"))'
             python manage.py migrate
       - run:
           name: run linting
