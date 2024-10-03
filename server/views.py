@@ -23,6 +23,7 @@ from django.utils.html import escape
 # Create your views here.
 logger = logging.getLogger(__name__)
 
+
 ##clean up old requests
 def cleanup():
     how_many_days = 7
