@@ -1,8 +1,7 @@
 # Using Docker
 
 ## Server Initialization
-This was last tested on Ubuntu 24.04 x86
-Note: For this document, macadmins/crypt-server and crypt-server are used interchangeably. macadmins/crypt-server references the downloadedy option and crypt-server represents the local build option. 
+This was last tested on Ubuntu 24.04 x86. This process may need to be modified for older installations.
 
 ``` bash
 git clone https://github.com/grahamgilbert/Crypt-Server.git
@@ -23,33 +22,6 @@ Ensure docker permissions are set. Log out then back in after running this comma
 sudo usermod -aG docker $USER
 ```
 
-We will now install the Docker buildx plugin. 
-``` bash
-sudo apt install docker-buildx
-```
-
-Verify plugin state: 
-``` bash
-docker info | head -n8
-```
-
-Response should be similar to: 
-``` bash
-Client:
- Version:    24.0.7
- Context:    default
- Debug Mode: false
- Plugins:
-  buildx: Docker Buildx (Docker Inc.)
-    Version:  0.12.1
-    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
-```
-
-Build the Dockerfile:
-``` bash
-docker buildx build -t crypt-server .
-```
-
 ## Prepare for first use
 When starting from scratch, create a new empty file on the docker host to hold the sqlite3 secrets database
 ``` bash
@@ -63,7 +35,7 @@ docker run -d --name="Crypt" \
 -v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
 -e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
 -p 8000:8000 \
-crypt-server
+macadmins/crypt-server
 ```
 
 ## Verify Operation
