@@ -12,6 +12,7 @@ django-bootstrap4==0.0.7
 django-debug-toolbar==1.11
 django-encrypted-model-fields==0.5.8
 django-extensions==2.1.4
+django-iam-dbauth==0.1.4
 docutils==0.11
 flake8==3.6.0
 gunicorn==19.9.0
