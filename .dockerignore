@@ -1,1 +1,4 @@
 keyset/
+*.db
+*.pyc
+crypt.db*

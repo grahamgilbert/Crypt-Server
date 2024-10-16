@@ -7,7 +7,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [("server", "0015_secret_remove_old_secret")]
+    dependencies = [("server", "0012_auto_20181128_2038")]
 
     operations = [
         migrations.AlterField(

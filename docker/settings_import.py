@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from os import getenv
 import locale
 
@@ -42,12 +42,12 @@ if getenv("ADMINS"):
     if "," in admins_var and ":" in admins_var:
         for admin in admins_var.split(":"):
             admin_list.append(tuple(admin.split(",")))
-        ADMINS = tuple(admin_list)
+        ADMINS = admin_list
     elif "," in admins_var:
         admin_list.append(tuple(admins_var.split(",")))
-        ADMINS = tuple(admin_list)
+        ADMINS = admin_list
 else:
-    ADMINS = ("Admin User", "admin@test.com")
+    ADMINS = [("Admin User", "admin@test.com")]
 
 # Read the preferred time zone from $TZ, use system locale or
 # set to 'America/New_York' if neither are set
@@ -61,17 +61,12 @@ elif getenv("TZ"):
 else:
     TIME_ZONE = "America/New_York"
 
-# Read the preferred language code from $LANG, use system locale or
-# set to 'en_US' if neither are set
+# Read the preferred language code from $LANG & default to en-us if not set
+# note django does not support locale-format for LANG
 if getenv("LANG"):
-    if "_" in getenv("LANG"):
-        LANGUAGE_CODE = getenv("LANG")
-    else:
-        LANGUAGE_CODE = "en_US"
-elif locale.getdefaultlocale():
-    LANGUAGE_CODE = locale.getdefaultlocale()[0]
+    LANGUAGE_CODE = getenv("LANG")
 else:
-    LANGUAGE_CODE = "en_US"
+    LANGUAGE_CODE = "en-us"
 
 # Set the display name from the $DISPLAY_NAME env var, or
 # use the default
@@ -92,8 +87,20 @@ if getenv("EMAIL_USER"):
 if getenv("EMAIL_PASSWORD"):
     EMAIL_PASSWORD = getenv("EMAIL_PASSWORD")
 
+if getenv("CSRF_TRUSTED_ORIGINS"):
+    CSRF_TRUSTED_ORIGINS = getenv("CSRF_TRUSTED_ORIGINS").split(",")
+else:
+    CSRF_TRUSTED_ORIGINS = []
+
 if getenv("HOST_NAME"):
     HOST_NAME = getenv("HOST_NAME")
+else:
+    HOST_NAME = "https://cryptexample.com"
+
+if getenv("EMAIL_SENDER"):
+    EMAIL_SENDER = getenv("EMAIL_SENDER")
+else:
+    EMAIL_SENDER = "crypt@cryptexample.com"
 
 # Read the list of allowed hosts from the $DOCKER_CRYPT_ALLOWED env var, or
 # allow all hosts if none was set.
@@ -101,3 +108,14 @@ if getenv("ALLOWED_HOSTS"):
     ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split(",")
 else:
     ALLOWED_HOSTS = ["*"]
+
+if getenv("SEND_EMAIL") and getenv("SEND_EMAIL").lower() == "true":
+    SEND_EMAIL = True
+else:
+    SEND_EMAIL = False
+
+if getenv("EMAIL_USE_TLS") and getenv("EMAIL_USE_TLS").lower() == "true":
+    EMAIL_USE_TLS = True
+
+if getenv("EMAIL_USE_SSL") and getenv("EMAIL_USE_SSL").lower() == "true":
+    EMAIL_USE_SSL = True

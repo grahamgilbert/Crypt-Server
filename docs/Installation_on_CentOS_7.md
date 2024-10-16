@@ -1,6 +1,6 @@
 # Installation on CentOS 7
 
-This document has not been updated for Crypt Server 3. Pull requests to update this are gratefully accepted.
+This document has not been updated for several years and should only be used for version 2 of Crypt server. Pull requests to update this are gratefully accepted.
 
 All commands should be run as root, unless specified.
 

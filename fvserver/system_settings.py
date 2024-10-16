@@ -13,9 +13,11 @@ ROTATE_VIEWED_SECRETS = True
 DATE_FORMAT = "Y-m-d H:i:s"
 DATETIME_FORMAT = "Y-m-d H:i:s"
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
+ADMINS = [
+    (
+        # ('Your Name', 'your_email@example.com'),
+    )
+]
 
 FIELD_ENCRYPTION_KEY = os.environ.get("FIELD_ENCRYPTION_KEY", "")
 
@@ -29,7 +31,7 @@ TIME_ZONE = "Europe/London"
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = "en-gb"
+LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1
 
@@ -109,10 +111,11 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.i18n",
+                "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
-                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.request",
                 "fvserver.context_processors.crypt_version",
             ],
             "debug": DEBUG,
@@ -131,7 +134,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = "fvserver.urls"
 
@@ -156,27 +158,29 @@ INSTALLED_APPS = (
     "django_extensions",
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {
+        "default": {
+            "format": "[DJANGO] %(levelname)s %(asctime)s %(module)s "
+            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
+        },
+    },
     "handlers": {
-        "mail_admins": {
-            "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler",
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
         }
     },
     "loggers": {
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
+        "*": {
+            "handlers": ["console"],
+            "level": "DEBUG",
             "propagate": True,
         }
     },
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

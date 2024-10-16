@@ -1,6 +1,8 @@
 from fvserver.system_settings import *
 from fvserver.settings_import import *
+from django.utils.log import DEFAULT_LOGGING
 import os
+
 
 # Django settings for fvserver project.
 
@@ -69,3 +71,12 @@ if 'AWS_IAM' in os.environ:
             }
         }
     }
+
+# Don't filter anything going to console
+DEFAULT_LOGGING["handlers"]["console"]["filters"] = []
+
+DEFAULT_LOGGING["loggers"][""] = {
+    "handlers": ["console"],
+    "level": "INFO",
+    "propagate": True,
+}

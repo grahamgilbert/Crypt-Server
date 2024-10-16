@@ -19,11 +19,15 @@ class Computer(models.Model):
     class Meta:
         ordering = ["serial"]
         permissions = (
-            ("can_approve", (u"Can approve requests to see encryption keys")),
+            ("can_approve", ("Can approve requests to see encryption keys")),
         )
 
 
-SECRET_TYPES = (("recovery_key", "Recovery Key"), ("password", "Password"), ("unlock_pin", "Unlock PIN"))
+SECRET_TYPES = (
+    ("recovery_key", "Recovery Key"),
+    ("password", "Password"),
+    ("unlock_pin", "Unlock PIN"),
+)
 
 
 class Secret(models.Model):
@@ -66,7 +70,7 @@ class Request(models.Model):
     requesting_user = models.ForeignKey(
         User, related_name="requesting_user", on_delete=models.CASCADE
     )
-    approved = models.NullBooleanField(verbose_name="Approved?")
+    approved = models.BooleanField(verbose_name="Approved?", null=True)
     auth_user = models.ForeignKey(
         User, null=True, related_name="auth_user", on_delete=models.PROTECT
     )

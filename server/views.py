@@ -1,7 +1,9 @@
+import logging
 from .models import *
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext, Template, Context
 import json
+import pytz
 import copy
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import HttpResponse, Http404, JsonResponse
@@ -16,8 +18,10 @@ from django.views.defaults import server_error
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
+from django.utils.html import escape
 
 # Create your views here.
+logger = logging.getLogger(__name__)
 
 ##clean up old requests
 def cleanup():
@@ -32,9 +36,11 @@ def cleanup():
 
 def get_server_version():
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    version = plistlib.readPlist(
-        os.path.join(os.path.dirname(current_dir), "fvserver", "version.plist")
-    )
+
+    with open(
+        os.path.join(os.path.dirname(current_dir), "fvserver", "version.plist"), "rb"
+    ) as f:
+        version = plistlib.load(f)
     return version["version"]
 
 
@@ -143,12 +149,12 @@ def tableajax(request):
 
         serial_link = '<a href="%s">%s</a>' % (
             reverse("server:computer_info", args=[machine["id"]]),
-            machine["serial"],
+            escape(machine["serial"]),
         )
 
         computername_link = '<a href="%s">%s</a>' % (
             reverse("server:computer_info", args=[machine["id"]]),
-            machine["computername"],
+            escape(machine["computername"]),
         )
 
         info_button = '<a class="btn btn-info btn-xs" href="%s">Info</a>' % (
@@ -158,7 +164,7 @@ def tableajax(request):
         list_data = [
             serial_link,
             computername_link,
-            machine["username"],
+            escape(machine["username"]),
             formatted_date,
             info_button,
         ]
@@ -287,16 +293,45 @@ def request(request, secret_id):
                                     server_name,
                                     reverse("server:approve", args=[new_request.id]),
                                 )
-                                email_sender = (
-                                    "requests@%s" % request.META["SERVER_NAME"]
+                                if hasattr(settings, "EMAIL_SENDER"):
+                                    email_sender = settings.EMAIL_SENDER
+                                else:
+                                    email_sender = (
+                                        "requests@%s" % request.META["SERVER_NAME"]
+                                    )
+
+                                logger.info(
+                                    "[*] Sending request email to {} from {}".format(
+                                        user.email, email_sender
+                                    )
                                 )
-                                send_mail(
-                                    "Crypt Key Request",
-                                    email_message,
-                                    email_sender,
-                                    [user.email],
-                                    fail_silently=True,
-                                )
+                                if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
+
+                                    authing_user = settings.EMAIL_USER
+                                    authing_password = settings.EMAIL_PASSWORD
+                                    logger.info(
+                                        "[*] Authing to mail server as {}".format(
+                                            authing_user
+                                        )
+                                    )
+
+                                    send_mail(
+                                        "Crypt Key Request",
+                                        email_message,
+                                        email_sender,
+                                        [user.email],
+                                        fail_silently=True,
+                                        auth_user=authing_user,
+                                        auth_password=authing_password,
+                                    )
+                                else:
+                                    send_mail(
+                                        "Crypt Key Request",
+                                        email_message,
+                                        email_sender,
+                                        [user.email],
+                                        fail_silently=True,
+                                    )
 
             ##if we're an approver, we'll redirect to the retrieve view
             if approver:
@@ -358,14 +393,41 @@ def approve(request, request_id):
                             server_name,
                             reverse("server:secret_info", args=[new_request.secret.id]),
                         )
-                        email_sender = "requests@%s" % request.META["SERVER_NAME"]
-                        send_mail(
-                            "Crypt Key Request",
-                            email_message,
-                            email_sender,
-                            [new_request.requesting_user.email],
-                            fail_silently=True,
+                        if hasattr(settings, "EMAIL_SENDER"):
+                            email_sender = settings.EMAIL_SENDER
+                        else:
+                            email_sender = "requests@%s" % request.META["SERVER_NAME"]
+
+                        logger.info(
+                            "[*] Sending approved/denied email to {} from {}".format(
+                                new_request.requesting_user.email, email_sender
+                            )
                         )
+                        if settings.EMAIL_USER and settings.EMAIL_PASSWORD:
+
+                            authing_user = settings.EMAIL_USER
+                            authing_password = settings.EMAIL_PASSWORD
+                            logger.info(
+                                "[*] Authing to mail server as {}".format(authing_user)
+                            )
+
+                            send_mail(
+                                "Crypt Key Request",
+                                email_message,
+                                email_sender,
+                                [new_request.requesting_user.email],
+                                fail_silently=True,
+                                auth_user=authing_user,
+                                auth_password=authing_password,
+                            )
+                        else:
+                            send_mail(
+                                "Crypt Key Request",
+                                email_message,
+                                email_sender,
+                                [new_request.requesting_user.email],
+                                fail_silently=True,
+                            )
             return redirect("server:managerequests")
     else:
         form = ApproveForm(instance=the_request)
@@ -488,8 +550,10 @@ def checkin(request):
     except ValidationError:
         pass
 
-    latest_secret = Secret.objects.filter(secret_type=secret_type).latest(
-        "date_escrowed"
+    latest_secret = (
+        Secret.objects.filter(secret_type=secret_type)
+        .filter(computer_id=computer.id)
+        .latest("date_escrowed")
     )
     rotation_required = latest_secret.rotation_required
 
