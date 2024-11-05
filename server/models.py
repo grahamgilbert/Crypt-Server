@@ -5,6 +5,7 @@ from encrypted_model_fields.fields import EncryptedCharField
 
 from django.core.exceptions import ValidationError
 
+
 # Create your models here.
 class Computer(models.Model):
     # recovery_key = models.CharField(max_length=200, verbose_name="Recovery Key")
