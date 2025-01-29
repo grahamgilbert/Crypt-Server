@@ -18,7 +18,7 @@ django-iam-dbauth==0.1.4
 docutils==0.19
 flake8==5.0.4
 gunicorn==20.1.0
-idna==3.4
+idna==3.7
 isort==5.10.1
 lazy-object-proxy==1.7.1
 mccabe==0.7.0
