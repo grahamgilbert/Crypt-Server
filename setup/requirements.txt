@@ -1,5 +1,5 @@
 appdirs==1.4.4
-asgiref==3.5.2
+asgiref==3.6.0
 asn1crypto==1.5.1
 astroid==2.12.11
 attrs==22.1.0
