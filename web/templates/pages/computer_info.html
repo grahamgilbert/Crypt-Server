@@ -1,0 +1,86 @@
+{{define "title"}}Computer Info{{end}}
+
+{{define "script"}}
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function () {
+    $(".groupList").dataTable({
+      aLengthMenu: [
+        [20, 50, -1],
+        [20, 50, "All"],
+      ]
+    });
+  });
+</script>
+{{end}}
+
+{{define "dropdown"}}
+<li class="nav-item">
+  <a class="nav-link" href="/new/secret/{{.Computer.ID}}/"><span class="glyphicon glyphicon-plus"></span> New secret</a>
+</li>
+{{end}}
+
+{{define "nav"}}
+<li class="nav-item">
+  <a class="nav-link" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Home</a>
+</li>
+{{end}}
+
+{{define "content"}}
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <h2>{{.Computer.ComputerName}}</h2>
+    <h4>{{.Computer.Serial}}</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4 col-md-4">
+    <table class="table table-bordered table-striped table-condensed">
+      <tbody>
+        <tr>
+          <th>Username</th>
+          <td>{{.Computer.Username}}</td>
+        </tr>
+        <tr>
+          <th>Computer Name</th>
+          <td>{{.Computer.ComputerName}}</td>
+        </tr>
+        <tr>
+          <th>Serial Number</th>
+          <td>{{.Computer.Serial}}</td>
+        </tr>
+        <tr>
+          <th>Last Checked In</th>
+          <td>{{.Computer.LastCheckinFormatted}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <h3>Secrets</h3>
+    <table class="table table-striped table-condensed groupList">
+      <thead>
+        <tr>
+          <th>Secret Type</th>
+          <th>Escrow Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Secrets}}
+        <tr>
+          <td>{{.SecretTypeDisplay}}</td>
+          <td>{{.DateEscrowedFormatted}}</td>
+          <td>
+            <a class="btn btn-info btn-xs" href="/info/secret/{{.ID}}/">Info / Request</a>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{end}}

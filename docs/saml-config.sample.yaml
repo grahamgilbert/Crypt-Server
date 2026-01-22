@@ -1,0 +1,74 @@
+# SAML Configuration for Crypt Server
+#
+# Required fields:
+#   - root_url: The public URL where the app is accessible
+#   - idp_metadata_path OR idp_metadata_url: Path to IdP metadata XML file or URL to fetch it
+#
+# Certificate/key are optional unless sign_request is true or your IdP encrypts assertions
+
+# Required: The public URL where the application is accessible
+root_url: https://crypt.example.com
+
+# Optional: Custom entity ID (defaults to root_url + metadata_url_path)
+entity_id: https://crypt.example.com/saml2/metadata/
+
+# IdP Metadata - provide ONE of these:
+idp_metadata_path: /path/to/idp/metadata.xml
+# idp_metadata_url: https://your-idp.example.com/metadata
+
+# Optional: SP certificate and private key
+# Only required if sign_request is true or your IdP encrypts SAML assertions
+# Most IdPs (including Okta) don't require these for basic setup
+# certificate_path: /path/to/sp.crt
+# private_key_path: /path/to/sp.key
+
+# Optional: Sign SAML authentication requests (requires certificate_path and private_key_path)
+sign_request: false
+
+# Optional: Allow IdP-initiated SSO (user clicks app in IdP portal)
+allow_idp_initiated: true
+
+# Username extraction - tries these in order:
+# 1. NameID (if use_name_id_as_username is true)
+# 2. username_attribute
+# 3. attribute_mapping with value "username"
+# 4. "uid" attribute
+use_name_id_as_username: true
+username_attribute: uid
+
+# Optional: Map SAML attributes to user fields
+attribute_mapping:
+  uid: username
+  mail: email
+
+# Group-based permissions
+# The attribute containing group membership (default: memberOf)
+groups_attribute: memberOf
+
+# Groups that grant staff (admin UI access) permissions
+staff_groups:
+  - Crypt-Admins
+
+# Groups that grant superuser permissions (staff + approve)
+superuser_groups: []
+
+# Groups that grant approval permissions
+can_approve_groups:
+  - Crypt-Approvers
+  - Crypt-Admins
+
+# Auto-create users on first SAML login
+create_unknown_user: true
+
+# Default settings for SAML-created users
+auth_source: saml
+local_login_enabled: false
+must_reset_password: false
+
+# Redirect after successful login
+default_redirect_uri: /
+
+# SAML endpoint paths (defaults shown)
+metadata_url_path: /saml2/metadata/
+acs_url_path: /saml2/acs/
+slo_url_path: /saml2/ls/

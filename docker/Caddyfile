@@ -1,3 +1,0 @@
-*:80 {
-    proxy / http://crypt:8000
-}

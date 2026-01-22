@@ -1,0 +1,20 @@
+{{define "title"}}Request Secret{{end}}
+
+{{define "content"}}
+<h1>Request Secret</h1>
+<p>{{.Computer.ComputerName}} ({{.Computer.Serial}})</p>
+<p>{{.Secret.SecretTypeDisplay}} - {{.Secret.DateEscrowedFormatted}}</p>
+{{if .ErrorMessage}}<p><strong>{{.ErrorMessage}}</strong></p>{{end}}
+        <form action="/request/{{.Secret.ID}}/" method="post">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+    <div class="form-group">
+        <label for="reason_for_request">Reason for Request</label>
+        <textarea class="form-control" id="reason_for_request" name="reason_for_request" rows="4"></textarea>
+    </div>
+    {{if .User.CanApprove}}
+        <p><button type="submit" class="btn primary btn-default">Retrieve Key</button></p>
+    {{else}}
+        <p><button type="submit" class="btn primary btn-default">Submit Request</button></p>
+    {{end}}
+</form>
+{{end}}

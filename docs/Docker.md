@@ -1,132 +1,197 @@
 # Using Docker
 
-## Server Initialization
-This was last tested on Ubuntu 24.04 x86. This process may need to be modified for older installations.
+## Quick Start
 
-``` bash
-git clone https://github.com/grahamgilbert/Crypt-Server.git
+### 1. Generate encryption keys
+
+```bash
+# Generate field encryption key
+docker run --rm ghcr.io/grahamgilbert/crypt-server ./cryptctl gen-key > field-encryption-key.txt
+
+# Generate session key
+docker run --rm ghcr.io/grahamgilbert/crypt-server ./cryptctl gen-key > session-key.txt
 ```
 
-Install Docker and Docker Compose plugin following instructions here:
-``` bash
-https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+### 2. Create database file
+
+For SQLite (simplest setup):
+
+```bash
+touch /path/to/crypt.db
 ```
 
-Restart the Docker services
-``` bash
-sudo systemctl restart docker
+### 3. Run the container
+
+```bash
+docker run -d --name="crypt" \
+  --restart="always" \
+  -v /path/to/crypt.db:/data/crypt.db \
+  -e FIELD_ENCRYPTION_KEY="$(cat field-encryption-key.txt)" \
+  -e SESSION_KEY="$(cat session-key.txt)" \
+  -e SQLITE_PATH=/data/crypt.db \
+  -p 8080:8080 \
+  ghcr.io/grahamgilbert/crypt-server
 ```
 
-Ensure docker permissions are set. Log out then back in after running this command: 
-``` bash
-sudo usermod -aG docker $USER
+### 4. Create admin user
+
+```bash
+docker exec crypt ./crypt-server \
+  -create-admin \
+  -username=admin \
+  -password='your-secure-password'
 ```
 
-## Prepare for first use
-When starting from scratch, create a new empty file on the docker host to hold the sqlite3 secrets database
-``` bash
-touch /somewhere/else/on/the/host
+### 5. Verify operation
+
+```bash
+docker logs crypt
 ```
 
-## Basic usage
-``` bash
-docker run -d --name="Crypt" \
---restart="always" \
--v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
--e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
--p 8000:8000 \
-macadmins/crypt-server
+Access the web interface at `http://localhost:8080`.
+
+## Using PostgreSQL
+
+For production deployments, PostgreSQL is recommended:
+
+```bash
+docker run -d --name="crypt" \
+  --restart="always" \
+  -e FIELD_ENCRYPTION_KEY="$(cat field-encryption-key.txt)" \
+  -e SESSION_KEY="$(cat session-key.txt)" \
+  -e DATABASE_URL="postgres://user:pass@db.example.com:5432/crypt" \
+  -p 8080:8080 \
+  ghcr.io/grahamgilbert/crypt-server
 ```
 
-## Verify Operation
-``` bash
-docker logs Crypt
+## Environment Variables
+
+### Required
+
+| Variable | Description |
+|----------|-------------|
+| `FIELD_ENCRYPTION_KEY` | Base64-encoded 32-byte key for encrypting secrets |
+| `SESSION_KEY` | Random string (at least 32 bytes) for signing session cookies |
+
+### Database (one required)
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `SQLITE_PATH` | Path to SQLite database file |
+
+### Optional
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SESSION_COOKIE_SECURE` | `false` | Set to `true` when using HTTPS |
+| `SAML_CONFIG_FILE` | - | Path to SAML configuration YAML file |
+| `APPROVE_OWN` | `false` | Allow users to approve their own requests |
+| `ALL_APPROVE` | `false` | Grant all users approval permissions |
+| `ROTATE_VIEWED_SECRETS` | `false` | Instruct clients to rotate secrets after viewing |
+
+## Docker Compose
+
+Create a `docker-compose.yml`:
+
+```yaml
+services:
+  crypt:
+    image: ghcr.io/grahamgilbert/crypt-server
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - FIELD_ENCRYPTION_KEY=${FIELD_ENCRYPTION_KEY}
+      - SESSION_KEY=${SESSION_KEY}
+      - SQLITE_PATH=/data/crypt.db
+      - SESSION_COOKIE_SECURE=true
+    volumes:
+      - ./data:/data
 ```
 
-## Upgrading from Crypt Server 2
+Create a `.env` file:
 
-The encryption method has changed in Crypt Server. You should pass in both your old encryption keys (e.g. `-v /somewhere/on/the/host:/home/docker/crypt/keyset`) and the new one (see below) for the first run to migrate your keys. After the migration you no longer need your old encryption keys. Crypt 3 is a major update, you should ensure any custom settings you pass are still valid.
-
-
-
-The secrets are encrypted, with the encryption key passed in as an environment variable. You should back this up as the keys are not recoverable without them.
-
-### Generating an encryption key
-
-Run the following command to generate an encryption key (you should specify the string only):
-
-```
-docker run --rm -ti macadmins/crypt-server \
-python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key())"
+```bash
+FIELD_ENCRYPTION_KEY=your-base64-key-here
+SESSION_KEY=your-session-key-here
 ```
 
-## Backing up the database with a data dump
-``` bash
-docker exec -it Crypt bash
-cd /home/docker/crypt/
-python manage.py dumpdata > db.json
-exit
-docker cp Crypt:/home/docker/crypt/db.json .
-```
-Optionally
-``` bash
-docker exec -it Crypt bash
-rm /home/docker/crypt/db.json
-exit
+Run:
+
+```bash
+mkdir -p data && touch data/crypt.db
+docker compose up -d
 ```
 
-## Using Postgres as an external database
+## SSL/TLS
 
-Crypt, by default, uses a sqlite3 database for the django db backend.  Crypt also supports using Postgres as the django db backend.  If you would like to use an external Postgres server, you need to set the following environment variables:
+Using Crypt without SSL **will** result in your secrets being compromised. Options:
 
-```
-docker run -d --name="Crypt" \
---restart="always" \
--p 8000:8000 \
--e DB_HOST='db.example.com' \
--e DB_PORT='5432' \
--e DB_NAME='postgres_dbname' \
--e DB_USER='postgres_user' \
--e DB_PASS='postgres_user_pass' \
--e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
--e CSRF_TRUSTED_ORIGINS='https://FirstServer.com,https://SecondServer.com' \
-macadmins/crypt-server
-```
+1. **Reverse proxy** (recommended): Use nginx, Caddy, or Traefik in front of Crypt
+2. **Load balancer**: Terminate SSL at your load balancer
 
-## Emails
+Example with Caddy:
 
-If you would like Crypt to send emails when keys are requested and approved, you should set the following environment variables:
+```yaml
+services:
+  crypt:
+    image: ghcr.io/grahamgilbert/crypt-server
+    environment:
+      - FIELD_ENCRYPTION_KEY=${FIELD_ENCRYPTION_KEY}
+      - SESSION_KEY=${SESSION_KEY}
+      - SQLITE_PATH=/data/crypt.db
+      - SESSION_COOKIE_SECURE=true
+    volumes:
+      - ./data:/data
 
-```
-docker run -d --name="Crypt" \
---restart="always" \
--v /somewhere/on/the/host:/home/docker/crypt/keyset \
--v /somewhere/else/on/the/host:/home/docker/crypt/crypt.db \
--p 8000:8000 \
--e EMAIL_HOST='mail.yourdomain.com' \
--e EMAIL_PORT='25' \
--e EMAIL_USER='youruser' \
--e EMAIL_PASSWORD='yourpassword' \
--e HOST_NAME='https://crypt.myorg.com' \
--e FIELD_ENCRYPTION_KEY='yourencryptionkey' \
--e CSRF_TRUSTED_ORIGINS='https://FirstServer.com,https://SecondServer.com' \
-macadmins/crypt-server
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+    depends_on:
+      - crypt
+
+volumes:
+  caddy_data:
 ```
 
-If your SMTP server doesn't need a setting (username and password for example), you should omit it. The `HOST_NAME` setting should be the hostname of your server - this will be used to generate links in emails.
+Example `Caddyfile`:
 
-## SSL
+```
+crypt.example.com {
+    reverse_proxy crypt:8080
+}
+```
 
-It is recommended to use either an Nginx proxy in front of the Crypt app for SSL termination (outside of the scope of this document, see [here](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) and [here](https://www.linode.com/docs/web-servers/nginx/use-nginx-reverse-proxy/) for more information), or to use Caddy. Caddy will also handle setting up letsencrypt SSL certificates for you. An example Caddyfile is included in `docker/Caddyfile`. Using Crypt without SSL __will__ result in your secrets being compromised.
+## Backing Up
 
-_Note Caddy is only free for personal use. For commercial deployments you should build from source yourself or use Nginx._
+### SQLite
 
-## X-Frame-Options
+```bash
+# Stop container first for consistent backup
+docker stop crypt
+cp /path/to/crypt.db /path/to/backup/crypt.db.backup
+docker start crypt
+```
 
-The nginx config included with the docker container configures the X-Frame-Options as sameorigin. This protects against a potential attacker using iframes to do bad stuff with Crypt.
+### PostgreSQL
 
-Depending on your environment you may need to also configure X-Frame-Options on any proxies in front of Crypt.
+Use standard PostgreSQL backup tools (`pg_dump`).
 
-## docker-compose
+### Important
 
-An example `docker-compose.yml` is included. For basic usuage, you should only need to edit the `FIELD_ENCRYPTION_KEY`.
+Always back up your `FIELD_ENCRYPTION_KEY`. Secrets cannot be recovered without it.
+
+## Password Reset
+
+```bash
+docker exec crypt ./crypt-server \
+  -reset-password \
+  -username=admin \
+  -password='new-password'
+```

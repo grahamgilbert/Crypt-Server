@@ -1,0 +1,5 @@
+- Always write unit tests for all code you write
+- Unit tests should use Testify
+- All user input should be protected from CSRF
+- If you are editing code that is configured by end users, either via environment variables, config file or flags, ensure that you update documentation accordingly
+- Use `go fmt` to format your code

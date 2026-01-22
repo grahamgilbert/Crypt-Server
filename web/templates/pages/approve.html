@@ -1,0 +1,22 @@
+{{define "title"}}Approve Request{{end}}
+
+{{define "content"}}
+<h1>Approve Request</h1>
+<p>{{.Computer.ComputerName}} ({{.Computer.Serial}})</p>
+{{if .ErrorMessage}}<p><strong>{{.ErrorMessage}}</strong></p>{{end}}
+        <form action="/approve/{{.Request.ID}}/" method="post">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+    <div class="form-group">
+        <label>Approved?</label>
+        <div>
+            <label class="radio-inline"><input type="radio" name="approved" value="1" checked /> Approved</label>
+            <label class="radio-inline"><input type="radio" name="approved" value="0" /> Denied</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="reason_for_approval">Reason for Approval</label>
+        <textarea class="form-control" id="reason_for_approval" name="reason_for_approval" rows="4"></textarea>
+    </div>
+    <p><button type="submit" class="btn primary btn-default">Save</button></p>
+</form>
+{{end}}

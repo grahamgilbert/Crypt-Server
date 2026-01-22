@@ -1,0 +1,45 @@
+{{define "title"}}Edit User{{end}}
+
+{{define "content"}}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Edit User</h2>
+    {{if .ErrorMessage}}
+      <div class="alert alert-danger">{{.ErrorMessage}}</div>
+    {{end}}
+    <form method="post" action="/admin/users/{{.AdminUser.ID}}/edit/">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" class="form-control" value="{{.NewUser.Username}}" />
+      </div>
+      <div class="form-check">
+        <input id="is_staff" name="is_staff" type="checkbox" class="form-check-input" {{if .NewUser.IsStaff}}checked{{end}} />
+        <label class="form-check-label" for="is_staff">Admin user</label>
+      </div>
+      <div class="form-check">
+        <input id="can_approve" name="can_approve" type="checkbox" class="form-check-input" {{if .NewUser.CanApprove}}checked{{end}} />
+        <label class="form-check-label" for="can_approve">Can approve requests</label>
+      </div>
+      <div class="form-check">
+        <input id="local_login_enabled" name="local_login_enabled" type="checkbox" class="form-check-input" {{if .NewUser.LocalLoginEnabled}}checked{{end}} />
+        <label class="form-check-label" for="local_login_enabled">Local login enabled</label>
+      </div>
+      <div class="form-check">
+        <input id="must_reset_password" name="must_reset_password" type="checkbox" class="form-check-input" {{if .NewUser.MustResetPassword}}checked{{end}} />
+        <label class="form-check-label" for="must_reset_password">Require password reset on next login</label>
+      </div>
+      <div class="form-group mt-3">
+        <label for="auth_source">Auth source</label>
+        <select id="auth_source" name="auth_source" class="form-control">
+          <option value="local" {{if eq .NewUser.AuthSource "local"}}selected{{end}}>Local</option>
+          <option value="saml" {{if eq .NewUser.AuthSource "saml"}}selected{{end}}>SAML</option>
+          <option value="hybrid" {{if eq .NewUser.AuthSource "hybrid"}}selected{{end}}>Hybrid</option>
+        </select>
+      </div>
+      <button class="btn btn-primary mt-3" type="submit">Save Changes</button>
+      <a class="btn btn-outline-secondary mt-3" href="/admin/users/">Back</a>
+    </form>
+  </div>
+</div>
+{{end}}

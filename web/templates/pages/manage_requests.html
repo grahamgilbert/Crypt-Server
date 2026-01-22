@@ -1,0 +1,44 @@
+{{define "title"}}Manage Requests{{end}}
+
+{{define "script"}}
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('.groupList').dataTable({
+            "aLengthMenu": [[20, 50, -1], [20, 50, "All"]]
+        });
+    } );
+</script>
+{{end}}
+
+{{define "nav"}}
+<li class="nav-item"><a class="nav-link" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Home</a></li>
+{{end}}
+
+{{define "content"}}
+<h3>Key Requests</h3>
+<table class="groupList table table-striped table-condensed">
+    <thead>
+        <tr>
+          <th>Serial Number</th>
+          <th>Computer Name</th>
+          <th>Requested By</th>
+          <th>Reason for Request</th>
+          <th>Date Requested</th>
+          <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .ManageRequests}}
+        <tr>
+            <td><a href="/approve/{{.ID}}/">{{.Serial}}</a></td>
+            <td><a href="/approve/{{.ID}}/">{{.ComputerName}}</a></td>
+            <td>{{.RequestingUser}}</td>
+            <td>{{.ReasonForRequest}}</td>
+            <td>{{.DateRequested}}</td>
+            <td><a class="btn btn-primary btn-mini" href="/approve/{{.ID}}/">Manage</a></td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+
+{{end}}

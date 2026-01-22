@@ -1,0 +1,42 @@
+{{define "title"}}Users{{end}}
+
+{{define "content"}}
+<div class="row">
+  <div class="col-md-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Users</h2>
+      <a class="btn btn-primary" href="/admin/users/new/">New User</a>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Admin</th>
+          <th>Can Approve</th>
+          <th>Local Login</th>
+          <th>Must Reset</th>
+          <th>Auth Source</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Users}}
+        <tr>
+          <td>{{.Username}}</td>
+          <td>{{if .IsStaff}}Yes{{else}}No{{end}}</td>
+          <td>{{if .CanApprove}}Yes{{else}}No{{end}}</td>
+          <td>{{if .LocalLoginEnabled}}Yes{{else}}No{{end}}</td>
+          <td>{{if .MustResetPassword}}Yes{{else}}No{{end}}</td>
+          <td>{{.AuthSource}}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary" href="/admin/users/{{.ID}}/edit/">Edit</a>
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/users/{{.ID}}/password/">Reset Password</a>
+            <a class="btn btn-sm btn-outline-danger" href="/admin/users/{{.ID}}/delete/">Delete</a>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{end}}

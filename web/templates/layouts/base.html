@@ -1,0 +1,66 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{block "title" .}}Crypt{{end}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/static/dataTables/css/dataTables.bootstrap4.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/dataTables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/dataTables/js/dataTables.bootstrap4.min.js"></script>
+  </head>
+
+  <body>
+      <div class="container">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <a class="navbar-brand" href="/">Crypt</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav ml-auto">
+                {{block "nav" .}}{{end}}
+                  {{if .User.IsAuthenticated}}
+                          <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" id="dLabel" data-toggle="dropdown" data-target="#" href="#">
+                          {{.User.Username}}
+                          <b class="caret"></b>
+                          </a>
+                              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                  {{block "dropdown" .}}{{end}}
+                                  {{if .User.LocalLoginEnabled}}
+                                    <li class="nav-item"><a class="nav-link" href="/password/change/">Change password</a></li>
+                                  {{end}}
+                                  {{if .User.IsStaff}}
+                                    <li class="nav-item"><a class="nav-link" href="/admin/users/">Users</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/admin/audit/">Audit Log</a></li>
+                                  {{end}}
+                                  <li class="nav-item"><a class="nav-link" href="/logout/">Log out</a></li>
+                              </ul>
+                          </li>
+                  {{end}}
+                </ul>
+              </div>
+            </nav>
+
+        {{block "content" .}}{{end}}
+
+        <div class="row"><div class="col-md-12"><p class="float-right">Crypt Server version {{.Version}}</p></div></div>
+
+      </div>
+
+{{block "script" .}}{{end}}
+  </body>
+</html>
+{{end}}

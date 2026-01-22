@@ -1,9 +1,6 @@
 # Crypt-Server
 
-**[Crypt][1]** is a tool for securely storing secrets such as FileVault 2 recovery keys. It is made up of a client app, and a Django web app for storing the keys.
-
-This Docker image contains the fully configured Crypt Django web app. A default admin user has been preconfigured, use admin/password to login.
-If you intend on using the server for anything semi-serious it is a good idea to change the password or add a new admin user and delete the default one.
+**[Crypt][1]** is a tool for securely storing secrets such as FileVault 2 recovery keys. It is made up of a client app, and a web app for storing the keys.
 
 ## Features
 
@@ -14,33 +11,152 @@ If you intend on using the server for anything semi-serious it is a good idea to
 
   [1]: https://github.com/grahamgilbert/Crypt
 
+## Migration from Django
+
+### Step 1: Export data from Django
+
+Export your Django database to a JSON fixture:
+
+```bash
+# If running Django directly:
+cd /path/to/legacy/crypt-server
+./manage.py dumpdata > legacy.json
+
+# If running Django in Docker:
+docker exec <container_name> python manage.py dumpdata > legacy.json
+```
+
+### Step 2: Generate a new encryption key
+
+Generate a new AES-GCM encryption key for the Go backend:
+
+```bash
+./cryptctl gen-key > new-field-encryption-key.txt
+```
+
+### Step 3: Convert the fixture
+
+Convert the Django JSON fixture into the new format. This re-encrypts all secrets from Django's Fernet encryption to the new AES-GCM format:
+
+```bash
+./cryptctl import-fixture \
+  -input legacy.json \
+  -output migration-export.json \
+  -legacy-key-file legacy-field-encryption-key.txt \
+  -new-key-file new-field-encryption-key.txt \
+  -password-map password-map.csv
+```
+
+The optional password map CSV allows you to set passwords for users who should have local login enabled. Any users not in this map will be configured for SAML authentication only. The CSV should have the following format (including header row):
+
+```csv
+username_or_email,password,must_reset_password
+admin@example.com,Str0ng!Passw0rd,false
+```
+
+Users not in the password map will be configured for SAML authentication only.
+
+### Step 4: Import into the new server
+
+Import the converted fixture into the Go server. **The database must be empty** (no existing computers, secrets, requests, or users).
+
+First, set the required environment variables:
+
+```bash
+export FIELD_ENCRYPTION_KEY=$(cat new-field-encryption-key.txt)
+export SESSION_KEY=$(./cryptctl gen-key)
+```
+
+Then run the import:
+
+```bash
+./crypt-server -import-fixture migration-export.json
+```
+
+The import will:
+
+- Verify the database is empty (fails if any data exists)
+- Import all computers with their original IDs
+- Import all secrets (already re-encrypted with the new key)
+- Import all users with their authentication settings
+- Import all requests with their approval status
+
+After import completes, start the server normally (the environment variables are already set):
+
+```bash
+./crypt-server
+```
+
 ## Installation instructions
 
-It is recommended that you use [Docker](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Docker.md) to run this, but if you wish to run directly on a host, installation instructions are over in the [docs directory](https://github.com/grahamgilbert/Crypt-Server/blob/master/docs/Installation_on_Ubuntu_1404.md)
+It is recommended that you use [Docker](docs/Docker.md) to run this. See the Docker documentation for complete setup instructions.
 
-### Migrating from versions earlier than Crypt 3.0
+### Migrating from the Django version
 
-Crypt 3 changed it's encryption backend, so when migrating from versions earlier than Crypt 3.0, you should first run Crypt 3.2.0 to perform the migration, and then upgrade to the latest version. The last version to support legacy migrations was Crypt 3.2.
+If you are migrating from the Django version of Crypt Server, follow the "Migration from Django" steps above. If you are running a version earlier than Crypt 3.0, you should first upgrade to Django Crypt 3.2.0 to migrate from the legacy encryption format, then follow the migration steps to move to the Go version.
 
 ## Settings
 
-All settings that would be entered into `settings.py` can also be passed into the Docker container as environment variables.
+All settings are configured via environment variables.
 
-- `FIELD_ENCRYPTION_KEY` - The key to use when encrypting the secrets. This is required.
+### Required
 
-- `SEND_EMAIL` - Crypt Server can send email notifcations when secrets are requested and approved. Set `SEND_EMAIL` to True, and set `HOST_NAME` to your server's host and URL scheme (e.g. `https://crypt.example.com`). For configuring your email settings, see the [Django documentation](https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-EMAIL_HOST).
+- `FIELD_ENCRYPTION_KEY` - Base64-encoded 32-byte key for encrypting secrets. Generate with `./cryptctl gen-key`.
 
-- `EMAIL_SENDER` - The email address to send emaiil notifications from when secrets are requests and approved. Ensure this is verified if you are using SES. Does nothing unless `SEND_EMAIIL` is True.
+- `SESSION_KEY` - A random string (at least 32 bytes) used to sign session cookies. Generate with `./cryptctl gen-key`.
 
-- `APPROVE_OWN` - By default, users with approval permissons can approve their own key requests. By setting this to False in settings.py (or by using the `APPROVE_OWN` environment variable with Docker), users cannot approve their own requests.
+### Database (one required)
 
-- `ALL_APPROVE` - By default, users need to be explicitly given approval permissions to approve key retrieval requests. By setting this to True in `settings.py`, all users are given this permission when they log in.
+- `DATABASE_URL` - PostgreSQL connection string (e.g., `postgres://user:pass@host:5432/dbname`). Mutually exclusive with `SQLITE_PATH`.
 
-- `ROTATE_VIEWED_SECRETS` - With a compatible client (such as Crypt 3.2.0 and greater), Crypt Server can instruct the client to rotate the secret and re-escrow it when the secret has been viewed. Enable by setting this to `True` or by using `ROTATE_VIEWED_SECRETS` and setting to `true`.
+- `SQLITE_PATH` - SQLite database file path. Must be a file path (not `:memory:`). Mutually exclusive with `DATABASE_URL`.
 
-- `HOST_NAME` - Set the host name of your instance - required if you do not have control over the load balancer or proxy in front of your Crypt server (see [the Django documentation](https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-trusted-origins)).
+### Optional
 
-- `CSRF_TRUSTED_ORIGINS` - Is a list of trusted origins expected to make requests to your Crypt instance, normally this is the hostname
+- `SESSION_COOKIE_SECURE` - Set to `true` to mark session cookies as secure (recommended when using HTTPS). Default: `false`.
+
+- `SAML_CONFIG_FILE` - Path to a YAML file containing SAML configuration. See `docs/saml-config.sample.yaml` for all supported fields.
+
+- `APPROVE_OWN` - Allow users with approval permissions to approve their own key requests. Default: `false`.
+
+- `ALL_APPROVE` - Grant all users approval permissions when they log in. Default: `false`.
+
+- `ROTATE_VIEWED_SECRETS` - Instruct compatible clients (Crypt 3.2.0+) to rotate and re-escrow secrets after viewing. Default: `false`.
+
+## Database migrations
+
+The Go server applies embedded SQL migrations on startup and records applied versions in `schema_migrations`.
+
+Migration file naming: `NNN_description.sql` (for example, `002_add_requests.sql`).
+
+Flags:
+
+- `-validate-migrations` - Validate embedded migrations and exit.
+- `-print-migrations` - Print embedded migrations and exit.
+- `-migrations-driver` - Limit the validation/print target to `postgres` or `sqlite` (default: both).
+
+Example:
+
+``` bash
+./crypt-server -validate-migrations -migrations-driver=postgres
+```
+
+## First admin creation
+
+Create the initial admin user (only works when no users exist yet):
+
+``` bash
+./crypt-server -create-admin -username=admin -password='your-password'
+```
+
+## Password reset
+
+Reset a user's password from the command line:
+
+``` bash
+./crypt-server -reset-password -username=admin -password='new-password'
+```
+
 ## Screenshots
 
 Main Page:

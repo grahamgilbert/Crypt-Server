@@ -1,0 +1,26 @@
+{{define "title"}}New Computer{{end}}
+
+{{define "content"}}
+<div class="row">
+    <div class="col-md-4">
+        <h1>New Computer</h1>
+        {{if .ErrorMessage}}<p><strong>{{.ErrorMessage}}</strong></p>{{end}}
+        <form action="/new/computer/" method="post">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+            <div class="form-group">
+                <label for="serial">Serial</label>
+                <input class="form-control" id="serial" name="serial" type="text" />
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" id="username" name="username" type="text" />
+            </div>
+            <div class="form-group">
+                <label for="computername">Computer Name</label>
+                <input class="form-control" id="computername" name="computername" type="text" />
+            </div>
+            <p><button type="submit" class="btn btn-primary">Add new computer</button></p>
+        </form>
+    </div>
+</div>
+{{end}}

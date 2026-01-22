@@ -1,0 +1,76 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Run unit tests
+        run: go test -v ./...
+
+  integration-sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Build cryptctl
+        run: go build -o cryptctl ./cmd/cryptctl/
+
+      - name: Generate encryption key
+        run: ./cryptctl gen-key > /tmp/test_key.txt
+
+      - name: Run SQLite integration tests
+        run: ./cryptctl integration-test -db sqlite -key-file /tmp/test_key.txt
+
+  integration-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: crypt
+          POSTGRES_PASSWORD: crypt_test_password
+          POSTGRES_DB: crypt_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Build cryptctl
+        run: go build -o cryptctl ./cmd/cryptctl/
+
+      - name: Generate encryption key
+        run: ./cryptctl gen-key > /tmp/test_key.txt
+
+      - name: Run PostgreSQL integration tests
+        run: |
+          ./cryptctl integration-test \
+            -db postgres \
+            -db-url "postgres://crypt:crypt_test_password@localhost:5432/crypt_test?sslmode=disable" \
+            -key-file /tmp/test_key.txt

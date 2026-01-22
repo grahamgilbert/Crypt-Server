@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS audit_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor TEXT NOT NULL,
+    target_user TEXT NOT NULL,
+    action TEXT NOT NULL,
+    reason TEXT NULL,
+    ip_address TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

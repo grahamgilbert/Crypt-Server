@@ -1,55 +1,37 @@
-FROM python:3.10.11-alpine3.16
+# Build stage
+FROM golang:1.22-alpine AS builder
 
-LABEL maintainer="graham@grahamgilbert.com"
+RUN apk add --no-cache git
 
-ENV APP_DIR /home/docker/crypt
-ENV DEBUG false
-ENV LANG en
-ENV TZ Etc/UTC
-ENV LC_ALL en_US.UTF-8
+WORKDIR /app
 
+# Copy go mod files first for better caching
+COPY go.mod go.sum ./
+RUN go mod download
 
+# Copy source code
+COPY . .
 
-RUN set -ex \
-    && apk add --no-cache --virtual .build-deps \
-    gcc \
-    git \
-    openssl-dev \
-    build-base \
-    libffi-dev \
-    libc-dev \
-    musl-dev \
-    linux-headers \
-    pcre-dev \
-    postgresql-dev \
-    xmlsec-dev \
-    tzdata \
-    postgresql-libs \
-    libpq
+# Build the binary
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o crypt-server ./cmd/crypt-server
 
-COPY setup/requirements.txt /tmp/requirements.txt
+# Runtime stage
+FROM alpine:3.19
 
-RUN set -ex \
-    && LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip install --no-cache-dir -r /tmp/requirements.txt" \
-    && rm /tmp/requirements.txt
+RUN apk add --no-cache ca-certificates tzdata
 
-COPY / $APP_DIR
-COPY docker/settings.py $APP_DIR/fvserver/
-COPY docker/settings_import.py $APP_DIR/fvserver/
-COPY docker/gunicorn_config.py $APP_DIR/
-COPY docker/django/management/ $APP_DIR/server/management/
-COPY docker/run.sh /run.sh
+WORKDIR /app
 
-RUN chmod +x /run.sh \
-    && mkdir -p /home/app \
-    && ln -s ${APP_DIR} /home/app/crypt
+# Copy binary from builder
+COPY --from=builder /app/crypt-server .
 
-WORKDIR ${APP_DIR}
-# don't use this key anywhere else, this is just for collectstatic to run
-RUN export FIELD_ENCRYPTION_KEY="jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg="; python manage.py collectstatic --noinput; export FIELD_ENCRYPTION_KEY=""
+# Copy web assets
+COPY --from=builder /app/web ./web
 
-EXPOSE 8000
+# Create non-root user
+RUN adduser -D -u 1000 crypt
+USER crypt
 
-VOLUME $APP_DIR/keyset
+EXPOSE 8080
 
-CMD ["/run.sh"]
+ENTRYPOINT ["/app/crypt-server"]

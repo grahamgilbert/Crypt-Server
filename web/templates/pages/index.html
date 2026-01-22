@@ -1,0 +1,80 @@
+{{define "title"}}Crypt{{end}}
+
+{{define "script"}}
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+         $('.groupList').dataTable({
+            "serverSide": true,
+            "order": [[3,'desc']],
+            columnDefs: [
+                { orderable: false, targets: -1 },
+                { "searchable": false, "targets": -1 }
+            ],
+            "ajax": {
+                "contentType": "application/json",
+                "url": "/ajax/",
+                "data": function ( args ) {
+                    return { "args": JSON.stringify( args ) };
+                }
+            },
+            "lengthMenu": [[20, 50, -1], [20, 50, "All"]],
+            stateSave: true,
+            "orderMulti": false,
+            "columns": [
+                { "name": "serial" },
+                { "name": "computername" },
+                { "name": "username" },
+                { "name": "last_checkin" },
+                { "name": "info_button" }
+            ]
+        });
+    } );
+</script>
+{{end}}
+
+{{define "dropdown"}}
+<li class="nav-item"><a class="nav-link" href="/new/computer/"><span class="glyphicon glyphicon-plus"></span> New computer</a></li>
+{{end}}
+
+{{define "nav"}}
+{{if .User.CanApprove}}
+    {{if gt .OutstandingCount 0}}
+        <li class="nav-item"><a class="btn btn-info" href="/manage-requests/">Approve requests</a></li>
+    {{else}}
+        <li class="nav-item"><a class="nav-link" href="/manage-requests/">Approve requests</a></li>
+    {{end}}
+{{end}}
+{{end}}
+
+{{define "content"}}
+{{if .User.CanApprove}}
+    {{if gt .OutstandingCount 0}}
+    <div class="alert alert-info">
+        You have outstanding requests to approve.
+    </div>
+    {{end}}
+{{end}}
+
+    <table class="groupList table table-striped table-condensed">
+    <thead>
+        <tr>
+          <th>Serial Number</th>
+          <th>Computer Name</th>
+          <th>User Name</th>
+          <th>Last Checked In</th>
+          <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Computers}}
+        <tr>
+            <td><a href="/info/{{.ID}}/">{{.Serial}}</a></td>
+            <td><a href="/info/{{.ID}}/">{{.ComputerName}}</a></td>
+            <td>{{.Username}}</td>
+            <td>{{.LastCheckin}}</td>
+            <td><a class="btn btn-info btn-xs" href="/info/{{.ID}}/">Info</a></td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{end}}

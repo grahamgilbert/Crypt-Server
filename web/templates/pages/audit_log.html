@@ -1,0 +1,64 @@
+{{define "title"}}Audit Log{{end}}
+{{define "content"}}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Audit Log</h2>
+    <form class="form-inline mb-3" method="get" action="/admin/audit/">
+      <input class="form-control mr-2" type="text" name="q" value="{{.AuditSearch}}" placeholder="Search audit log">
+      <button class="btn btn-primary" type="submit">Search</button>
+      {{if .AuditSearch}}
+        <a class="btn btn-link" href="/admin/audit/">Clear</a>
+      {{end}}
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>When</th>
+          <th>Actor</th>
+          <th>Target</th>
+          <th>Action</th>
+          <th>Reason</th>
+          <th>IP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{if .AuditEvents}}
+          {{range .AuditEvents}}
+            <tr>
+              <td>{{.CreatedAtFormatted}}</td>
+              <td>{{.Actor}}</td>
+              <td>{{.TargetUser}}</td>
+              <td>{{.Action}}</td>
+              <td>{{.Reason}}</td>
+              <td>{{.IPAddress}}</td>
+            </tr>
+          {{end}}
+        {{else}}
+          <tr>
+            <td colspan="6">No audit events yet.</td>
+          </tr>
+        {{end}}
+      </tbody>
+    </table>
+    {{if gt .AuditTotalPages 1}}
+      <nav>
+        <ul class="pagination">
+          {{if gt .AuditPage 1}}
+            <li class="page-item">
+              <a class="page-link" href="/admin/audit/?q={{.AuditSearch}}&page={{sub .AuditPage 1}}">Previous</a>
+            </li>
+          {{end}}
+          <li class="page-item disabled">
+            <span class="page-link">Page {{.AuditPage}} of {{.AuditTotalPages}}</span>
+          </li>
+          {{if lt .AuditPage .AuditTotalPages}}
+            <li class="page-item">
+              <a class="page-link" href="/admin/audit/?q={{.AuditSearch}}&page={{add .AuditPage 1}}">Next</a>
+            </li>
+          {{end}}
+        </ul>
+      </nav>
+    {{end}}
+  </div>
+</div>
+{{end}}

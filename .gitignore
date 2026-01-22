@@ -10,3 +10,16 @@ keyset
 *.db
 
 .vscode
+.gocache/*
+
+/cryptctl
+/crypt-server
+.field-encryption-key
+
+# SAML config (contains environment-specific paths)
+saml-config.yaml
+okta-metadata.xml
+sp.crt
+sp.key
+
+.claude/settings.local.json
