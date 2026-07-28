@@ -6,6 +6,7 @@ on:
     tags: ["*"]
 
 env:
+  IMAGE: macadmins/crypt-server
   TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
 
 jobs:
@@ -21,15 +22,30 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Tags build as the tag name; master builds move `latest`.
+      # Load into the local daemon rather than pushing, so the migration check
+      # below runs against the exact image that gets published.
       - uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64
-          push: true
-          tags: macadmins/crypt-server:${{ env.TAG }}
+          load: true
+          push: false
+          tags: ${{ env.IMAGE }}:${{ env.TAG }}
           cache-from: type=gha
           cache-to: type=gha
+
+      # docker/run.sh applies migrations at container startup, so a migration
+      # that imports cleanly but fails to apply would only break on deploy.
+      # No DB_* env means settings fall back to sqlite, same as run.sh sees.
+      - name: Check migrations apply
+        run: |
+          docker run --rm \
+            -e FIELD_ENCRYPTION_KEY="$(python3 -c 'import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())')" \
+            "$IMAGE:$TAG" \
+            sh -c 'cd $APP_DIR && python3 manage.py migrate --noinput'
+
+      - name: Push
+        run: docker push "$IMAGE:$TAG"
 
       # crypt-server-saml builds FROM this image, so it has to run after the push.
       # Needs a PAT: GITHUB_TOKEN cannot dispatch to another repo.
