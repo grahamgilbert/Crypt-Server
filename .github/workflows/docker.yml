@@ -29,7 +29,7 @@ jobs:
           push: true
           tags: macadmins/crypt-server:${{ env.TAG }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha
 
       # crypt-server-saml builds FROM this image, so it has to run after the push.
       # Needs a PAT: GITHUB_TOKEN cannot dispatch to another repo.
@@ -37,6 +37,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SAML_DISPATCH_TOKEN }}
         run: |
-          jq -n --arg tag "$TAG" \
-            '{event_type: "build", client_payload: {tag: $tag}}' \
-            | gh api repos/grahamgilbert/crypt-server-saml/dispatches --input -
+          gh api repos/grahamgilbert/crypt-server-saml/dispatches \
+            -f event_type=build \
+            -f "client_payload[tag]=$TAG"
