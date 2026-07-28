@@ -37,6 +37,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SAML_DISPATCH_TOKEN }}
         run: |
-          gh api repos/grahamgilbert/crypt-server-saml/dispatches \
-            -f event_type=build \
-            -f client_payload[tag]="$TAG"
+          jq -n --arg tag "$TAG" \
+            '{event_type: "build", client_payload: {tag: $tag}}' \
+            | gh api repos/grahamgilbert/crypt-server-saml/dispatches --input -
