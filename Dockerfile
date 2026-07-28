@@ -45,8 +45,11 @@ RUN chmod +x /run.sh \
     && ln -s ${APP_DIR} /home/app/crypt
 
 WORKDIR ${APP_DIR}
-# don't use this key anywhere else, this is just for collectstatic to run
-RUN export FIELD_ENCRYPTION_KEY="jKAv1Sde8m6jCYFnmps0iXkUfAilweNVjbvoebBrDwg="; python manage.py collectstatic --noinput; export FIELD_ENCRYPTION_KEY=""
+# collectstatic imports the app, which needs a key present to load the encrypted
+# fields. Generate a throwaway one for this build step only, so no key literal
+# ends up in the image, the layer, or `docker history`.
+RUN FIELD_ENCRYPTION_KEY="$(python -c 'import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())')" \
+    python manage.py collectstatic --noinput
 
 EXPOSE 8000
 

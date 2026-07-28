@@ -2,3 +2,23 @@ keyset/
 *.db
 *.pyc
 crypt.db*
+
+# Build- and dev-time only. `COPY / $APP_DIR` would otherwise ship all of this
+# inside the runtime image, including the throwaway FIELD_ENCRYPTION_KEY in
+# docker-compose.yml and the host-side docker/run_docker*.sh helpers.
+.git/
+.gitignore
+.circleci/
+.pre-commit-config.yaml
+.flake8
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker/run_docker.sh
+docker/run_docker_postgres.sh
+docker/postgres.sh
+docker/setup_db.sh
+smtp.sh
+remote_build.py
+set_build_no.py
+functional_tests/
