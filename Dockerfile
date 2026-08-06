@@ -1,4 +1,4 @@
-FROM python:3.10.11-alpine3.16
+FROM python:3.10.19-alpine3.23
 
 LABEL maintainer="graham@grahamgilbert.com"
 
